@@ -12,7 +12,8 @@ import PouchDB from 'pouchdb';
 export class HomePage {
   
   private tasks;
-  private db;
+  // private localdb;
+  private remotedb;
   constructor(public navCtrl: NavController) {
     
   }
@@ -20,15 +21,15 @@ export class HomePage {
   ionViewDidEnter(){
 
     this.refresh();
-
   }
 
   refresh(){
     
-    this.db = new PouchDB('taskList')
+    // this.localdb = new PouchDB('taskList'); non mi serve più
+    this.remotedb = new PouchDB('http://localhost:5984/mydudo');
     this.tasks = [];
 
-    this.db.allDocs({include_docs: true},(err,result) =>{
+    this.remotedb.allDocs({include_docs: true},(err,result) =>{
       if(!err){
         let rows = result.rows;
         for(let i = 0; i<rows.length; i++){
@@ -39,7 +40,7 @@ export class HomePage {
   }
 
   delete(task){
-    this.db.remove(task,(err,result) => {
+    this.remotedb.remove(task,(err,result) => {
       if(!err){
         alert("task eliminato");
         this.refresh();

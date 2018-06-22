@@ -1,8 +1,13 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
+  <ion-navbar padding >
+    <ion-title text-center>
       Momò Task
     </ion-title>
+    <ion-buttons start>
+      <button (click)="refresh()" ion-button icon-only large color="primary">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+      </ion-buttons>
     <ion-buttons end>
       <button (click)="createNew()" ion-button icon-only large color="primary">
         <ion-icon name="add"></ion-icon>
@@ -15,14 +20,14 @@
 
 <ion-content>
   <ion-list>
-    <ion-item-sliding *ngFor="let task of tasks">
+    <ion-item-sliding  (ionSwipe)="delete(task)" *ngFor="let task of tasks">
       <ion-item>
         <h1> Da fare: {{ task.fare }} </h1>
-        <p> importanza: {{ task.importante }}</p>
+        <p> importanza: {{ task.importanza }}</p>
       </ion-item>
 
       <ion-item-options side="right">
-        <button (click)="delete(task)" ion-button color="danger">
+        <button expandable  (click)="delete(task)" ion-button color="danger">
           <ion-icon name="nuclear"></ion-icon>
           elimina
         </button>

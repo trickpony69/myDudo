@@ -17,7 +17,8 @@ export class NewTaskPage{
 
   private fare;
   private importanza;
-  private db;
+  // private localdb;
+  private remotedb
 
   constructor(public navCtrl: NavController, public navParams: NavParams){
 
@@ -25,7 +26,8 @@ export class NewTaskPage{
 
   setupDB(){
     
-    this.db = new PouchDB('taskList');
+    // this.localdb = new PouchDB('taskList'); non mi serve più
+    this.remotedb = new PouchDB('https://a4bb63c0.ngrok.io/mydudo');
   }
 
   ionViewDidLoad() {
@@ -35,13 +37,14 @@ export class NewTaskPage{
 
   save(){
 
-    this.db.post({
+    this.remotedb.post({
       fare: this.fare,
       importanza: this.importanza
     },(err, result) => {
       if(!err){
         this.navCtrl.pop();
       }
+      else alert("ciè problema col database")
     })
   } 
 

@@ -32,20 +32,23 @@ var NewTaskPage = /** @class */ (function () {
         this.navParams = navParams;
     }
     NewTaskPage.prototype.setupDB = function () {
-        this.db = new __WEBPACK_IMPORTED_MODULE_2_pouchdb__["a" /* default */]('taskList');
+        // this.localdb = new PouchDB('taskList'); non mi serve più
+        this.remotedb = new __WEBPACK_IMPORTED_MODULE_2_pouchdb__["a" /* default */]('https://a4bb63c0.ngrok.io/mydudo');
     };
     NewTaskPage.prototype.ionViewDidLoad = function () {
         this.setupDB();
     };
     NewTaskPage.prototype.save = function () {
         var _this = this;
-        this.db.post({
+        this.remotedb.post({
             fare: this.fare,
             importanza: this.importanza
         }, function (err, result) {
             if (!err) {
                 _this.navCtrl.pop();
             }
+            else
+                alert("ciè problema col database");
         });
     };
     NewTaskPage.prototype.cancel = function () {
@@ -53,11 +56,12 @@ var NewTaskPage = /** @class */ (function () {
     };
     NewTaskPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-new-task',template:/*ion-inline-start:"/Users/micky/Desktop/myDudo/src/pages/new-task/new-task.html"*/'<!--\n  Generated template for the NewTaskPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>newTask</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-list>\n    <ion-item>\n      <ion-label color="primary" fixed>Nuovo Task</ion-label>\n      <ion-input [(ngModel)]="fare" type="text" placeholder="Task"></ion-input>\n    </ion-item>\n\n    <ion-item>\n      <ion-label color="primary" fixed>Data</ion-label>\n      <ion-input [(ngModel)]="importante" type="text" placeholder="Importanza"></ion-input>\n    </ion-item>\n  </ion-list>\n\n\n  <button (click)="save()" ion-button>\n    inserisci\n  </button>\n\n  <button (click)="cancel()" ion-button color="danger">\n      annulla\n    </button>\n\n</ion-content>'/*ion-inline-end:"/Users/micky/Desktop/myDudo/src/pages/new-task/new-task.html"*/,
+            selector: 'page-new-task',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/new-task/new-task.html"*/'<!--\n  Generated template for the NewTaskPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title></ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-list>\n    <ion-item>\n      <ion-label color="primary" fixed>Nuovo Task</ion-label>\n      <ion-input [(ngModel)]="fare" type="text" placeholder="Task"></ion-input>\n    </ion-item>\n\n    <ion-item>\n      <ion-label color="primary" fixed>Importanza</ion-label>\n      <ion-input [(ngModel)]="importanza" type="text" placeholder="Importanza"></ion-input>\n    </ion-item>\n  </ion-list>\n\n\n  <button (click)="save()" ion-button>\n    inserisci\n  </button>\n\n  <button (click)="cancel()" ion-button color="danger">\n      annulla\n    </button>\n\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/new-task/new-task.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */]) === "function" && _b || Object])
     ], NewTaskPage);
     return NewTaskPage;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=new-task.js.map
@@ -137,9 +141,10 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.refresh = function () {
         var _this = this;
-        this.db = new __WEBPACK_IMPORTED_MODULE_3_pouchdb__["a" /* default */]('taskList');
+        // this.localdb = new PouchDB('taskList'); non mi serve più
+        this.remotedb = new __WEBPACK_IMPORTED_MODULE_3_pouchdb__["a" /* default */]('http://localhost:5984/mydudo');
         this.tasks = [];
-        this.db.allDocs({ include_docs: true }, function (err, result) {
+        this.remotedb.allDocs({ include_docs: true }, function (err, result) {
             if (!err) {
                 var rows = result.rows;
                 for (var i = 0; i < rows.length; i++) {
@@ -150,7 +155,7 @@ var HomePage = /** @class */ (function () {
     };
     HomePage.prototype.delete = function (task) {
         var _this = this;
-        this.db.remove(task, function (err, result) {
+        this.remotedb.remove(task, function (err, result) {
             if (!err) {
                 alert("task eliminato");
                 _this.refresh();
@@ -165,11 +170,12 @@ var HomePage = /** @class */ (function () {
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/micky/Desktop/myDudo/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Momò Task\n    </ion-title>\n    <ion-buttons end>\n      <button (click)="createNew()" ion-button icon-only large color="primary">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n\n<ion-content>\n  <ion-list>\n    <ion-item-sliding *ngFor="let task of tasks">\n      <ion-item>\n        <h1> Da fare: {{ task.fare }} </h1>\n        <p> importanza: {{ task.importante }}</p>\n      </ion-item>\n\n      <ion-item-options side="right">\n        <button (click)="delete(task)" ion-button color="danger">\n          <ion-icon name="nuclear"></ion-icon>\n          elimina\n        </button>\n      </ion-item-options>\n\n    </ion-item-sliding>\n\n    \n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/micky/Desktop/myDudo/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar padding >\n    <ion-title text-center>\n      Momò Task\n    </ion-title>\n    <ion-buttons start>\n      <button (click)="refresh()" ion-button icon-only large color="primary">\n        <ion-icon name="refresh"></ion-icon>\n      </button>\n      </ion-buttons>\n    <ion-buttons end>\n      <button (click)="createNew()" ion-button icon-only large color="primary">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n\n<ion-content>\n  <ion-list>\n    <ion-item-sliding  (ionSwipe)="delete(task)" *ngFor="let task of tasks">\n      <ion-item>\n        <h1> Da fare: {{ task.fare }} </h1>\n        <p> importanza: {{ task.importanza }}</p>\n      </ion-item>\n\n      <ion-item-options side="right">\n        <button expandable  (click)="delete(task)" ion-button color="danger">\n          <ion-icon name="nuclear"></ion-icon>\n          elimina\n        </button>\n      </ion-item-options>\n\n    </ion-item-sliding>\n\n    \n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */]) === "function" && _a || Object])
     ], HomePage);
     return HomePage;
+    var _a;
 }());
 
 //# sourceMappingURL=home.js.map
@@ -290,7 +296,7 @@ var MyApp = /** @class */ (function () {
         });
     }
     MyApp = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/Users/micky/Desktop/myDudo/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/micky/Desktop/myDudo/src/app/app.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/Users/micky/myDudo/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/micky/myDudo/src/app/app.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
     ], MyApp);
