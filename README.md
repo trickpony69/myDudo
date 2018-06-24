@@ -1,2 +1,2 @@
 # myDudo
-Sexy ToDo app
+Sexy ToDo app that sync with your dudo
