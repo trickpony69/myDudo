@@ -7,6 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { NewTaskPage } from '../pages/new-task/new-task';
+import { ToDoProvider } from '../providers/to-do/to-do';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { NewTaskPage } from '../pages/new-task/new-task';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -27,7 +28,8 @@ import { NewTaskPage } from '../pages/new-task/new-task';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ToDoProvider,
   ]
 })
 export class AppModule {}
