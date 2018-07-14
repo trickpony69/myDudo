@@ -2,6 +2,7 @@
   <ion-navbar padding>
     <ion-title text-center>
       Momò Task
+      <p [innerHTML]="nomeLista"></p>
     </ion-title>
     <ion-buttons start>
       <!-- <button (click)="refresh()" ion-button icon-only large color="primary">
@@ -10,7 +11,7 @@
     </ion-buttons>
     <ion-buttons end>
       <button (click)="createTodo()" ion-button icon-only large color="primary">
-        <ion-icon name="cloud-upload"></ion-icon>
+        <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -41,4 +42,5 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+
 </ion-content>

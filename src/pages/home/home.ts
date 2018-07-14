@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController,AlertController } from 'ionic-angular';
-import { NewTaskPage } from '../new-task/new-task';
-import { ToDoProvider } from '../../providers/to-do/to-do'
+import { AlertController } from 'ionic-angular';
+import { ToDoProvider } from '../../providers/to-do/to-do';
 
 @Component({
   selector: 'page-home',
@@ -9,27 +8,63 @@ import { ToDoProvider } from '../../providers/to-do/to-do'
 })
 
 export class HomePage {
-
+  nomeLista: any;
   todos: any;
   private tasks;
   // private localdb;
   private remotedb;
-
-  constructor(public navCtrl: NavController, public todoService: ToDoProvider,public alertCtrl: AlertController) {
+  splash;
+  constructor(public alertCtrl: AlertController,public todoService: ToDoProvider ) {
     this.doRefresh(0);
-  }
 
-  ionViewDidLoad() {
+      this.splash = this.alertCtrl.create({
+      title: 'Lista',
+      message: 'Inserisci il nome della lista condivisa o creane una',
+      inputs: [
+        {
+          placeholder: '',
+          name: 'title'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Invia',
+          handler: data => {
+            todoService.user = data.title;
+          }
+        }
+      ]
+    });
+    this.splash.present();
 
-    this.todoService.getTodo().then((data) => {
-      this.todos = data;
+    this.splash.onDidDismiss(() => {
+
+      todoService.remote = todoService.link + todoService.user;
+      todoService.db.sync(todoService.remote, todoService.options);
+      // alert(todoService.remote);
+      this.nomeLista = todoService.user;
     });
   }
 
-  doRefresh(refresher){
+  // ----------- NON POSSO USARE DUE onDidDismiss() DELLO STESSO SPLASH------------
+  // ionViewDidEnter() {
+  //   this.todoService.splash.onDidDismiss(() => {
+  //     this.nomeLista = this.todoService.user;
+  //   });
+    
+  // }
+
+  ionViewDidLoad() {
     this.todoService.getTodo().then((data) => {
       this.todos = data;
-      if(refresher != 0)
+    });
+
+  }
+
+  doRefresh(refresher) {
+    this.todoService.getTodo().then((data) => {
+      this.todos = data;
+      if (refresher != 0)
         refresher.complete();
     });
   }
@@ -95,13 +130,6 @@ export class HomePage {
   deleteTodo(todo) {
     this.todoService.deleteTodo(todo);
   }
-
-  createNew() {
-
-    this.navCtrl.push(NewTaskPage);
-
-  }
-
 }
 
  // ionViewDidEnter(){
