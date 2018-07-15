@@ -1,13 +1,10 @@
 <ion-header>
   <ion-navbar padding>
     <ion-title text-center>
-      Momò Task
+      <h2>Momò Task</h2>
       <p [innerHTML]="nomeLista"></p>
     </ion-title>
     <ion-buttons start>
-      <!-- <button (click)="refresh()" ion-button icon-only large color="primary">
-        <ion-icon name="refresh"></ion-icon>
-      </button> -->
     </ion-buttons>
     <ion-buttons end>
       <button (click)="createTodo()" ion-button icon-only large color="primary">
@@ -20,11 +17,8 @@
 
 <ion-content>
   <ion-refresher pulling-text="Refreshing..." (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content 
-    pullingText="swipe per aggiornare"
-    pullingIcon="cloud-download"
-    refreshingSpinner="circles">
-  </ion-refresher-content>
+    <ion-refresher-content pullingText="swipe per aggiornare" pullingIcon="cloud-download" refreshingSpinner="circles">
+    </ion-refresher-content>
   </ion-refresher>
   <ion-list>
     <ion-item-sliding (ionSwipe)="deleteTodo(task)" *ngFor="let task of todos">

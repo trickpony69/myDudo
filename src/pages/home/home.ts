@@ -14,10 +14,10 @@ export class HomePage {
   // private localdb;
   private remotedb;
   splash;
-  constructor(public alertCtrl: AlertController,public todoService: ToDoProvider ) {
+  constructor(public alertCtrl: AlertController, public todoService: ToDoProvider) {
     this.doRefresh(0);
 
-      this.splash = this.alertCtrl.create({
+    this.splash = this.alertCtrl.create({
       title: 'Lista',
       message: 'Inserisci il nome della lista condivisa o creane una',
       inputs: [
@@ -45,14 +45,6 @@ export class HomePage {
       this.nomeLista = todoService.user;
     });
   }
-
-  // ----------- NON POSSO USARE DUE onDidDismiss() DELLO STESSO SPLASH------------
-  // ionViewDidEnter() {
-  //   this.todoService.splash.onDidDismiss(() => {
-  //     this.nomeLista = this.todoService.user;
-  //   });
-    
-  // }
 
   ionViewDidLoad() {
     this.todoService.getTodo().then((data) => {
@@ -101,7 +93,7 @@ export class HomePage {
 
     let prompt = this.alertCtrl.create({
       title: 'Edit',
-      message: 'Change your mind?',
+      message: 'Cambiato idea ?',
       inputs: [
         {
           name: 'title'
@@ -130,7 +122,10 @@ export class HomePage {
   deleteTodo(todo) {
     this.todoService.deleteTodo(todo);
   }
+  
 }
+
+
 
  // ionViewDidEnter(){
 

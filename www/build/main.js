@@ -180,12 +180,6 @@ var HomePage = /** @class */ (function () {
             _this.nomeLista = todoService.user;
         });
     }
-    // ----------- NON POSSO USARE DUE onDidDismiss() DELLO STESSO SPLASH------------
-    // ionViewDidEnter() {
-    //   this.todoService.splash.onDidDismiss(() => {
-    //     this.nomeLista = this.todoService.user;
-    //   });
-    // }
     HomePage.prototype.ionViewDidLoad = function () {
         var _this = this;
         this.todoService.getTodo().then(function (data) {
@@ -229,7 +223,7 @@ var HomePage = /** @class */ (function () {
         var _this = this;
         var prompt = this.alertCtrl.create({
             title: 'Edit',
-            message: 'Change your mind?',
+            message: 'Cambiato idea ?',
             inputs: [
                 {
                     name: 'title'
@@ -258,7 +252,7 @@ var HomePage = /** @class */ (function () {
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar padding>\n    <ion-title text-center>\n      Momò Task\n      <p [innerHTML]="nomeLista"></p>\n    </ion-title>\n    <ion-buttons start>\n      <!-- <button (click)="refresh()" ion-button icon-only large color="primary">\n        <ion-icon name="refresh"></ion-icon>\n      </button> -->\n    </ion-buttons>\n    <ion-buttons end>\n      <button (click)="createTodo()" ion-button icon-only large color="primary">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <ion-refresher pulling-text="Refreshing..." (ionRefresh)="doRefresh($event)">\n    <ion-refresher-content \n    pullingText="swipe per aggiornare"\n    pullingIcon="cloud-download"\n    refreshingSpinner="circles">\n  </ion-refresher-content>\n  </ion-refresher>\n  <ion-list>\n    <ion-item-sliding (ionSwipe)="deleteTodo(task)" *ngFor="let task of todos">\n      <ion-item>\n        <h1>{{ task.title }} </h1>\n      </ion-item>\n\n      <ion-item-options side="right">\n        <button ion-button icon-only color="light" (click)="updateTodo(todo)">\n          <ion-icon name="create"></ion-icon>\n        </button>\n        <button ion-button icon-only color="primary" (click)="deleteTodo(todo)">\n          <ion-icon name="checkmark"></ion-icon>\n        </button>\n      </ion-item-options>\n    </ion-item-sliding>\n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar padding>\n    <ion-title text-center>\n      <h2>Momò Task</h2>\n      <p [innerHTML]="nomeLista"></p>\n    </ion-title>\n    <ion-buttons start>\n    </ion-buttons>\n    <ion-buttons end>\n      <button (click)="createTodo()" ion-button icon-only large color="primary">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <ion-refresher pulling-text="Refreshing..." (ionRefresh)="doRefresh($event)">\n    <ion-refresher-content pullingText="swipe per aggiornare" pullingIcon="cloud-download" refreshingSpinner="circles">\n    </ion-refresher-content>\n  </ion-refresher>\n  <ion-list>\n    <ion-item-sliding (ionSwipe)="deleteTodo(task)" *ngFor="let task of todos">\n      <ion-item>\n        <h1>{{ task.title }} </h1>\n      </ion-item>\n\n      <ion-item-options side="right">\n        <button ion-button icon-only color="light" (click)="updateTodo(todo)">\n          <ion-icon name="create"></ion-icon>\n        </button>\n        <button ion-button icon-only color="primary" (click)="deleteTodo(todo)">\n          <ion-icon name="checkmark"></ion-icon>\n        </button>\n      </ion-item-options>\n    </ion-item-sliding>\n  </ion-list>\n\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home/home.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */], __WEBPACK_IMPORTED_MODULE_2__providers_to_do_to_do__["a" /* ToDoProvider */]])
     ], HomePage);
@@ -524,7 +518,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var ToDoProvider = /** @class */ (function () {
     function ToDoProvider(alertCtrl) {
         this.alertCtrl = alertCtrl;
-        this.link = "http://a0412d92.ngrok.io/";
+        this.link = "https://a6821a44.ngrok.io/";
         this.db = new __WEBPACK_IMPORTED_MODULE_1_PouchDb__["a" /* default */]('myDudo');
         this.options = {
             live: true,
