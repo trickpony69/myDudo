@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { SettingsPage } from '../settings/settings';
-import { HomePage } from '../home/home';
-import { NavController, NavParams, Platform, Events } from 'ionic-angular/umd';
+import { HomeListe } from '../home-liste/home-liste';
 
 @Component({
   selector: 'page-tabs',
@@ -9,7 +8,7 @@ import { NavController, NavParams, Platform, Events } from 'ionic-angular/umd';
 })
 export class TabsPage {
 
-  home = HomePage;
+  home = HomeListe;
   impostazioni = SettingsPage;
 
   constructor(){

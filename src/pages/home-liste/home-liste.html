@@ -1,0 +1,19 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Le tue liste({{this.numListe}}) </ion-title>
+    <ion-buttons end>
+      <button ion-button round (click)="add()">add</button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+  <div *ngFor="let array of liste">
+    <h1>{{ array.nomeLista }}</h1>
+  </div>
+</ion-list>
+</ion-content>

@@ -6,19 +6,19 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { NewTaskPage } from '../pages/new-task/new-task';
 import { ToDoProvider } from '../providers/to-do/to-do';
 import { SettingsPage } from '../pages/settings/settings';
 import { TabsPage } from '../pages/tabs/tabs';
 import { IonicStorageModule } from '@ionic/storage';
+import { HomeListe } from '../pages/home-liste/home-liste';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    NewTaskPage,
     SettingsPage,
-    TabsPage
+    TabsPage,
+    HomeListe
   ],
   imports: [
     BrowserModule,
@@ -29,7 +29,7 @@ import { IonicStorageModule } from '@ionic/storage';
   entryComponents: [
     MyApp,
     HomePage,
-    NewTaskPage,
+    HomeListe,
     SettingsPage,
     TabsPage
   ],

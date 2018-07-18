@@ -10,9 +10,6 @@ import { ToDoProvider } from '../../providers/to-do/to-do';
 export class HomePage {
   nomeLista: any;
   todos: any;
-  private tasks;
-  // private localdb;
-  private remotedb;
   splash;
   constructor(public alertCtrl: AlertController, public todoService: ToDoProvider) {
     this.doRefresh(0);
