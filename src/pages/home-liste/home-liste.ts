@@ -19,17 +19,16 @@ export class HomeListe {
 
   public liste: any = [];
   public numListe;
-  constructor(public todo: ToDoProvider, public alert: AlertController, public navCtrl: NavController, public navParams: NavParams) {
-
-    var oggetto = new HomePage(alert, todo);
-    var oggetto1 = new HomePage(alert, todo);
-
-    this.numListe =this.liste.push(oggetto,oggetto1);
+  public todo;
+  public alert;
+  constructor(todo:ToDoProvider,alert:AlertController, public navCtrl: NavController, public navParams: NavParams) {
+    this.todo = todo; 
+    this.alert = alert;
   }
 
-  add(){
-    console.log(this.liste[0].nomeLista);
-    console.log(this.liste[1].nomeLista);
+  add() {
+    var oggetto = new HomePage(this.alert, this.todo);
+    this.numListe = this.liste.push(oggetto);
   }
 
   ionViewDidLoad() {

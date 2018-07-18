@@ -30,28 +30,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  */
 var HomeListe = /** @class */ (function () {
     function HomeListe(todo, alert, navCtrl, navParams) {
-        this.todo = todo;
-        this.alert = alert;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.liste = [];
-        var oggetto = new __WEBPACK_IMPORTED_MODULE_2__home_home__["a" /* HomePage */](alert, todo);
-        var oggetto1 = new __WEBPACK_IMPORTED_MODULE_2__home_home__["a" /* HomePage */](alert, todo);
-        this.numListe = this.liste.push(oggetto, oggetto1);
+        this.todo = todo;
+        this.alert = alert;
     }
     HomeListe.prototype.add = function () {
-        console.log(this.liste[0].nomeLista);
-        console.log(this.liste[1].nomeLista);
+        var oggetto = new __WEBPACK_IMPORTED_MODULE_2__home_home__["a" /* HomePage */](this.alert, this.todo);
+        this.numListe = this.liste.push(oggetto);
     };
     HomeListe.prototype.ionViewDidLoad = function () {
     };
     HomeListe = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-title>Le tue liste({{this.numListe}}) </ion-title>\n    <ion-buttons end>\n      <button ion-button round (click)="add()">add</button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-list>\n  <div *ngFor="let array of liste">\n    <h1>{{ array.nomeLista }}</h1>\n  </div>\n</ion-list>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/,
+            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-title>Le tue liste({{this.numListe}}) </ion-title>\n    <ion-buttons end>\n      <button ion-button round (click)="add()">\n        <ion-icon name="add-circle"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-list>\n    <div *ngFor="let array of liste">\n      <h1>{{ array.nomeLista }}</h1>\n    </div>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__providers_to_do_to_do__["a" /* ToDoProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__providers_to_do_to_do__["a" /* ToDoProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_to_do_to_do__["a" /* ToDoProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _d || Object])
     ], HomeListe);
     return HomeListe;
+    var _a, _b, _c, _d;
 }());
 
 //# sourceMappingURL=home-liste.js.map
