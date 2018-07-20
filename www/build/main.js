@@ -29,27 +29,55 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var HomeListe = /** @class */ (function () {
-    function HomeListe(todo, alert, navCtrl, navParams) {
-        this.navCtrl = navCtrl;
+    function HomeListe(todo, alert, actionSheetCtrl, navCtrl, navParams) {
         this.navParams = navParams;
         this.liste = [];
         this.todo = todo;
         this.alert = alert;
+        this.actionSheetCtrl = actionSheetCtrl;
+        this.navCtrl = navCtrl;
     }
     HomeListe.prototype.add = function () {
         var oggetto = new __WEBPACK_IMPORTED_MODULE_2__home_home__["a" /* HomePage */](this.alert, this.todo);
         this.numListe = this.liste.push(oggetto);
     };
+    HomeListe.prototype.openList = function () {
+        this.navCtrl.push('oggetto');
+    };
+    HomeListe.prototype.action = function () {
+        this.presentActionSheet();
+    };
+    HomeListe.prototype.presentActionSheet = function () {
+        var _this = this;
+        this.actionSheet = this.actionSheetCtrl.create({
+            title: 'Cosa fuori fare con questa lista ?',
+            buttons: [
+                {
+                    text: 'Elimina',
+                    cssClass: 'deleteButton',
+                    role: 'delete',
+                    handler: function (data) {
+                        _this.liste.splice(data, 1);
+                    }
+                }, {
+                    text: 'Annulla',
+                    role: 'cancel',
+                    handler: function () { }
+                }
+            ]
+        });
+        this.actionSheet.present();
+    };
     HomeListe.prototype.ionViewDidLoad = function () {
     };
     HomeListe = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-title>Le tue liste({{this.numListe}}) </ion-title>\n    <ion-buttons end>\n      <button ion-button round (click)="add()">\n        <ion-icon name="add-circle"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-list>\n    <div *ngFor="let array of liste">\n      <h1>{{ array.nomeLista }}</h1>\n    </div>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/,
+            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-title>Le tue liste({{this.numListe}}) </ion-title>\n    <ion-buttons end>\n      <button ion-button round (click)="add()">\n        <ion-icon name="add-circle"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-card id="card" (press)="action()" (click)="openList()" *ngFor="let array of liste">\n    <img id="immagine" src="https://www.downloadwallpapers.info/preview/2017/12/07/1050926_gradient-iphone_7680x4320_h.jpg" />\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ array.nomeLista }}\n      </ion-card-title>\n      <p>\n        Mini descrizione lista\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>\n\n\n\n\n\n<!-- <ion-content>\n  <ion-list>\n    <div id="lista" (click)="openList()" *ngFor="let array of liste">\n      <div="wowLista">\n        immagine o descrizione\n    </div>\n    <h1>{{ array.nomeLista }}</h1>\n    </div>\n  </ion-list>\n</ion-content> -->'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/,
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__providers_to_do_to_do__["a" /* ToDoProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_to_do_to_do__["a" /* ToDoProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__providers_to_do_to_do__["a" /* ToDoProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_to_do_to_do__["a" /* ToDoProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]) === "function" && _e || Object])
     ], HomeListe);
     return HomeListe;
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=home-liste.js.map
@@ -91,7 +119,7 @@ var SettingsPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-settings',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/settings/settings.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Impostazioni</ion-title>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content padding>\n  <ion-list>\n    <ion-item>\n      <ion-label color="primary" padding>Lista condivisa</ion-label>\n      <ion-input [(ngModel)]="inputText" type="text" placeholder="nome"></ion-input>\n    </ion-item>\n    <button ion-button (click)="saveData()"> conferma</button>\n    <button ion-button (click)="loadData()">mostra</button>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/settings/settings.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__providers_to_do_to_do__["a" /* ToDoProvider */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__providers_to_do_to_do__["a" /* ToDoProvider */]])
     ], SettingsPage);
     return SettingsPage;
 }());
@@ -272,7 +300,7 @@ var HomePage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-home',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar padding>\n    <ion-title text-center>\n      Momò Task\n      <p [(ngModel)]="nomeLista"></p>\n    </ion-title>\n    <ion-buttons start>\n    </ion-buttons>\n    <ion-buttons end>\n      <button (click)="createTodo()" ion-button icon-only large color="primary">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <ion-refresher pulling-text="Refreshing..." (ionRefresh)="doRefresh($event)">\n    <ion-refresher-content pullingText="swipe per aggiornare" pullingIcon="cloud-download" refreshingSpinner="circles">\n    </ion-refresher-content>\n  </ion-refresher>\n  <ion-list>\n    <ion-item-sliding (ionSwipe)="deleteTodo(task)" *ngFor="let task of todos">\n      <ion-item>\n        <h1>{{ task.title }} </h1>\n      </ion-item>\n\n      <ion-item-options side="right">\n        <button ion-button icon-only color="light" (click)="updateTodo(todo)">\n          <ion-icon name="create"></ion-icon>\n        </button>\n        <button ion-button icon-only color="primary" (click)="deleteTodo(todo)">\n          <ion-icon name="checkmark"></ion-icon>\n        </button>\n      </ion-item-options>\n    </ion-item-sliding>\n  </ion-list>\n\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */], __WEBPACK_IMPORTED_MODULE_2__providers_to_do_to_do__["a" /* ToDoProvider */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_2__providers_to_do_to_do__["a" /* ToDoProvider */]])
     ], HomePage);
     return HomePage;
 }());
@@ -407,7 +435,7 @@ var AppModule = /** @class */ (function () {
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */], {}, {
+                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */], {}, {
                     links: [
                         { loadChildren: '../pages/home-liste/home-liste.module#HomeListeModule', name: 'HomeListe', segment: 'home-liste', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/settings/settings.module#SettingsPageModule', name: 'SettingsPage', segment: 'settings', priority: 'low', defaultHistory: [] }
@@ -415,7 +443,7 @@ var AppModule = /** @class */ (function () {
                 }),
                 __WEBPACK_IMPORTED_MODULE_10__ionic_storage__["a" /* IonicStorageModule */].forRoot()
             ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicApp */]],
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["d" /* IonicApp */]],
             entryComponents: [
                 __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */],
                 __WEBPACK_IMPORTED_MODULE_6__pages_home_home__["a" /* HomePage */],
@@ -426,7 +454,7 @@ var AppModule = /** @class */ (function () {
             providers: [
                 __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__["a" /* StatusBar */],
                 __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
-                { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["u" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["d" /* IonicErrorHandler */] },
+                { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["u" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicErrorHandler */] },
                 __WEBPACK_IMPORTED_MODULE_7__providers_to_do_to_do__["a" /* ToDoProvider */],
             ]
         })
@@ -475,7 +503,7 @@ var MyApp = /** @class */ (function () {
     MyApp = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/Users/micky/myDudo/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/micky/myDudo/src/app/app.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */]])
     ], MyApp);
     return MyApp;
 }());
@@ -574,7 +602,7 @@ var ToDoProvider = /** @class */ (function () {
     };
     ToDoProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* AlertController */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* AlertController */]])
     ], ToDoProvider);
     return ToDoProvider;
 }());

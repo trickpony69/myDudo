@@ -3,13 +3,43 @@ page-home-liste {
 }
 
 @media only screen and (max-width: 600px){
-    h1{
+    #lista{
         text-align: center;
-        border: solid 8px #e8175d;
-        border-radius: 40px;
-        padding: 40px;
-        margin: 20px;
+        border: solid 3px #e8175d;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 30px;
+        margin-top: 50px;
         height: 300px;
         box-shadow: 2px 4px 20px 1px grey;
+        background-color: #fafafa;
     }
+
+    #wowLista{
+        border-top: solid black;
+        margin-top: 50%;
+    }
+    #immagine{
+        padding: 3%;
+        height: 250px;
+        border-radius: 10px!important; 
+        // margin-top: 5%;
+        // margin-left: 5%;
+        // margin-right: 5%;
+        // width: 50%;
+    }
+
+    #card{
+        border-radius: 8px!important; 
+        width: 90%;
+        margin: 20px;
+        margin-top: 30px;
+    }
+
+    #font{
+        font-weight: 900;
+        font-size: 3em;
+    }
+
 }
+

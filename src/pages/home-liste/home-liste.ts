@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ActionSheetController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { ToDoProvider } from '../../providers/to-do/to-do';
 
@@ -21,14 +21,48 @@ export class HomeListe {
   public numListe;
   public todo;
   public alert;
-  constructor(todo:ToDoProvider,alert:AlertController, public navCtrl: NavController, public navParams: NavParams) {
-    this.todo = todo; 
+  public actionSheetCtrl;
+  public actionSheet;
+  public navCtrl: NavController;
+
+  constructor(todo: ToDoProvider, alert: AlertController, actionSheetCtrl: ActionSheetController, navCtrl: NavController, public navParams: NavParams) {
+    this.todo = todo;
     this.alert = alert;
+    this.actionSheetCtrl = actionSheetCtrl;
+    this.navCtrl = navCtrl;
   }
 
   add() {
     var oggetto = new HomePage(this.alert, this.todo);
     this.numListe = this.liste.push(oggetto);
+  }
+
+  openList() {
+    this.navCtrl.push('oggetto');
+  }
+
+  action() {
+    this.presentActionSheet();
+  }
+
+  presentActionSheet() {
+    this.actionSheet = this.actionSheetCtrl.create({
+      title: 'Cosa fuori fare con questa lista ?',
+      buttons: [
+        {
+          text: 'Elimina',
+          cssClass: 'deleteButton',
+          role: 'delete',
+          handler: (data) => { this.liste.splice(data,1);
+          }
+        },{
+          text: 'Annulla',
+          role: 'cancel',
+          handler: () => {}
+        }
+      ]
+    });
+    this.actionSheet.present();
   }
 
   ionViewDidLoad() {

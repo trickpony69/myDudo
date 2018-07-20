@@ -11,6 +11,5 @@ export class TabsPage {
   home = HomeListe;
   impostazioni = SettingsPage;
 
-  constructor(){
-  }
+  constructor(){}
 }

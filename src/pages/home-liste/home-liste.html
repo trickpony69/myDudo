@@ -13,9 +13,30 @@
 
 
 <ion-content>
+  <ion-card id="card" (press)="action()" (click)="openList()" *ngFor="let array of liste">
+    <img id="immagine" src="https://www.downloadwallpapers.info/preview/2017/12/07/1050926_gradient-iphone_7680x4320_h.jpg" />
+    <ion-card-content>
+      <ion-card-title id="font">
+        {{ array.nomeLista }}
+      </ion-card-title>
+      <p>
+        Mini descrizione lista
+      </p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+
+
+
+
+<!-- <ion-content>
   <ion-list>
-    <div *ngFor="let array of liste">
-      <h1>{{ array.nomeLista }}</h1>
+    <div id="lista" (click)="openList()" *ngFor="let array of liste">
+      <div="wowLista">
+        immagine o descrizione
+    </div>
+    <h1>{{ array.nomeLista }}</h1>
     </div>
   </ion-list>
-</ion-content>
+</ion-content> -->
