@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Le tue liste({{this.numListe}}) </ion-title>
+    <ion-title>Le tue liste({{cardCount}}) </ion-title>
     <ion-buttons end>
       <button ion-button round (click)="add()">
         <ion-icon name="add-circle"></ion-icon>
@@ -13,14 +13,14 @@
 
 
 <ion-content>
-  <ion-card id="card" (press)="action()" (click)="openList()" *ngFor="let array of liste">
-    <img id="immagine" src="https://www.downloadwallpapers.info/preview/2017/12/07/1050926_gradient-iphone_7680x4320_h.jpg" />
+  <ion-card id="card" (press)="action(card)" (click)="openTodo(card)" *ngFor="let card of cards">
+    <img id="immagine" src="../../assets/imgs/ombrellone.jpg" />
     <ion-card-content>
       <ion-card-title id="font">
-        {{ array.nomeLista }}
+        {{ card }}
       </ion-card-title>
       <p>
-        Mini descrizione lista
+        id Lista: {{ cardId[cardCount] }}
       </p>
     </ion-card-content>
   </ion-card>

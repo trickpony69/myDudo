@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import PouchDB from 'PouchDb'
-import { SettingsPage } from '../../pages/settings/settings';
-import { NavParams, AlertController } from 'ionic-angular';
-import { HomePage } from '../../pages/home/home';
+import { AlertController } from 'ionic-angular';
 
 
 @Injectable()

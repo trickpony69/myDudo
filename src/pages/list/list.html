@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar padding>
+    <ion-title text-center>
+      Momò Task
+      <p>{{ nomeLista }}</p>
+      <p>{{ idLista }}</p>
+    </ion-title>
+    <ion-buttons start>
+    </ion-buttons>
+    <ion-buttons end>
+      <button (click)="createTodo()" ion-button icon-only large color="primary">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher pulling-text="Refreshing..." (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="swipe per aggiornare" pullingIcon="cloud-download" refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-item-sliding (ionSwipe)="deleteTodo(task)" *ngFor="let task of todos">
+      <ion-item>
+        <h1>{{ task.title }} </h1>
+      </ion-item>
+
+      <ion-item-options side="right">
+        <button ion-button icon-only color="light" (click)="updateTodo(todo)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+        <button ion-button icon-only color="primary" (click)="deleteTodo(todo)">
+          <ion-icon name="checkmark"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+</ion-content>

@@ -1,14 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ActionSheetController } from 'ionic-angular';
-import { HomePage } from '../home/home';
-import { ToDoProvider } from '../../providers/to-do/to-do';
-
-/**
- * Generated class for the HomeListePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { ListPage } from '../list/list';
 
 @IonicPage()
 @Component({
@@ -17,44 +9,70 @@ import { ToDoProvider } from '../../providers/to-do/to-do';
 })
 export class HomeListe {
 
-  public liste: any = [];
-  public numListe;
-  public todo;
-  public alert;
-  public actionSheetCtrl;
-  public actionSheet;
-  public navCtrl: NavController;
+  public cards: string[] = [];
+  public cardId: number[] = [];
+  public cardCount: number = 0;
+  toCard: {id: number, name: string};
 
-  constructor(todo: ToDoProvider, alert: AlertController, actionSheetCtrl: ActionSheetController, navCtrl: NavController, public navParams: NavParams) {
-    this.todo = todo;
-    this.alert = alert;
-    this.actionSheetCtrl = actionSheetCtrl;
+  public actionSheet;
+  public navCtrl;
+  public alertCtrl;
+
+  constructor(actionSheet: ActionSheetController, alertCtrl: AlertController, navCtrl: NavController){
+    this.actionSheet = actionSheet;
     this.navCtrl = navCtrl;
+    this.alertCtrl = alertCtrl;
+    this.toCard = {
+      id: this.cardId[0],
+      name: this.cards[0]
+    }
   }
 
   add() {
-    var oggetto = new HomePage(this.alert, this.todo);
-    this.numListe = this.liste.push(oggetto);
+    let splash = this.alertCtrl.create({
+      title: 'Lista',
+      message: 'Inserisci il nome della lista condivisa o creane una',
+      inputs: [
+        {
+          placeholder: '',
+          name: 'title'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Invia',
+          handler: data => { this.cards.push(data.title); 
+            // todoService.user = data.title; //da pensare come fare...direi da passare tramite navParams
+          }
+        }
+      ]
+    });
+    splash.present();
+
+    this.cardCount ++;
+    this.cardId[this.cardCount] = this.cardCount-1+1;
   }
 
-  openList() {
-    this.navCtrl.push('oggetto');
+  openTodo(card){
+    this.navCtrl.push(ListPage, {  
+      id: this.cardId[card], //come me lo passo il numero ??
+      name: card
+    });
   }
 
-  action() {
-    this.presentActionSheet();
+  action(card) {
+    this.presentActionSheet(card);
   }
 
-  presentActionSheet() {
-    this.actionSheet = this.actionSheetCtrl.create({
+  presentActionSheet(card) {
+    var popup =  this.actionSheet.create({
       title: 'Cosa fuori fare con questa lista ?',
       buttons: [
         {
           text: 'Elimina',
           cssClass: 'deleteButton',
           role: 'delete',
-          handler: (data) => { this.liste.splice(data,1);
-          }
+          handler: () => { this.removePost(card);}
         },{
           text: 'Annulla',
           role: 'cancel',
@@ -62,11 +80,17 @@ export class HomeListe {
         }
       ]
     });
-    this.actionSheet.present();
+    popup.present();
   }
 
-  ionViewDidLoad() {
-
+  removePost(post){
+    let index = this.cards.indexOf(post);
+    if(index > -1){
+      this.cards.splice(index, 1);
+      this.cardCount--;
+    }
   }
+
+  ionViewDidLoad() {}
 
 }
