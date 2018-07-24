@@ -7,9 +7,6 @@ import { AlertController } from 'ionic-angular';
 export class ToDoProvider {
   data: any;
   db: any;
-  remote: any;
-  link: any = "https://a6821a44.ngrok.io/";
-  user: any;
   options: any;
   constructor(public alertCtrl: AlertController) {
      

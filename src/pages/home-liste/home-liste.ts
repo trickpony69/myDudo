@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ActionSheetController } from 'ionic-angular';
 import { ListPage } from '../list/list';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -9,24 +10,14 @@ import { ListPage } from '../list/list';
 })
 export class HomeListe {
 
-  public cards: string[] = [];
+  public cards = [];
   public cardId: number[] = [];
   public cardCount: number = 0;
-  toCard: {id: number, name: string};
+  public nickname = "cle";
 
-  public actionSheet;
-  public navCtrl;
-  public alertCtrl;
+  
 
-  constructor(actionSheet: ActionSheetController, alertCtrl: AlertController, navCtrl: NavController){
-    this.actionSheet = actionSheet;
-    this.navCtrl = navCtrl;
-    this.alertCtrl = alertCtrl;
-    this.toCard = {
-      id: this.cardId[0],
-      name: this.cards[0]
-    }
-  }
+  constructor(private storage: Storage, public actionSheet: ActionSheetController, public alertCtrl: AlertController, public navCtrl: NavController) {}
 
   add() {
     let splash = this.alertCtrl.create({
@@ -41,22 +32,30 @@ export class HomeListe {
       buttons: [
         {
           text: 'Invia',
-          handler: data => { this.cards.push(data.title); 
-            // todoService.user = data.title; //da pensare come fare...direi da passare tramite navParams
+          handler: (data) => {
+            this.cards.push({ id: this.cardCount, name: data.title });
+            this.cardCount++;
+            this.cardId[this.cardCount] = this.cardCount - 1 + 1;
+            this.storage.set("cards", this.cards);
           }
         }
       ]
     });
     splash.present();
-
-    this.cardCount ++;
-    this.cardId[this.cardCount] = this.cardCount-1+1;
   }
 
-  openTodo(card){
-    this.navCtrl.push(ListPage, {  
-      id: this.cardId[card], //come me lo passo il numero ??
-      name: card
+
+  ionViewDidLoad() {
+    this.storage.get('cards').then((val) => {
+      this.cards = val;
+    });
+  }
+
+  openTodo(card) {
+    this.navCtrl.push(ListPage, {
+      id: card.id,
+      name: card.name,
+      nickname: this.nickname
     });
   }
 
@@ -65,32 +64,31 @@ export class HomeListe {
   }
 
   presentActionSheet(card) {
-    var popup =  this.actionSheet.create({
+    var popup = this.actionSheet.create({
       title: 'Cosa fuori fare con questa lista ?',
       buttons: [
         {
           text: 'Elimina',
           cssClass: 'deleteButton',
           role: 'delete',
-          handler: () => { this.removePost(card);}
-        },{
+          handler: () => { this.removePost(card); }
+        }, {
           text: 'Annulla',
           role: 'cancel',
-          handler: () => {}
+          handler: () => { }
         }
       ]
     });
     popup.present();
   }
 
-  removePost(post){
+  removePost(post) {
     let index = this.cards.indexOf(post);
-    if(index > -1){
+    if (index > -1) {
       this.cards.splice(index, 1);
       this.cardCount--;
+      this.storage.set("cards", this.cards);
     }
   }
-
-  ionViewDidLoad() {}
 
 }

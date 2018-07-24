@@ -3,7 +3,7 @@
   <ion-navbar>
     <ion-title>Le tue liste({{cardCount}}) </ion-title>
     <ion-buttons end>
-      <button ion-button round (click)="add()">
+      <button ion-button round icon-only large (click)="add()" >
         <ion-icon name="add-circle"></ion-icon>
       </button>
     </ion-buttons>
@@ -17,26 +17,11 @@
     <img id="immagine" src="../../assets/imgs/ombrellone.jpg" />
     <ion-card-content>
       <ion-card-title id="font">
-        {{ card }}
+        {{ card.name }}
       </ion-card-title>
       <p>
-        id Lista: {{ cardId[cardCount] }}
+        id Lista: {{ card.id }}
       </p>
     </ion-card-content>
   </ion-card>
 </ion-content>
-
-
-
-
-
-<!-- <ion-content>
-  <ion-list>
-    <div id="lista" (click)="openList()" *ngFor="let array of liste">
-      <div="wowLista">
-        immagine o descrizione
-    </div>
-    <h1>{{ array.nomeLista }}</h1>
-    </div>
-  </ion-list>
-</ion-content> -->

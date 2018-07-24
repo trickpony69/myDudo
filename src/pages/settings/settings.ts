@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController} from 'ionic-angular';
 import { ToDoProvider } from '../../providers/to-do/to-do';
+import { HomeListe } from '../home-liste/home-liste';
 
 @IonicPage()
 @Component({
@@ -16,10 +17,7 @@ export class SettingsPage {
 
   ionViewDidLoad(){
 
-    this.inputText = this.todoProv.user;
+    
   }
 
-  loadData(){
-    alert(this.todoProv.remote);
-  }
 }

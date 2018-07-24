@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { ToDoProvider } from '../../providers/to-do/to-do';
-
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { Observable } from '../../../node_modules/rxjs';
+import { map } from 'rxjs/operators';
 
 @IonicPage()
 @Component({
@@ -10,43 +11,23 @@ import { ToDoProvider } from '../../providers/to-do/to-do';
 })
 export class ListPage {
 
-  todos;
-  toUser;
-  nomeLista;
-  idLista;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public todoService: ToDoProvider, public alertCtrl: AlertController) {
-    this.doRefresh(0);
+  toUser: any;
+  todos: Observable<any[]>;
+  itemsRef: AngularFireList<any>;
+
+  constructor(public afDatabase: AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
     this.toUser = {
-      id: navParams.get("id"),
-      name: navParams.get("name")
+      name: navParams.get("name"),
+      nickname: navParams.get("nickname")
     }
-    this.nomeLista = this.toUser.name;
-    this.idLista = this.toUser.id;
-    // this.splash.onDidDismiss(() => {
-
-    //   todoService.remote = todoService.link + todoService.user;
-    //   todoService.db.sync(todoService.remote, todoService.options);
-    //   // alert(todoService.remote);
-    //   this.nomeLista = todoService.user;
-    // });
+    this.itemsRef = afDatabase.list("/todos/" + this.toUser.nickname + "/" + this.toUser.name + "/");
+    this.todos = this.itemsRef.snapshotChanges().pipe(
+      map(changes =>
+        changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))
+      )
+    );
   }
-
-
-  ionViewDidLoad() {
-    this.todoService.getTodo().then((data) => {
-      this.todos = data;
-    });
-
-  }
-
-  doRefresh(refresher) {
-    this.todoService.getTodo().then((data) => {
-      this.todos = data;
-      if (refresher != 0)
-        refresher.complete();
-    });
-  }
-
+  
   createTodo() {
 
     let prompt = this.alertCtrl.create({
@@ -65,7 +46,7 @@ export class ListPage {
         {
           text: 'Salva',
           handler: data => {
-            this.todoService.createTodo({ title: data.title });
+            this.itemsRef.push({ content: data.title })
           }
         }
       ]
@@ -78,25 +59,21 @@ export class ListPage {
   updateTodo(todo) {
 
     let prompt = this.alertCtrl.create({
-      title: 'Edit',
-      message: 'Cambiato idea ?',
+      title: 'Cambiato idea ?',
       inputs: [
         {
-          name: 'title'
+          name: 'title',
+          value: todo.content,
         }
       ],
       buttons: [
         {
-          text: 'Cancel'
+          text: 'Annulla'
         },
         {
-          text: 'Save',
-          handler: data => {
-            this.todoService.updateTodo({
-              _id: todo._id,
-              _rev: todo._rev,
-              title: data.title
-            });
+          text: 'Modifica',
+          handler: (data) => {
+            this.itemsRef.update(todo.key, { content: data.title });
           }
         }
       ]
@@ -105,8 +82,8 @@ export class ListPage {
     prompt.present();
   }
 
-  deleteTodo(todo) {
-    this.todoService.deleteTodo(todo);
+  deleteTodo(key: string) {    
+    this.itemsRef.remove(key); 
   }
 
 }

@@ -10,6 +10,7 @@ export class TabsPage {
 
   home = HomeListe;
   impostazioni = SettingsPage;
+  // tab2Params = { id: HomeListe };
 
   constructor(){}
 }
