@@ -16,7 +16,7 @@ export class HomeListe {
 
   constructor(private storage: Storage, public actionSheet: ActionSheetController, navParams: NavParams, public alertCtrl: AlertController, public navCtrl: NavController) {
     this.storage.get('cards').then((val) => {
-      if(val != null){
+      if (val != null) {
         this.cards = val;
       }
     });
@@ -41,7 +41,7 @@ export class HomeListe {
         {
           text: 'Invia',
           handler: (data) => {
-            this.cards.push({ id: this.cardCount, name: data.title, friend:"null", proprietary: "yes" });
+            this.cards.push({ id: this.cardCount, name: data.title, friend: "null", proprietary: "yes" });
             this.cardCount++;
             this.storage.set("cards", this.cards);
             this.storage.set("cardCount", this.cardCount);
@@ -79,9 +79,47 @@ export class HomeListe {
       ]
     });
     splash.present();
-    // alert.onDidDismiss(() => {
-      
-    // })
+    // alert.onDidDismiss(() => {})
+  }
+
+  choseImage() {
+    let splash = this.alertCtrl.create({
+      title: 'Sfondo',
+      // message: 'Inserisci il nome della lista ed il nome del tuo amico',
+      inputs: [
+        {
+          type: 'radio',
+          name: 'image',
+          label: 'nessuno',
+          value: 'nessuno',
+        },
+        {
+          type: 'radio',
+          name: 'image',
+          label: 'sfondo 0',
+          value: 'sfondo0',
+        },
+        {
+          type: 'radio',
+          name: 'image',
+          label: 'sfondo 1',
+          value: 'sfondo1',
+        },
+        {
+          type: 'radio',
+          name: 'image',
+          label: 'sfondo 2',
+          value: 'sfondo2',
+        }
+      ],
+      buttons: [
+        {
+          text: 'Invia',
+          handler: (data) => { if(data == "nessuno")document.getElementById("immagine").style.display = "none" }
+        }
+      ]
+    });
+    splash.present();
   }
 
   openTodo(card) {
@@ -115,6 +153,9 @@ export class HomeListe {
           text: 'Annulla',
           role: 'cancel',
           handler: () => { }
+        },{
+          text: "modifica",
+          handler: () => { this.choseImage() }
         }
       ]
     });

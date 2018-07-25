@@ -95,8 +95,47 @@ var HomeListe = /** @class */ (function () {
             ]
         });
         splash.present();
-        // alert.onDidDismiss(() => {
-        // })
+        // alert.onDidDismiss(() => {})
+    };
+    HomeListe.prototype.choseImage = function () {
+        var splash = this.alertCtrl.create({
+            title: 'Sfondo',
+            // message: 'Inserisci il nome della lista ed il nome del tuo amico',
+            inputs: [
+                {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'nessuno',
+                    value: 'nessuno',
+                },
+                {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'sfondo 0',
+                    value: 'sfondo0',
+                },
+                {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'sfondo 1',
+                    value: 'sfondo1',
+                },
+                {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'sfondo 2',
+                    value: 'sfondo2',
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Invia',
+                    handler: function (data) { if (data == "nessuno")
+                        document.getElementById("immagine").style.display = "none"; }
+                }
+            ]
+        });
+        splash.present();
     };
     HomeListe.prototype.openTodo = function (card) {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__list_list__["a" /* ListPage */], {
@@ -128,6 +167,9 @@ var HomeListe = /** @class */ (function () {
                     text: 'Annulla',
                     role: 'cancel',
                     handler: function () { }
+                }, {
+                    text: "modifica",
+                    handler: function () { _this.choseImage(); }
                 }
             ]
         });
@@ -146,9 +188,10 @@ var HomeListe = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/'<ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <h1 id="titolo">Le tue liste({{cardCount}})</h1>\n    <p>Il tuo user: {{nickname}}</p>\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card id="card" (press)="action(card)" (click)="openTodo(card)" *ngFor="let card of cards">\n    <img id="immagine" src="../../assets/imgs/sfondo0.jpg" />\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description">\n        Condivisa con {{ card.friend }}\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]) === "function" && _e || Object])
     ], HomeListe);
     return HomeListe;
+    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=home-liste.js.map
@@ -486,7 +529,7 @@ var TabsPage = /** @class */ (function () {
         var _this = this;
         this.impostazioni = __WEBPACK_IMPORTED_MODULE_1__settings_settings__["a" /* SettingsPage */];
         var splash = alertCtrl.create({
-            title: 'Lista',
+            title: 'Nome utente',
             message: 'Inserisci il tuo nome utente',
             enableBackdropDismiss: false,
             inputs: [
