@@ -1,11 +1,9 @@
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Le tue liste({{cardCount}}) </ion-title>
+  <ion-navbar hideBackButton="true">
+    <h1 id="titolo">Le tue liste({{cardCount}})</h1>
+    <p>Il tuo user: {{nickname}}</p>
     <ion-buttons end>
-      <button ion-button round icon-only large (click)="add()" >
-        <ion-icon name="add-circle"></ion-icon>
-      </button>
     </ion-buttons>
   </ion-navbar>
 
@@ -13,14 +11,29 @@
 
 
 <ion-content>
+  <ion-fab bottom right>
+    <button ion-fab>
+      <ion-icon name="create"></ion-icon>
+    </button>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="add()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab-list>
+    <ion-fab-list side="left">
+      <button ion-fab (click)="addShared()">
+        <ion-icon name="share"></ion-icon>
+      </button>
+    </ion-fab-list>
+  </ion-fab>
   <ion-card id="card" (press)="action(card)" (click)="openTodo(card)" *ngFor="let card of cards">
-    <img id="immagine" src="../../assets/imgs/ombrellone.jpg" />
+    <img id="immagine" src="../../assets/imgs/sfondo0.jpg" />
     <ion-card-content>
       <ion-card-title id="font">
         {{ card.name }}
       </ion-card-title>
-      <p>
-        id Lista: {{ card.id }}
+      <p id="description">
+        Condivisa con {{ card.friend }}
       </p>
     </ion-card-content>
   </ion-card>

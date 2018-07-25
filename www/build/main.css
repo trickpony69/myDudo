@@ -25682,6 +25682,10 @@ ion-navbar.toolbar {
   color: red !important;
 }
 
+#titolo {
+  font-weight: 700 !important;
+}
+
 @media only screen and (max-width: 600px) {
   #lista {
     text-align: center;

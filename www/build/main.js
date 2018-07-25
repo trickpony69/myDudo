@@ -6,7 +6,7 @@ webpackJsonp([3],{
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeListe; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__list_list__ = __webpack_require__(151);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(237);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -23,21 +23,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var HomeListe = /** @class */ (function () {
-    function HomeListe(storage, actionSheet, alertCtrl, navCtrl) {
+    function HomeListe(storage, actionSheet, navParams, alertCtrl, navCtrl) {
+        var _this = this;
         this.storage = storage;
         this.actionSheet = actionSheet;
         this.alertCtrl = alertCtrl;
         this.navCtrl = navCtrl;
         this.cards = [];
-        this.cardId = [];
         this.cardCount = 0;
-        this.nickname = "cle";
+        this.storage.get('cards').then(function (val) {
+            if (val != null) {
+                _this.cards = val;
+            }
+        });
+        this.storage.get('cardCount').then(function (val) {
+            if (val >= 0)
+                _this.cardCount = val;
+        });
+        this.nickname = navParams.get("nickname");
     }
     HomeListe.prototype.add = function () {
         var _this = this;
         var splash = this.alertCtrl.create({
             title: 'Lista',
-            message: 'Inserisci il nome della lista condivisa o creane una',
+            message: 'Inserisci il nome della lista che vuoi creare',
             inputs: [
                 {
                     placeholder: '',
@@ -48,27 +57,58 @@ var HomeListe = /** @class */ (function () {
                 {
                     text: 'Invia',
                     handler: function (data) {
-                        _this.cards.push({ id: _this.cardCount, name: data.title });
+                        _this.cards.push({ id: _this.cardCount, name: data.title, friend: "null", proprietary: "yes" });
                         _this.cardCount++;
-                        _this.cardId[_this.cardCount] = _this.cardCount - 1 + 1;
                         _this.storage.set("cards", _this.cards);
+                        _this.storage.set("cardCount", _this.cardCount);
                     }
                 }
             ]
         });
         splash.present();
     };
-    HomeListe.prototype.ionViewDidLoad = function () {
+    HomeListe.prototype.addShared = function () {
         var _this = this;
-        this.storage.get('cards').then(function (val) {
-            _this.cards = val;
+        var splash = this.alertCtrl.create({
+            title: 'Lista',
+            message: 'Inserisci il nome della lista ed il nome del tuo amico',
+            inputs: [
+                {
+                    placeholder: 'nome lista',
+                    name: 'title'
+                },
+                {
+                    placeholder: 'nome amico',
+                    name: 'friend'
+                },
+            ],
+            buttons: [
+                {
+                    text: 'Invia',
+                    handler: function (data) {
+                        _this.cards.push({ id: _this.cardCount, name: data.title, friend: data.friend, proprietary: "no" });
+                        _this.cardCount++;
+                        _this.storage.set("cards", _this.cards);
+                        _this.storage.set("cardCount", _this.cardCount);
+                    }
+                }
+            ]
         });
+        splash.present();
+        // alert.onDidDismiss(() => {
+        // })
     };
     HomeListe.prototype.openTodo = function (card) {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__list_list__["a" /* ListPage */], {
             id: card.id,
             name: card.name,
-            nickname: this.nickname
+            nickname: this.nickname,
+            friend: card.friend,
+            proprietary: card.proprietary
+        }, {
+            animate: true,
+            animation: "ios-transition",
+            direction: "backward"
         });
     };
     HomeListe.prototype.action = function (card) {
@@ -99,16 +139,16 @@ var HomeListe = /** @class */ (function () {
             this.cards.splice(index, 1);
             this.cardCount--;
             this.storage.set("cards", this.cards);
+            this.storage.set("cardCount", this.cardCount);
         }
     };
     HomeListe = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-title>Le tue liste({{cardCount}}) </ion-title>\n    <ion-buttons end>\n      <button ion-button round icon-only large (click)="add()" >\n        <ion-icon name="add-circle"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-card id="card" (press)="action(card)" (click)="openTodo(card)" *ngFor="let card of cards">\n    <img id="immagine" src="../../assets/imgs/ombrellone.jpg" />\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p>\n        id Lista: {{ card.id }}\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/,
+            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/'<ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <h1 id="titolo">Le tue liste({{cardCount}})</h1>\n    <p>Il tuo user: {{nickname}}</p>\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card id="card" (press)="action(card)" (click)="openTodo(card)" *ngFor="let card of cards">\n    <img id="immagine" src="../../assets/imgs/sfondo0.jpg" />\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description">\n        Condivisa con {{ card.friend }}\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/,
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]])
     ], HomeListe);
     return HomeListe;
-    var _a, _b, _c, _d;
 }());
 
 //# sourceMappingURL=home-liste.js.map
@@ -121,7 +161,7 @@ var HomeListe = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(227);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators__ = __webpack_require__(30);
 var __assign = (this && this.__assign) || Object.assign || function(t) {
@@ -153,9 +193,14 @@ var ListPage = /** @class */ (function () {
         this.alertCtrl = alertCtrl;
         this.toUser = {
             name: navParams.get("name"),
-            nickname: navParams.get("nickname")
+            nickname: navParams.get("nickname"),
+            friend: navParams.get("friend"),
+            proprietary: navParams.get("proprietary")
         };
-        this.itemsRef = afDatabase.list("/todos/" + this.toUser.nickname + "/" + this.toUser.name + "/");
+        if (this.toUser.proprietary == "yes")
+            this.itemsRef = afDatabase.list("/todos/" + this.toUser.nickname + "/" + this.toUser.name + "/");
+        else
+            this.itemsRef = afDatabase.list("/todos/" + this.toUser.friend + "/" + this.toUser.name + "/");
         this.todos = this.itemsRef.snapshotChanges().pipe(Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["map"])(function (changes) {
             return changes.map(function (c) { return (__assign({ key: c.payload.key }, c.payload.val())); });
         }));
@@ -231,7 +276,7 @@ var ListPage = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_to_do_to_do__ = __webpack_require__(238);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -322,7 +367,7 @@ module.exports = webpackAsyncContext;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ToDoProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_PouchDb__ = __webpack_require__(454);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(41);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -421,6 +466,7 @@ var ToDoProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings_settings__ = __webpack_require__(152);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_liste_home_liste__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(41);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -433,17 +479,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var TabsPage = /** @class */ (function () {
     // tab2Params = { id: HomeListe };
-    function TabsPage() {
-        this.home = __WEBPACK_IMPORTED_MODULE_2__home_liste_home_liste__["a" /* HomeListe */];
+    function TabsPage(alertCtrl, navCtrl) {
+        var _this = this;
         this.impostazioni = __WEBPACK_IMPORTED_MODULE_1__settings_settings__["a" /* SettingsPage */];
+        var splash = alertCtrl.create({
+            title: 'Lista',
+            message: 'Inserisci il tuo nome utente',
+            enableBackdropDismiss: false,
+            inputs: [
+                {
+                    placeholder: '',
+                    name: 'title'
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Invia',
+                    handler: function (data) {
+                        _this.home = __WEBPACK_IMPORTED_MODULE_2__home_liste_home_liste__["a" /* HomeListe */];
+                        navCtrl.push(_this.home, { nickname: data.title });
+                    }
+                }
+            ]
+        });
+        splash.present();
     }
     TabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-tabs',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/tabs/tabs.html"*/'<ion-tabs>\n  <ion-tab [root]="home" tabTitle="Liste" tabIcon="home"></ion-tab>\n  <ion-tab [root]="impostazioni" tabTitle="Impostazioni" tabIcon="settings"></ion-tab>\n</ion-tabs>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/tabs/tabs.html"*/,
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* NavController */]])
     ], TabsPage);
     return TabsPage;
 }());
@@ -474,7 +542,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(280);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(283);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(488);
@@ -568,7 +636,7 @@ var AppModule = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(283);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(280);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_tabs_tabs__ = __webpack_require__(284);
