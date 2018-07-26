@@ -25683,13 +25683,13 @@ ion-navbar.toolbar {
 }
 
 #titolo {
-  font-weight: 700 !important;
+  font-weight: 900 !important;
+  font-size: 2.5em;
 }
 
 @media only screen and (max-width: 600px) {
   #lista {
     text-align: center;
-    border: solid 3px #e8175d;
     border-radius: 10px;
     padding: 10px;
     margin: 30px;
@@ -25704,18 +25704,23 @@ ion-navbar.toolbar {
     margin-top: 50%;
   }
   #immagine {
-    padding: 3%;
+    width: 90%;
+    margin-top: 4%;
+    margin-left: 5%;
     height: 250px;
     border-radius: 10px !important;
+    display: none;
+    background-size: 95% 95% !important;
+    background-repeat: no-repeat !important;
   }
-  #card {
+  .card {
     border-radius: 8px !important;
     width: 90%;
     margin: 20px;
     margin-top: 30px;
   }
   #font {
-    font-weight: 900;
+    font-weight: 700;
     font-size: 3em;
   }
 }

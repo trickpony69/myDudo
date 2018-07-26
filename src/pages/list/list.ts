@@ -93,4 +93,9 @@ export class ListPage {
     this.itemsRef.remove(key);
   }
 
+  checked(todo){
+    document.getElementById("task").style.textDecoration = "line-through";
+
+  }
+
 }

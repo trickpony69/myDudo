@@ -13,6 +13,7 @@ export class HomeListe {
   public cards = [];
   public cardCount = 0;
   nickname: string;
+  immagine = "src=\"./../assets/imgs/sfondo0.jpg\"";
 
   constructor(private storage: Storage, public actionSheet: ActionSheetController, navParams: NavParams, public alertCtrl: AlertController, public navCtrl: NavController) {
     this.storage.get('cards').then((val) => {
@@ -82,7 +83,7 @@ export class HomeListe {
     // alert.onDidDismiss(() => {})
   }
 
-  choseImage() {
+  choseImage(index) {
     let splash = this.alertCtrl.create({
       title: 'Sfondo',
       // message: 'Inserisci il nome della lista ed il nome del tuo amico',
@@ -92,30 +93,49 @@ export class HomeListe {
           name: 'image',
           label: 'nessuno',
           value: 'nessuno',
-        },
-        {
+        }, {
           type: 'radio',
           name: 'image',
           label: 'sfondo 0',
           value: 'sfondo0',
-        },
-        {
+        }, {
           type: 'radio',
           name: 'image',
           label: 'sfondo 1',
           value: 'sfondo1',
-        },
-        {
+        }, {
           type: 'radio',
           name: 'image',
           label: 'sfondo 2',
           value: 'sfondo2',
+        }, {
+          type: 'radio',
+          name: 'image',
+          label: 'ombrellone',
+          value: 'ombrellone',
+        }, {
+          type: 'radio',
+          name: 'image',
+          label: 'spiaggia',
+          value: 'spiaggia',
+        }, {
+          type: 'radio',
+          name: 'image',
+          label: 'carrello della spesa',
+          value: 'shopping',
         }
       ],
       buttons: [
         {
-          text: 'Invia',
-          handler: (data) => { if(data == "nessuno")document.getElementById("immagine").style.display = "none" }
+          text: 'Cambia',
+          handler: (data) => {
+            var listeCards = document.getElementsByTagName("img");
+            if (data == "nessuno") { listeCards[index].style.display = "none"; }
+            else {          
+              listeCards[index].style.background =  "url('./../assets/imgs/" + data + ".jpg')" ;        
+              listeCards[index].style.display = "block";
+            }
+          }
         }
       ]
     });
@@ -136,26 +156,26 @@ export class HomeListe {
       });
   }
 
-  action(card) {
-    this.presentActionSheet(card);
+  action(card,index) {
+    this.presentActionSheet(card,index);
   }
 
-  presentActionSheet(card) {
+  presentActionSheet(card,index) {
     var popup = this.actionSheet.create({
       title: 'Cosa fuori fare con questa lista ?',
       buttons: [
         {
-          text: 'Elimina',
-          cssClass: 'deleteButton',
-          role: 'delete',
-          handler: () => { this.removePost(card); }
+          text: "modifica",
+          handler: () => { this.choseImage(index) }
         }, {
           text: 'Annulla',
           role: 'cancel',
           handler: () => { }
-        },{
-          text: "modifica",
-          handler: () => { this.choseImage() }
+        }, {
+          text: 'Elimina',
+          cssClass: 'deleteButton',
+          role: 'delete',
+          handler: () => { this.removePost(card); }
         }
       ]
     });

@@ -1,7 +1,6 @@
 <ion-header>
   <ion-navbar padding>
     <ion-title text-center>
-      <h1>Momò Task</h1>
       <p>{{ toUser.name }}</p>
       <p>{{ toUser.link }}</p>
       <p>Il tuo nickname: {{ toUser.nickname }}</p>
@@ -21,7 +20,7 @@
   <ion-list>
     <ion-item-sliding *ngFor="let task of todos | async">
       <ion-item>
-        <h1>{{ task.content }}</h1>
+        <h1 id="task">{{ task.content }}</h1>
       </ion-item>
 
       <ion-item-options side="right">
@@ -30,6 +29,11 @@
         </button>
         <button ion-button icon-only color="danger" (click)="deleteTodo(task.key)">
           <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options>
+      <ion-item-options side="left">
+        <button ion-button icon-only color="secondary" (click)="checked()">
+          <ion-icon name="checkmark"></ion-icon>
         </button>
       </ion-item-options>
     </ion-item-sliding>

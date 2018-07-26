@@ -26,8 +26,8 @@
       </button>
     </ion-fab-list>
   </ion-fab>
-  <ion-card id="card" (press)="action(card)" (click)="openTodo(card)" *ngFor="let card of cards">
-    <img id="immagine" src="../../assets/imgs/sfondo0.jpg" />
+  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">
+    <img id="immagine"/>
     <ion-card-content>
       <ion-card-title id="font">
         {{ card.name }}
