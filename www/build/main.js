@@ -4,224 +4,6 @@ webpackJsonp([3],{
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeListe; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__list_list__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(237);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-var HomeListe = /** @class */ (function () {
-    function HomeListe(storage, actionSheet, navParams, alertCtrl, navCtrl) {
-        var _this = this;
-        this.storage = storage;
-        this.actionSheet = actionSheet;
-        this.alertCtrl = alertCtrl;
-        this.navCtrl = navCtrl;
-        this.cards = [];
-        this.cardCount = 0;
-        this.immagine = "src=\"./../assets/imgs/sfondo0.jpg\"";
-        this.storage.get('cards').then(function (val) {
-            if (val != null) {
-                _this.cards = val;
-            }
-        });
-        this.storage.get('cardCount').then(function (val) {
-            if (val >= 0)
-                _this.cardCount = val;
-        });
-        this.nickname = "cle"; //navParams.get("nickname");
-    }
-    HomeListe.prototype.add = function () {
-        var _this = this;
-        var splash = this.alertCtrl.create({
-            title: 'Lista',
-            message: 'Inserisci il nome della lista che vuoi creare',
-            inputs: [
-                {
-                    placeholder: '',
-                    name: 'title'
-                }
-            ],
-            buttons: [
-                {
-                    text: 'Invia',
-                    handler: function (data) {
-                        _this.cards.push({ id: _this.cardCount, name: data.title, friend: "null", proprietary: "yes" });
-                        _this.cardCount++;
-                        _this.storage.set("cards", _this.cards);
-                        _this.storage.set("cardCount", _this.cardCount);
-                    }
-                }
-            ]
-        });
-        splash.present();
-    };
-    HomeListe.prototype.addShared = function () {
-        var _this = this;
-        var splash = this.alertCtrl.create({
-            title: 'Lista',
-            message: 'Inserisci il nome della lista ed il nome del tuo amico',
-            inputs: [
-                {
-                    placeholder: 'nome lista',
-                    name: 'title'
-                },
-                {
-                    placeholder: 'nome amico',
-                    name: 'friend'
-                },
-            ],
-            buttons: [
-                {
-                    text: 'Invia',
-                    handler: function (data) {
-                        _this.cards.push({ id: _this.cardCount, name: data.title, friend: data.friend, proprietary: "no" });
-                        _this.cardCount++;
-                        _this.storage.set("cards", _this.cards);
-                        _this.storage.set("cardCount", _this.cardCount);
-                    }
-                }
-            ]
-        });
-        splash.present();
-        // alert.onDidDismiss(() => {})
-    };
-    HomeListe.prototype.choseImage = function (index) {
-        var splash = this.alertCtrl.create({
-            title: 'Sfondo',
-            // message: 'Inserisci il nome della lista ed il nome del tuo amico',
-            inputs: [
-                {
-                    type: 'radio',
-                    name: 'image',
-                    label: 'nessuno',
-                    value: 'nessuno',
-                }, {
-                    type: 'radio',
-                    name: 'image',
-                    label: 'sfondo 0',
-                    value: 'sfondo0',
-                }, {
-                    type: 'radio',
-                    name: 'image',
-                    label: 'sfondo 1',
-                    value: 'sfondo1',
-                }, {
-                    type: 'radio',
-                    name: 'image',
-                    label: 'sfondo 2',
-                    value: 'sfondo2',
-                }, {
-                    type: 'radio',
-                    name: 'image',
-                    label: 'ombrellone',
-                    value: 'ombrellone',
-                }, {
-                    type: 'radio',
-                    name: 'image',
-                    label: 'spiaggia',
-                    value: 'spiaggia',
-                }, {
-                    type: 'radio',
-                    name: 'image',
-                    label: 'carrello della spesa',
-                    value: 'shopping',
-                }
-            ],
-            buttons: [
-                {
-                    text: 'Cambia',
-                    handler: function (data) {
-                        var listeCards = document.getElementsByTagName("img");
-                        if (data == "nessuno") {
-                            listeCards[index].style.display = "none";
-                        }
-                        else {
-                            listeCards[index].style.background = "url('./../assets/imgs/" + data + ".jpg')";
-                            listeCards[index].style.display = "block";
-                        }
-                    }
-                }
-            ]
-        });
-        splash.present();
-    };
-    HomeListe.prototype.openTodo = function (card) {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__list_list__["a" /* ListPage */], {
-            id: card.id,
-            name: card.name,
-            nickname: this.nickname,
-            friend: card.friend,
-            proprietary: card.proprietary
-        }, {
-            animate: true,
-            animation: "ios-transition",
-            direction: "backward"
-        });
-    };
-    HomeListe.prototype.action = function (card, index) {
-        this.presentActionSheet(card, index);
-    };
-    HomeListe.prototype.presentActionSheet = function (card, index) {
-        var _this = this;
-        var popup = this.actionSheet.create({
-            title: 'Cosa fuori fare con questa lista ?',
-            buttons: [
-                {
-                    text: "modifica",
-                    handler: function () { _this.choseImage(index); }
-                }, {
-                    text: 'Annulla',
-                    role: 'cancel',
-                    handler: function () { }
-                }, {
-                    text: 'Elimina',
-                    cssClass: 'deleteButton',
-                    role: 'delete',
-                    handler: function () { _this.removePost(card); }
-                }
-            ]
-        });
-        popup.present();
-    };
-    HomeListe.prototype.removePost = function (post) {
-        var index = this.cards.indexOf(post);
-        if (index > -1) {
-            this.cards.splice(index, 1);
-            this.cardCount--;
-            this.storage.set("cards", this.cards);
-            this.storage.set("cardCount", this.cardCount);
-        }
-    };
-    HomeListe = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/'<ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <h1 id="titolo">Le tue liste({{cardCount}})</h1>\n    <p>Il tuo user: {{nickname}}</p>\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">\n    <img id="immagine"/>\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description">\n        Condivisa con {{ card.friend }}\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]])
-    ], HomeListe);
-    return HomeListe;
-}());
-
-//# sourceMappingURL=home-liste.js.map
-
-/***/ }),
-
-/***/ 151:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(41);
@@ -329,7 +111,7 @@ var ListPage = /** @class */ (function () {
     ;
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChildren */])('elemento'),
-        __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["T" /* QueryList */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["T" /* QueryList */]) === "function" && _a || Object)
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["T" /* QueryList */])
     ], ListPage.prototype, "elemento", void 0);
     ListPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
@@ -338,13 +120,230 @@ var ListPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */])({
             selector: '[elemento]'
         }),
-        __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _e || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]])
     ], ListPage);
     return ListPage;
-    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=list.js.map
+
+/***/ }),
+
+/***/ 151:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeListe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__list_list__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(237);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var HomeListe = /** @class */ (function () {
+    function HomeListe(storage, actionSheet, navParams, alertCtrl, navCtrl) {
+        var _this = this;
+        this.storage = storage;
+        this.actionSheet = actionSheet;
+        this.alertCtrl = alertCtrl;
+        this.navCtrl = navCtrl;
+        this.cards = [];
+        this.cardCount = 0;
+        this.immagine = "src=\"./../assets/imgs/sfondo0.jpg\"";
+        this.storage.get('cards').then(function (val) {
+            if (val != null) {
+                _this.cards = val;
+            }
+        });
+        this.storage.get('cardCount').then(function (val) {
+            if (val >= 0)
+                _this.cardCount = val;
+        });
+        this.nickname = "cle"; //navParams.get("nickname");
+    }
+    HomeListe.prototype.add = function () {
+        var _this = this;
+        var splash = this.alertCtrl.create({
+            title: 'Lista',
+            message: 'Inserisci il nome della lista che vuoi creare',
+            inputs: [
+                {
+                    placeholder: '',
+                    name: 'title'
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Crea',
+                    handler: function (data) {
+                        _this.cards.push({ id: _this.cardCount, name: data.title, friend: "null", proprietary: "yes" });
+                        _this.cardCount++;
+                        _this.storage.set("cards", _this.cards);
+                        _this.storage.set("cardCount", _this.cardCount);
+                    }
+                }
+            ]
+        });
+        splash.present();
+    };
+    HomeListe.prototype.addShared = function () {
+        var _this = this;
+        var splash = this.alertCtrl.create({
+            title: 'Lista',
+            message: 'Inserisci il nome della lista ed il nome del tuo amico',
+            inputs: [
+                {
+                    placeholder: 'nome lista',
+                    name: 'title'
+                },
+                {
+                    placeholder: 'nome amico',
+                    name: 'friend'
+                },
+            ],
+            buttons: [
+                {
+                    text: 'Aggiungi',
+                    handler: function (data) {
+                        _this.cards.push({ id: _this.cardCount, name: data.title, friend: data.friend, proprietary: "no" });
+                        _this.cardCount++;
+                        _this.storage.set("cards", _this.cards);
+                        _this.storage.set("cardCount", _this.cardCount);
+                    }
+                }
+            ]
+        });
+        splash.present();
+        // alert.onDidDismiss(() => {})
+    };
+    HomeListe.prototype.choseImage = function (index) {
+        var splash = this.alertCtrl.create({
+            title: 'Sfondo',
+            // message: 'Inserisci il nome della lista ed il nome del tuo amico',
+            inputs: [
+                {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'nessuno',
+                    value: 'nessuno',
+                }, {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'sfondo 0',
+                    value: 'sfondo0',
+                }, {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'sfondo 1',
+                    value: 'sfondo1',
+                }, {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'sfondo 2',
+                    value: 'sfondo2',
+                }, {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'ombrellone',
+                    value: 'ombrellone',
+                }, {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'spiaggia',
+                    value: 'spiaggia',
+                }, {
+                    type: 'radio',
+                    name: 'image',
+                    label: 'carrello della spesa',
+                    value: 'shopping',
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Cambia',
+                    handler: function (data) {
+                        var listeCards = document.getElementsByTagName("img");
+                        if (data == "nessuno") {
+                            listeCards[index].style.display = "none";
+                        }
+                        else {
+                            listeCards[index].style.background = "url('./../assets/imgs/" + data + ".jpg')";
+                            listeCards[index].style.display = "block";
+                        }
+                    }
+                }
+            ]
+        });
+        splash.present();
+    };
+    HomeListe.prototype.openTodo = function (card) {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__list_list__["a" /* ListPage */], {
+            id: card.id,
+            name: card.name,
+            nickname: this.nickname,
+            friend: card.friend,
+            proprietary: card.proprietary
+        }, {
+            animate: true,
+            animation: "ios-transition",
+            direction: "backward"
+        });
+    };
+    HomeListe.prototype.action = function (card, index) {
+        this.presentActionSheet(card, index);
+    };
+    HomeListe.prototype.presentActionSheet = function (card, index) {
+        var _this = this;
+        var popup = this.actionSheet.create({
+            title: 'Cosa vuoi fare con questa lista ?',
+            buttons: [
+                {
+                    text: "modifica",
+                    handler: function () { _this.choseImage(index); }
+                }, {
+                    text: 'Annulla',
+                    role: 'cancel',
+                    handler: function () { }
+                }, {
+                    text: 'Elimina',
+                    cssClass: 'deleteButton',
+                    role: 'delete',
+                    handler: function () { _this.removePost(card); }
+                }
+            ]
+        });
+        popup.present();
+    };
+    HomeListe.prototype.removePost = function (post) {
+        var index = this.cards.indexOf(post);
+        if (index > -1) {
+            this.cards.splice(index, 1);
+            this.cardCount--;
+            this.storage.set("cards", this.cards);
+            this.storage.set("cardCount", this.cardCount);
+        }
+    };
+    HomeListe = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/'<ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <h1 id="titolo">Le tue liste({{cardCount}})</h1>\n    <p>Il tuo user: {{nickname}}</p>\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">\n    <img id="immagine"/>\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description">\n        Condivisa con {{ card.friend }}\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]])
+    ], HomeListe);
+    return HomeListe;
+}());
+
+//# sourceMappingURL=home-liste.js.map
 
 /***/ }),
 
@@ -410,11 +409,11 @@ webpackEmptyAsyncContext.id = 185;
 
 var map = {
 	"../pages/home-liste/home-liste.module": [
-		489,
+		490,
 		2
 	],
 	"../pages/list/list.module": [
-		490,
+		489,
 		1
 	],
 	"../pages/settings/settings.module": [
@@ -543,7 +542,7 @@ var ToDoProvider = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings_settings__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_liste_home_liste__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_liste_home_liste__ = __webpack_require__(151);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(41);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -628,8 +627,8 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_to_do_to_do__ = __webpack_require__(238);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_settings_settings__ = __webpack_require__(152);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_tabs_tabs__ = __webpack_require__(284);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_list_list__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_home_liste_home_liste__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_list_list__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_home_liste_home_liste__ = __webpack_require__(151);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_angularfire2__ = __webpack_require__(234);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_angularfire2_database__ = __webpack_require__(227);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_storage__ = __webpack_require__(237);
@@ -677,8 +676,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */], {}, {
                     links: [
-                        { loadChildren: '../pages/home-liste/home-liste.module#HomeListeModule', name: 'HomeListe', segment: 'home-liste', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/list/list.module#ListPageModule', name: 'ListPage', segment: 'list', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/home-liste/home-liste.module#HomeListeModule', name: 'HomeListe', segment: 'home-liste', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/settings/settings.module#SettingsPageModule', name: 'SettingsPage', segment: 'settings', priority: 'low', defaultHistory: [] }
                     ]
                 }),

@@ -1,4 +1,4 @@
-import { Component, Directive, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, Directive, ViewChildren, QueryList } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from '../../../node_modules/rxjs';

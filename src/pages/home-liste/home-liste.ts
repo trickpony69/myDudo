@@ -40,7 +40,7 @@ export class HomeListe {
       ],
       buttons: [
         {
-          text: 'Invia',
+          text: 'Crea',
           handler: (data) => {
             this.cards.push({ id: this.cardCount, name: data.title, friend: "null", proprietary: "yes" });
             this.cardCount++;
@@ -69,7 +69,7 @@ export class HomeListe {
       ],
       buttons: [
         {
-          text: 'Invia',
+          text: 'Aggiungi',
           handler: (data) => {
             this.cards.push({ id: this.cardCount, name: data.title, friend: data.friend, proprietary: "no" });
             this.cardCount++;
@@ -162,7 +162,7 @@ export class HomeListe {
 
   presentActionSheet(card,index) {
     var popup = this.actionSheet.create({
-      title: 'Cosa fuori fare con questa lista ?',
+      title: 'Cosa vuoi fare con questa lista ?',
       buttons: [
         {
           text: "modifica",
