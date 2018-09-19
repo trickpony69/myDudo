@@ -25,7 +25,7 @@ export class HomeListe {
       if (val >= 0)
         this.cardCount = val;
     });
-    this.nickname = navParams.get("nickname");
+    this.nickname = "cle" //navParams.get("nickname");
   }
 
   add() {

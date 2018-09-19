@@ -18,9 +18,10 @@
 
 <ion-content>
   <ion-list>
-    <ion-item-sliding *ngFor="let task of todos | async">
+    <ion-item-sliding *ngFor="let task of todos | async ; let i = index ">
       <ion-item>
-        <h1 id="task">{{ task.content }}</h1>
+        <div *ngIf="task.status == 0" > <h1 #elemento>{{ task.content }}</h1></div>
+        <div *ngIf="task.status == 1" > <h1 #elemento class='lineThrough'>{{ task.content }}</h1></div>       
       </ion-item>
 
       <ion-item-options side="right">
@@ -32,7 +33,7 @@
         </button>
       </ion-item-options>
       <ion-item-options side="left">
-        <button ion-button icon-only color="secondary" (click)="checked()">
+        <button ion-button icon-only color="secondary" (click)="checkUncheck(task)">
           <ion-icon name="checkmark"></ion-icon>
         </button>
       </ion-item-options>

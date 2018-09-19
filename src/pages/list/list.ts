@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Directive, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from '../../../node_modules/rxjs';
@@ -9,12 +9,14 @@ import { map } from 'rxjs/operators';
   selector: 'page-list',
   templateUrl: 'list.html',
 })
+@Directive({
+  selector: '[elemento]'
+})
 export class ListPage {
-
+  @ViewChildren('elemento') elemento: QueryList<any>;
   toUser: any;
   todos: Observable<any[]>;
   itemsRef: AngularFireList<any>;
-
   constructor(public afDatabase: AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
     this.toUser = {
       name: navParams.get("name"),
@@ -24,15 +26,16 @@ export class ListPage {
     }
     if (this.toUser.proprietary == "yes")
       this.itemsRef = afDatabase.list("/todos/" + this.toUser.nickname + "/" + this.toUser.name + "/");
-    
+
     else
       this.itemsRef = afDatabase.list("/todos/" + this.toUser.friend + "/" + this.toUser.name + "/");
-    
+
     this.todos = this.itemsRef.snapshotChanges().pipe(
       map(changes =>
         changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))
       )
     );
+
   }
 
   createTodo() {
@@ -53,7 +56,7 @@ export class ListPage {
         {
           text: 'Salva',
           handler: data => {
-            this.itemsRef.push({ content: data.title })
+            this.itemsRef.push({ content: data.title, status: 0 }) //status 0 è normale, 1 è sottolineata
           }
         }
       ]
@@ -93,9 +96,9 @@ export class ListPage {
     this.itemsRef.remove(key);
   }
 
-  checked(todo){
-    document.getElementById("task").style.textDecoration = "line-through";
-
-  }
+  checkUncheck(todo, i) {
+    if (todo.status == 0) this.itemsRef.update(todo.key, { status: 1 });
+    else this.itemsRef.update(todo.key, { status: 0 });
+  };
 
 }

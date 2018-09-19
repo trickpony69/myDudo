@@ -25724,3 +25724,7 @@ ion-navbar.toolbar {
     font-size: 3em;
   }
 }
+
+.lineThrough {
+  text-decoration: line-through;
+}

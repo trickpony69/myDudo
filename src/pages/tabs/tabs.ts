@@ -29,7 +29,7 @@ export class TabsPage {
           text: 'Invia',
           handler: (data) => {
             this.tab2Params = { nickname: data.title };
-            console.log("Il tuo nickname "+this.tab2Params.nickname)
+            // console.log("Il tuo nickname "+this.tab2Params.nickname)
           }
         }
       ]
