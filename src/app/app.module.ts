@@ -13,6 +13,8 @@ import { HomeListe } from '../pages/home-liste/home-liste';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { IonicStorageModule } from '@ionic/storage';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { LoginPage } from '../pages/login/login';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCJf4aqwkCNGixvmTKHm8NnnzksXmTnpE0",
@@ -29,7 +31,8 @@ export const firebaseConfig = {
     HomeListe,
     SettingsPage,
     TabsPage,
-    ListPage
+    ListPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -44,13 +47,15 @@ export const firebaseConfig = {
     HomeListe,
     SettingsPage,
     TabsPage,
-    ListPage
+    ListPage,
+    LoginPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ToDoProvider,
+    AngularFireAuth
   ]
 })
 export class AppModule { }
