@@ -15,6 +15,7 @@ export class HomeListe {
   public cards = [];
   public cardCount = 0;
   nickname;
+  user = {email: "",uid: "",name: ""};
   immagine = "src=\"./../assets/imgs/sfondo0.jpg\"";
   
   constructor(private storage: Storage, public actionSheet: ActionSheetController, navParams: NavParams, public alertCtrl: AlertController, public navCtrl: NavController, public aFAuth: AngularFireAuth) {
@@ -31,7 +32,7 @@ export class HomeListe {
   }
 
   ionViewWillLoad(){
-    this.aFAuth.authState.subscribe(data => {this.nickname = data.email; console.log(data); }) 
+    this.aFAuth.authState.subscribe(data => {this.user.uid = data.uid; this.user.email = data.email; console.log(data); console.log("uid:" ,this.user.uid)}) 
   }
 
   add() {
@@ -69,15 +70,15 @@ export class HomeListe {
           name: 'title'
         },
         {
-          placeholder: 'nome amico',
-          name: 'friend'
+          placeholder: 'id amico',
+          name: 'friendId'
         },
       ],
       buttons: [
         {
           text: 'Aggiungi',
           handler: (data) => {
-            this.cards.push({ id: this.cardCount, name: data.title, friend: data.friend, proprietary: "no" });
+            this.cards.push({ id: this.cardCount, name: data.title, friend: data.friendId, proprietary: "no" });
             this.cardCount++;
             this.storage.set("cards", this.cards);
             this.storage.set("cardCount", this.cardCount);
@@ -92,7 +93,7 @@ export class HomeListe {
   choseImage(index) {
     let splash = this.alertCtrl.create({
       title: 'Sfondo',
-      // message: 'Inserisci il nome della lista ed il nome del tuo amico',
+      message: 'Inserisci il nome della lista ed il nome del tuo amico',
       inputs: [
         {
           type: 'radio',
@@ -150,9 +151,10 @@ export class HomeListe {
 
   openTodo(card) {
     this.navCtrl.push(ListPage, {
+      uid: this.user.uid,
+      email: this.user.email,
       id: card.id,
       name: card.name,
-      nickname: this.nickname,
       friend: card.friend,
       proprietary: card.proprietary
     }, {

@@ -10,12 +10,12 @@ import { AngularFireAuth } from 'angularfire2/auth';
 })
 export class SettingsPage {
 
-  user = {email: "",name: ""};
+  user = {uid: "",email: "",name: ""};
   constructor(public navCtrl: NavController, public todoProv: ToDoProvider,public aFAuth: AngularFireAuth, public modalCtrl: ModalController) {
     
   }
   ionViewWillLoad() {
-    this.aFAuth.authState.subscribe(data => { this.user.email = data.email; console.log(data); })
+    this.aFAuth.authState.subscribe(data => {this.user.uid = data.uid; this.user.email = data.email; console.log(data); })
   }
 
 }

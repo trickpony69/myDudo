@@ -13,22 +13,23 @@ import { map } from 'rxjs/operators';
   selector: '[elemento]'
 })
 export class ListPage {
-  @ViewChildren('elemento') elemento: QueryList<any>;
+  // @ViewChildren('elemento') elemento: QueryList<any>;
   toUser: any;
   todos: Observable<any[]>;
   itemsRef: AngularFireList<any>;
   constructor(public afDatabase: AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
     this.toUser = {
+      uid: navParams.get("uid"),
+      email: navParams.get("email"),
       name: navParams.get("name"),
       nickname: navParams.get("nickname"),
-      friend: navParams.get("friend"),
+      friendId: navParams.get("friend"),
       proprietary: navParams.get("proprietary")
     }
     if (this.toUser.proprietary == "yes")
-      this.itemsRef = afDatabase.list("/todos/" + this.toUser.nickname + "/" + this.toUser.name + "/");
-
+      this.itemsRef = afDatabase.list("/todos/" +  this.toUser.uid + "/" + this.toUser.name);
     else
-      this.itemsRef = afDatabase.list("/todos/" + this.toUser.friend + "/" + this.toUser.name + "/");
+      this.itemsRef = afDatabase.list("/todos/" + this.toUser.friendId + "/" + this.toUser.name + "/");
 
     this.todos = this.itemsRef.snapshotChanges().pipe(
       map(changes =>
