@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController, ActionSheetController, NavParams } from 'ionic-angular';
 import { ListPage } from '../list/list';
 import { Storage } from '@ionic/storage';
+import * as firebase from 'firebase/app';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @IonicPage()
 @Component({
@@ -12,10 +14,10 @@ export class HomeListe {
 
   public cards = [];
   public cardCount = 0;
-  nickname: string;
+  nickname;
   immagine = "src=\"./../assets/imgs/sfondo0.jpg\"";
-
-  constructor(private storage: Storage, public actionSheet: ActionSheetController, navParams: NavParams, public alertCtrl: AlertController, public navCtrl: NavController) {
+  
+  constructor(private storage: Storage, public actionSheet: ActionSheetController, navParams: NavParams, public alertCtrl: AlertController, public navCtrl: NavController, public aFAuth: AngularFireAuth) {
     this.storage.get('cards').then((val) => {
       if (val != null) {
         this.cards = val;
@@ -25,7 +27,11 @@ export class HomeListe {
       if (val >= 0)
         this.cardCount = val;
     });
-    this.nickname = "cle" //navParams.get("nickname");
+    
+  }
+
+  ionViewWillLoad(){
+    this.aFAuth.authState.subscribe(data => {this.nickname = data.email; console.log(data); }) 
   }
 
   add() {

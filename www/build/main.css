@@ -25728,3 +25728,23 @@ ion-navbar.toolbar {
 .lineThrough {
   text-decoration: line-through;
 }
+
+page-login {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+#content {
+  margin-top: 8%;
+}
+
+#title {
+  margin-left: 25%;
+  font-weight: 900;
+  font-size: 3em;
+}
+
+.btn {
+  margin-top: 10%;
+  font-weight: 700;
+  border-radius: 8px;
+}

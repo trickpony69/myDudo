@@ -11,7 +11,9 @@ import { TabsPage } from '../tabs/tabs';
   templateUrl: 'login.html',
 })
 export class LoginPage {
-
+  
+  private email;
+  private password;
   constructor(public navCtrl: NavController, public navParams: NavParams, public afAuth: AngularFireAuth) {
   }
 
@@ -19,13 +21,24 @@ export class LoginPage {
     this.navCtrl.push(TabsPage);
   }
 
-  doRegister(value){
+  register(){
     return new Promise<any>((resolve, reject) => {
-      firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
+      firebase.auth().createUserWithEmailAndPassword(this.email,this.password)
       .then(res => {
         resolve(res);
-      }, err => reject(err))
+        this.next();
+      }, err => alert(err))
     })
-   }
+   };
+
+   login(){
+     return new Promise<any>((resolve,reject) => {
+       firebase.auth().signInWithEmailAndPassword(this.email,this.password)
+       .then(res => {
+         resolve(res);
+         this.next();
+       }, err => alert(err))
+       })
+   };
  
 }

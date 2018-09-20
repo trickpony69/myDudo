@@ -7,7 +7,19 @@
 </ion-header>
 
 
-<ion-content padding>
-    <!-- <ion-input type="text" [(ngModel)]="todo.title" [ngModelOptions]="{standalone: true}"></ion-input> -->
-    <button ion-button (click)="next()">registrati</button>
+<ion-content padding id="content">
+  <div><h1 id="title">myDudo</h1></div>
+  <ion-list>
+    <ion-item>
+      <ion-label color="primary" stacked>La tua Email</ion-label>
+      <ion-input type="email" placeholder="Email" [(ngModel)]="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" stacked>La tua Password</ion-label>
+      <ion-input type="password" placeholder="Password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+    <button class="btn" ion-button block  (click) ="login()">accedi</button>
+    <button class="btn" ion-button block  (click)="register()" color="danger">registrati</button>
+  </ion-list>
 </ion-content>

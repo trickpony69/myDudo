@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController} from 'ionic-angular';
+import { IonicPage, NavController, ModalController } from 'ionic-angular';
 import { ToDoProvider } from '../../providers/to-do/to-do';
-import { HomeListe } from '../home-liste/home-liste';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @IonicPage()
 @Component({
@@ -10,14 +10,12 @@ import { HomeListe } from '../home-liste/home-liste';
 })
 export class SettingsPage {
 
-  inputText: any;
-  constructor(public navCtrl: NavController, public todoProv: ToDoProvider) {
-
-  }
-
-  ionViewDidLoad(){
-
+  user = {email: "",name: ""};
+  constructor(public navCtrl: NavController, public todoProv: ToDoProvider,public aFAuth: AngularFireAuth, public modalCtrl: ModalController) {
     
+  }
+  ionViewWillLoad() {
+    this.aFAuth.authState.subscribe(data => { this.user.email = data.email; console.log(data); })
   }
 
 }
