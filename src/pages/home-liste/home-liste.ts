@@ -4,6 +4,7 @@ import { ListPage } from '../list/list';
 import { Storage } from '@ionic/storage';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { LoginPage } from '../login/login';
 
 @IonicPage()
 @Component({
@@ -32,7 +33,16 @@ export class HomeListe {
   }
 
   ionViewWillLoad(){
-    this.aFAuth.authState.subscribe(data => {this.user.uid = data.uid; this.user.email = data.email; console.log(data); console.log("uid:" ,this.user.uid)}) 
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log('user is logged');
+        this.aFAuth.authState.subscribe(data => {this.user.uid = data.uid; this.user.email = data.email; console.log(data); console.log("uid:" ,this.user.uid)}) 
+      }
+      else{
+        console.log("user is not logged");
+        this.navCtrl.push(LoginPage);
+      }
+    })
   }
 
   add() {
