@@ -46,7 +46,7 @@ export class LoginPage {
       }
     );
     this.loading = this.loadingCtrl.create({
-      content: `<img id="loader" src="assets/imgs/loading.gif" />`,
+      content: `<img src="assets/imgs/loader.svg"/>`,
       spinner: 'hide',
      
     });

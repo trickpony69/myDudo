@@ -92,7 +92,7 @@ var LoginPage = /** @class */ (function () {
             });
         });
         this.loading = this.loadingCtrl.create({
-            content: "<img id=\"loader\" src=\"assets/imgs/loading.gif\" />",
+            content: "<img src=\"assets/imgs/loader.svg\"/>",
             spinner: 'hide',
         });
         this.loading.present();

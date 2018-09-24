@@ -469,8 +469,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var SettingsPage = /** @class */ (function () {
-    function SettingsPage(toastCtrl, session, profileProv, clipboard) {
+    function SettingsPage(toastCtrl, loadingCtrl, session, profileProv, clipboard) {
         this.toastCtrl = toastCtrl;
+        this.loadingCtrl = loadingCtrl;
         this.session = session;
         this.profileProv = profileProv;
         this.clipboard = clipboard;
@@ -502,13 +503,19 @@ var SettingsPage = /** @class */ (function () {
         this.presentToast();
     };
     SettingsPage.prototype.logout = function () {
-        this.session.logoutUser().then(function () { window.location.reload(); });
+        var loading;
+        loading = this.loadingCtrl.create({
+            content: "<img src=\"assets/imgs/loader.svg\"/>",
+            spinner: 'hide'
+        });
+        loading.present();
+        this.session.logoutUser().then(function () { loading.dismiss().then(function () { window.location.reload(); }); });
     };
     SettingsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-settings',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/settings/settings.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Impostazioni</ion-title>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content padding>\n  <ion-list>\n    <ion-item>\n      <ion-avatar item-start>\n        <ion-icon name="heart"></ion-icon>\n      </ion-avatar>\n      <h2>Email: {{ user.email }}</h2>\n      <p>La tua email</p>\n    </ion-item>\n    <ion-item (tap)="copy()">\n      <ion-avatar item-start>\n        <ion-icon name="person"></ion-icon>\n      </ion-avatar>\n      <div >\n      <h2 >Id: {{ user.uid }}</h2>\n      <p>Ti servirà per condividere le tue liste</p>\n    </div>\n    </ion-item>\n  </ion-list>\n  <button ion-button block  (click)="logout()" color="danger">Esci</button>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/settings/settings.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ToastController */], __WEBPACK_IMPORTED_MODULE_2__providers_session_session__["a" /* SessionProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_profile_profile__["a" /* ProfileProvider */], __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__["a" /* Clipboard */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ToastController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_2__providers_session_session__["a" /* SessionProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_profile_profile__["a" /* ProfileProvider */], __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__["a" /* Clipboard */]])
     ], SettingsPage);
     return SettingsPage;
 }());
