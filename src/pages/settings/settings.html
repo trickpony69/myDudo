@@ -11,15 +11,17 @@
       <ion-avatar item-start>
         <ion-icon name="heart"></ion-icon>
       </ion-avatar>
-      <h2>Email: {{user.email}}</h2>
+      <h2>Email: {{ user.email }}</h2>
       <p>La tua email</p>
     </ion-item>
-    <ion-item>
+    <ion-item (tap)="copy()">
       <ion-avatar item-start>
-        <ion-icon name="heart"></ion-icon>
+        <ion-icon name="person"></ion-icon>
       </ion-avatar>
-      <h2>Id: {{user.uid}}</h2>
+      <div >
+      <h2 >Id: {{ user.uid }}</h2>
       <p>Ti servirà per condividere le tue liste</p>
+    </div>
     </ion-item>
   </ion-list>
   <button ion-button block  (click)="logout()" color="danger">Esci</button>

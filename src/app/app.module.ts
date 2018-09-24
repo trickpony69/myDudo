@@ -14,7 +14,9 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { IonicStorageModule } from '@ionic/storage';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { LoginPage } from '../pages/login/login';
+import { SessionProvider } from '../providers/session/session';
+import { ProfileProvider } from '../providers/profile/profile';
+import { Clipboard } from '@ionic-native/clipboard';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCJf4aqwkCNGixvmTKHm8NnnzksXmTnpE0",
@@ -32,7 +34,6 @@ export const firebaseConfig = {
     SettingsPage,
     TabsPage,
     ListPage,
-    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -48,14 +49,18 @@ export const firebaseConfig = {
     SettingsPage,
     TabsPage,
     ListPage,
-    LoginPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ToDoProvider,
-    AngularFireAuth
+    AngularFireAuth,
+    SessionProvider,
+    SessionProvider,
+    ProfileProvider,
+    ProfileProvider,
+    Clipboard
   ]
 })
 export class AppModule { }

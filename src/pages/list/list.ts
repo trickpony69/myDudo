@@ -27,7 +27,7 @@ export class ListPage {
       proprietary: navParams.get("proprietary")
     }
     if (this.toUser.proprietary == "yes")
-      this.itemsRef = afDatabase.list("/todos/" +  this.toUser.uid + "/" + this.toUser.name);
+      this.itemsRef = afDatabase.list("/todos/" +  this.toUser.uid + "/" + this.toUser.name + "/");
     else
       this.itemsRef = afDatabase.list("/todos/" + this.toUser.friendId + "/" + this.toUser.name + "/");
 
@@ -55,7 +55,7 @@ export class ListPage {
           text: 'Annulla'
         },
         {
-          text: 'Salva',
+          text: 'Invia',
           handler: data => {
             this.itemsRef.push({ content: data.title, status: 0 }) //status 0 è normale, 1 è sottolineata
           }

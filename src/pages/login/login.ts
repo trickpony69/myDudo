@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
+import { IonicPage, NavController, Loading, LoadingController } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
-
+import { SessionProvider } from '../../providers/session/session';
 
 @IonicPage()
 @Component({
@@ -11,34 +9,48 @@ import { TabsPage } from '../tabs/tabs';
   templateUrl: 'login.html',
 })
 export class LoginPage {
-  
+
+  public loading: Loading;
   private email;
   private password;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public afAuth: AngularFireAuth) {
+  constructor(public navCtrl: NavController, public session: SessionProvider, public loadingCtrl: LoadingController) { }
+
+  register() {
+    this.loading = this.loadingCtrl.create();
+    this.loading.present();
+    this.session.signupUser(this.email, this.password).then(
+      () => {
+        this.loading.dismiss().then(() => {
+          this.navCtrl.setRoot(TabsPage);
+        });
+      },
+      error => {
+        this.loading.dismiss().then(() => {
+          alert(error.message);
+        });
+      }
+    );
   }
 
-  next(){
-    this.navCtrl.push(TabsPage);
+  login(): void {
+    this.session.loginUser(this.email, this.password).then(
+      authData => {
+        this.loading.dismiss().then(() => {
+          this.navCtrl.setRoot(TabsPage);
+        });
+      },
+      error => {
+        this.loading.dismiss().then(() => {
+          alert(error.message);
+        });
+      }
+    );
+    this.loading = this.loadingCtrl.create({
+      content: `<img id="loader" src="assets/imgs/loading.gif" />`,
+      spinner: 'hide',
+     
+    });
+    this.loading.present();
   }
 
-  register(){
-    return new Promise<any>((resolve, reject) => {
-      firebase.auth().createUserWithEmailAndPassword(this.email,this.password)
-      .then(res => {
-        resolve(res);
-        this.next();
-      }, err => alert(err))
-    })
-   };
-
-   login(){
-     return new Promise<any>((resolve,reject) => {
-       firebase.auth().signInWithEmailAndPassword(this.email,this.password)
-       .then(res => {
-         resolve(res);
-         this.next();
-       }, err => alert(err))
-       })
-   };
- 
 }

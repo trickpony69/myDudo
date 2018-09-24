@@ -7,6 +7,7 @@ page-login {
 }
 
 #title{
+    margin-bottom: 15%;
     text-align: center;
     font-weight: 900;
     font-size: 3em;
@@ -16,4 +17,8 @@ page-login {
     margin-top: 10%; 
     font-weight: 700;
     border-radius: 8px;
+}
+
+#loader{
+    border-radius: 20px;
 }

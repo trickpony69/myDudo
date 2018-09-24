@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController, ActionSheetController, NavParams } from 'ionic-angular';
 import { ListPage } from '../list/list';
 import { Storage } from '@ionic/storage';
-import * as firebase from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { LoginPage } from '../login/login';
+import { SessionProvider } from '../../providers/session/session';
+import { ProfileProvider } from '../../providers/profile/profile';
 
 @IonicPage()
 @Component({
@@ -16,10 +17,10 @@ export class HomeListe {
   public cards = [];
   public cardCount = 0;
   nickname;
-  user = {email: "",uid: "",name: ""};
+  user = { email: "", uid: "" };
   immagine = "src=\"./../assets/imgs/sfondo0.jpg\"";
-  
-  constructor(private storage: Storage, public actionSheet: ActionSheetController, navParams: NavParams, public alertCtrl: AlertController, public navCtrl: NavController, public aFAuth: AngularFireAuth) {
+
+  constructor(private storage: Storage, public actionSheet: ActionSheetController, public alertCtrl: AlertController, public navCtrl: NavController, public profileProv: ProfileProvider) {
     this.storage.get('cards').then((val) => {
       if (val != null) {
         this.cards = val;
@@ -29,20 +30,11 @@ export class HomeListe {
       if (val >= 0)
         this.cardCount = val;
     });
-    
+
   }
 
-  ionViewWillLoad(){
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log('user is logged');
-        this.aFAuth.authState.subscribe(data => {this.user.uid = data.uid; this.user.email = data.email; console.log(data); console.log("uid:" ,this.user.uid)}) 
-      }
-      else{
-        console.log("user is not logged");
-        this.navCtrl.push(LoginPage);
-      }
-    })
+  ionViewWillEnter() {
+    this.user = {email: "", uid: this.profileProv.getUserProfile().key};
   }
 
   add() {
@@ -148,8 +140,8 @@ export class HomeListe {
           handler: (data) => {
             var listeCards = document.getElementsByTagName("img");
             if (data == "nessuno") { listeCards[index].style.display = "none"; }
-            else {          
-              listeCards[index].style.background =  "url('./../assets/imgs/" + data + ".jpg')" ;        
+            else {
+              listeCards[index].style.background = "url('./../assets/imgs/" + data + ".jpg')";
               listeCards[index].style.display = "block";
             }
           }
@@ -174,11 +166,11 @@ export class HomeListe {
       });
   }
 
-  action(card,index) {
-    this.presentActionSheet(card,index);
+  action(card, index) {
+    this.presentActionSheet(card, index);
   }
 
-  presentActionSheet(card,index) {
+  presentActionSheet(card, index) {
     var popup = this.actionSheet.create({
       title: 'Cosa vuoi fare con questa lista ?',
       buttons: [
