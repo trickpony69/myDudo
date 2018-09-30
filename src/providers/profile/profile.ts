@@ -19,12 +19,25 @@ export class ProfileProvider {
     });
   }
 
-  getEmail(): string{
+  getEmail(): string {
     return this.currentUser.email;
   }
-  
+
   getUserProfile(): firebase.database.Reference {
     return this.userProfile;
+  }
+
+  getFriends() {
+    return new Promise((resolve, reject) => {
+      var friends = firebase.database().ref('userProfile/');
+      friends.on('value', getData);
+      function getData(data) {
+        let obj = data.val();
+        console.log(obj);
+        resolve(obj);
+      }
+    });
+
   }
 
   updateName(firstName: string, lastName: string): Promise<any> {

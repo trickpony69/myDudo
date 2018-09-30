@@ -38,6 +38,17 @@ var ProfileProvider = /** @class */ (function () {
     ProfileProvider.prototype.getUserProfile = function () {
         return this.userProfile;
     };
+    ProfileProvider.prototype.getFriends = function () {
+        return new Promise(function (resolve, reject) {
+            var friends = __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('userProfile/');
+            friends.on('value', getData);
+            function getData(data) {
+                var obj = data.val();
+                console.log(obj);
+                resolve(obj);
+            }
+        });
+    };
     ProfileProvider.prototype.updateName = function (firstName, lastName) {
         return this.userProfile.update({ firstName: firstName, lastName: lastName });
     };
@@ -116,7 +127,7 @@ var HomeListe = /** @class */ (function () {
                 {
                     text: 'Crea',
                     handler: function (data) {
-                        _this.cards.push({ id: _this.cardCount, name: data.title, friend: "null", proprietary: "yes" });
+                        _this.cards.push({ id: _this.cardCount, name: data.title, friends: "null", proprietary: "yes" });
                         _this.cardCount++;
                         _this.storage.set("cards", _this.cards);
                         _this.storage.set("cardCount", _this.cardCount);
@@ -125,6 +136,30 @@ var HomeListe = /** @class */ (function () {
             ]
         });
         splash.present();
+    };
+    HomeListe.prototype.addFriend = function () {
+        var friends = this.profileProv.getFriends().then(function (data) { console.log(data); });
+        var alert = this.alertCtrl.create();
+        alert.setTitle('Amici');
+        alert.addInput({
+            type: 'radio',
+            label: 'id1',
+            value: 'id1',
+            checked: false
+        });
+        alert.addInput({
+            type: 'radio',
+            label: 'id2',
+            value: 'id2',
+            checked: false
+        });
+        alert.addButton('Cancel');
+        alert.addButton({
+            text: 'OK',
+            handler: function (data) {
+            }
+        });
+        alert.present();
     };
     HomeListe.prototype.addShared = function () {
         var _this = this;
@@ -239,6 +274,9 @@ var HomeListe = /** @class */ (function () {
             title: 'Cosa vuoi fare con questa lista ?',
             buttons: [
                 {
+                    text: "Aggiungi amico",
+                    handler: function () { _this.addFriend(); }
+                }, {
                     text: "modifica",
                     handler: function () { _this.choseImage(index); }
                 }, {
@@ -266,11 +304,12 @@ var HomeListe = /** @class */ (function () {
     };
     HomeListe = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/'<!-- <ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header> -->\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">\n    <img id="immagine"/>\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description">\n        Condivisa con {{ card.friend }}\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/,
+            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/'<!-- <ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header> -->\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">\n    <img id="immagine"/>\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description">\n        <!-- Condivisa con {{ card.friends }} -->\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */]) === "function" && _e || Object])
     ], HomeListe);
     return HomeListe;
+    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=home-liste.js.map
@@ -695,8 +734,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */], {}, {
                     links: [
                         { loadChildren: '../pages/home-liste/home-liste.module#HomeListeModule', name: 'HomeListe', segment: 'home-liste', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/list/list.module#ListPageModule', name: 'ListPage', segment: 'list', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/list/list.module#ListPageModule', name: 'ListPage', segment: 'list', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/settings/settings.module#SettingsPageModule', name: 'SettingsPage', segment: 'settings', priority: 'low', defaultHistory: [] }
                     ]
                 }),
@@ -742,11 +781,11 @@ var map = {
 		3
 	],
 	"../pages/list/list.module": [
-		499,
+		500,
 		2
 	],
 	"../pages/login/login.module": [
-		500,
+		499,
 		0
 	],
 	"../pages/settings/settings.module": [

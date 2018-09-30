@@ -51,7 +51,7 @@ export class HomeListe {
         {
           text: 'Crea',
           handler: (data) => {
-            this.cards.push({ id: this.cardCount, name: data.title, friend: "null", proprietary: "yes" });
+            this.cards.push({ id: this.cardCount, name: data.title, friends: "null", proprietary: "yes" });
             this.cardCount++;
             this.storage.set("cards", this.cards);
             this.storage.set("cardCount", this.cardCount);
@@ -62,7 +62,35 @@ export class HomeListe {
     splash.present();
   }
 
-  addShared() {
+  addFriend(){
+    var friends = this.profileProv.getFriends().then( (data) => {console.log(data)});
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Amici');
+
+    alert.addInput({
+      type: 'radio',
+      label: 'id1',
+      value: 'id1',
+      checked: false
+    });
+    alert.addInput({
+      type: 'radio',
+      label: 'id2',
+      value: 'id2',
+      checked: false
+    });
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'OK',
+      handler: data => {
+        
+      }
+    });
+    alert.present();
+  }
+
+  addShared() { // Da togliere
     let splash = this.alertCtrl.create({
       title: 'Lista',
       message: 'Inserisci il nome della lista ed il nome del tuo amico',
@@ -92,7 +120,7 @@ export class HomeListe {
     // alert.onDidDismiss(() => {})
   }
 
-  choseImage(index) {
+  choseImage(index) { // Da cambiare
     let splash = this.alertCtrl.create({
       title: 'Sfondo',
       message: 'Inserisci il nome della lista ed il nome del tuo amico',
@@ -175,6 +203,9 @@ export class HomeListe {
       title: 'Cosa vuoi fare con questa lista ?',
       buttons: [
         {
+          text: "Aggiungi amico",
+          handler: () => { this.addFriend() }
+        }, {
           text: "modifica",
           handler: () => { this.choseImage(index) }
         }, {
