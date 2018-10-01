@@ -34,7 +34,7 @@ export class HomeListe {
   }
 
   ionViewWillEnter() {
-    this.user = {email: "", uid: this.profileProv.getUserProfile().key};
+    this.user = { email: "", uid: this.profileProv.getUserProfile().key };
   }
 
   add() {
@@ -62,34 +62,84 @@ export class HomeListe {
     splash.present();
   }
 
-  addFriend(){
-    var friends = this.profileProv.getFriends().then( (data) => {console.log(data)});
-    let alert = this.alertCtrl.create();
-    alert.setTitle('Amici');
-
-    alert.addInput({
-      type: 'radio',
-      label: 'id1',
-      value: 'id1',
-      checked: false
+  addFriend(i) {
+    var friends = this.profileProv.getFriends().then((data) => {
+      let alert = this.alertCtrl.create();
+      data.forEach((element, index) => {
+        alert.addInput({
+          type: 'radio',
+          label: element,
+          value: element,
+          checked: false
+        })
+      })
+      alert.setTitle('Amici');
+      alert.addButton('Annulla');
+      alert.addButton({
+        text: 'Aggiungi',
+        handler: data => {
+         this.profileProv.setFriends(data,this.cards[i].name,i);
+        }
+      });
+      alert.present()
     });
-    alert.addInput({
-      type: 'radio',
-      label: 'id2',
-      value: 'id2',
-      checked: false
-    });
-
-    alert.addButton('Cancel');
-    alert.addButton({
-      text: 'OK',
-      handler: data => {
-        
-      }
-    });
-    alert.present();
   }
 
+  openTodo(card) {
+    this.navCtrl.push(ListPage, {
+      uid: this.user.uid,
+      email: this.user.email,
+      id: card.id,
+      name: card.name,
+      friend: card.friend,
+      proprietary: card.proprietary
+    }, {
+        animate: true,
+        animation: "ios-transition",
+        direction: "backward"
+      });
+  }
+
+  action(card, index) {
+    this.presentActionSheet(card, index);
+  }
+
+  presentActionSheet(card, index) {
+    var popup = this.actionSheet.create({
+      title: 'Cosa vuoi fare con questa lista ?',
+      buttons: [
+        {
+          text: "Aggiungi amico",
+          handler: () => { this.addFriend(index) }
+        }, {
+          text: "modifica",
+          handler: () => { this.choseImage(index) }
+        }, {
+          text: 'Annulla',
+          role: 'cancel',
+          handler: () => { }
+        }, {
+          text: 'Elimina',
+          cssClass: 'deleteButton',
+          role: 'delete',
+          handler: () => { this.removePost(card); }
+        }
+      ]
+    });
+    popup.present();
+  }
+
+  removePost(post) {
+    let index = this.cards.indexOf(post);
+    if (index > -1) {
+      this.cards.splice(index, 1);
+      this.cardCount--;
+      this.storage.set("cards", this.cards);
+      this.storage.set("cardCount", this.cardCount);
+    }
+  }
+
+  //-----------REFACTORING------------
   addShared() { // Da togliere
     let splash = this.alertCtrl.create({
       title: 'Lista',
@@ -177,60 +227,6 @@ export class HomeListe {
       ]
     });
     splash.present();
-  }
-
-  openTodo(card) {
-    this.navCtrl.push(ListPage, {
-      uid: this.user.uid,
-      email: this.user.email,
-      id: card.id,
-      name: card.name,
-      friend: card.friend,
-      proprietary: card.proprietary
-    }, {
-        animate: true,
-        animation: "ios-transition",
-        direction: "backward"
-      });
-  }
-
-  action(card, index) {
-    this.presentActionSheet(card, index);
-  }
-
-  presentActionSheet(card, index) {
-    var popup = this.actionSheet.create({
-      title: 'Cosa vuoi fare con questa lista ?',
-      buttons: [
-        {
-          text: "Aggiungi amico",
-          handler: () => { this.addFriend() }
-        }, {
-          text: "modifica",
-          handler: () => { this.choseImage(index) }
-        }, {
-          text: 'Annulla',
-          role: 'cancel',
-          handler: () => { }
-        }, {
-          text: 'Elimina',
-          cssClass: 'deleteButton',
-          role: 'delete',
-          handler: () => { this.removePost(card); }
-        }
-      ]
-    });
-    popup.present();
-  }
-
-  removePost(post) {
-    let index = this.cards.indexOf(post);
-    if (index > -1) {
-      this.cards.splice(index, 1);
-      this.cardCount--;
-      this.storage.set("cards", this.cards);
-      this.storage.set("cardCount", this.cardCount);
-    }
   }
 
 }

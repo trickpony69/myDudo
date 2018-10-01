@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import firebase, { User } from 'firebase/app';
 import 'firebase/database';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class ProfileProvider {
@@ -9,8 +10,6 @@ export class ProfileProvider {
   public currentUser: User;
 
   constructor() {
-    console.log('Hello ProfileProvider Provider');
-
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.currentUser = user;
@@ -27,17 +26,25 @@ export class ProfileProvider {
     return this.userProfile;
   }
 
-  getFriends() {
+  getFriends(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
       var friends = firebase.database().ref('userProfile/');
       friends.on('value', getData);
       function getData(data) {
-        let obj = data.val();
-        console.log(obj);
-        resolve(obj);
+        var obj = data.val();
+        var keys = Object.keys(obj);
+        console.log(keys);
+        resolve(keys);
       }
     });
+  }
 
+  setFriends(userId, list, i) {
+    firebase.database().ref('userProfile/' + userId + '/sharedLists'+'/list'+i).update({
+      n: i,
+      title: list,
+      path: 'percorso'
+    });
   }
 
   updateName(firstName: string, lastName: string): Promise<any> {

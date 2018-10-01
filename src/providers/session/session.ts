@@ -14,7 +14,6 @@ export class SessionProvider {
   user = { uid: "", email: "", name: "" };
   authState: any = null;
   constructor(public afAuth: AngularFireAuth) {
-    console.log('Hello SessionProvider Provider');
 
     this.afAuth.authState.subscribe((auth) => {
       this.authState = auth;
@@ -33,7 +32,7 @@ export class SessionProvider {
       .then(newUserCredential => {
         firebase
           .database()
-          .ref(`/userProfile/${newUserCredential.user.uid}/email`)
+          .ref(`/userProfile/${newUserCredential.user.uid}/`)
           .set({email});
       })
       .catch(error => {

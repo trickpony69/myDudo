@@ -24,7 +24,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var ProfileProvider = /** @class */ (function () {
     function ProfileProvider() {
         var _this = this;
-        console.log('Hello ProfileProvider Provider');
         __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.auth().onAuthStateChanged(function (user) {
             if (user) {
                 _this.currentUser = user;
@@ -44,9 +43,17 @@ var ProfileProvider = /** @class */ (function () {
             friends.on('value', getData);
             function getData(data) {
                 var obj = data.val();
-                console.log(obj);
-                resolve(obj);
+                var keys = Object.keys(obj);
+                console.log(keys);
+                resolve(keys);
             }
+        });
+    };
+    ProfileProvider.prototype.setFriends = function (userId, list, i) {
+        __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('userProfile/' + userId + '/sharedLists' + '/list' + i).update({
+            n: i,
+            title: list,
+            path: 'percorso'
         });
     };
     ProfileProvider.prototype.updateName = function (firstName, lastName) {
@@ -137,30 +144,81 @@ var HomeListe = /** @class */ (function () {
         });
         splash.present();
     };
-    HomeListe.prototype.addFriend = function () {
-        var friends = this.profileProv.getFriends().then(function (data) { console.log(data); });
-        var alert = this.alertCtrl.create();
-        alert.setTitle('Amici');
-        alert.addInput({
-            type: 'radio',
-            label: 'id1',
-            value: 'id1',
-            checked: false
+    HomeListe.prototype.addFriend = function (i) {
+        var _this = this;
+        var friends = this.profileProv.getFriends().then(function (data) {
+            var alert = _this.alertCtrl.create();
+            data.forEach(function (element, index) {
+                alert.addInput({
+                    type: 'radio',
+                    label: element,
+                    value: element,
+                    checked: false
+                });
+            });
+            alert.setTitle('Amici');
+            alert.addButton('Annulla');
+            alert.addButton({
+                text: 'Aggiungi',
+                handler: function (data) {
+                    _this.profileProv.setFriends(data, _this.cards[i].name, i);
+                }
+            });
+            alert.present();
         });
-        alert.addInput({
-            type: 'radio',
-            label: 'id2',
-            value: 'id2',
-            checked: false
-        });
-        alert.addButton('Cancel');
-        alert.addButton({
-            text: 'OK',
-            handler: function (data) {
-            }
-        });
-        alert.present();
     };
+    HomeListe.prototype.openTodo = function (card) {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__list_list__["a" /* ListPage */], {
+            uid: this.user.uid,
+            email: this.user.email,
+            id: card.id,
+            name: card.name,
+            friend: card.friend,
+            proprietary: card.proprietary
+        }, {
+            animate: true,
+            animation: "ios-transition",
+            direction: "backward"
+        });
+    };
+    HomeListe.prototype.action = function (card, index) {
+        this.presentActionSheet(card, index);
+    };
+    HomeListe.prototype.presentActionSheet = function (card, index) {
+        var _this = this;
+        var popup = this.actionSheet.create({
+            title: 'Cosa vuoi fare con questa lista ?',
+            buttons: [
+                {
+                    text: "Aggiungi amico",
+                    handler: function () { _this.addFriend(index); }
+                }, {
+                    text: "modifica",
+                    handler: function () { _this.choseImage(index); }
+                }, {
+                    text: 'Annulla',
+                    role: 'cancel',
+                    handler: function () { }
+                }, {
+                    text: 'Elimina',
+                    cssClass: 'deleteButton',
+                    role: 'delete',
+                    handler: function () { _this.removePost(card); }
+                }
+            ]
+        });
+        popup.present();
+    };
+    HomeListe.prototype.removePost = function (post) {
+        var index = this.cards.indexOf(post);
+        if (index > -1) {
+            this.cards.splice(index, 1);
+            this.cardCount--;
+            this.storage.set("cards", this.cards);
+            this.storage.set("cardCount", this.cardCount);
+        }
+    };
+    //-----------REFACTORING------------
     HomeListe.prototype.addShared = function () {
         var _this = this;
         var splash = this.alertCtrl.create({
@@ -251,60 +309,9 @@ var HomeListe = /** @class */ (function () {
         });
         splash.present();
     };
-    HomeListe.prototype.openTodo = function (card) {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__list_list__["a" /* ListPage */], {
-            uid: this.user.uid,
-            email: this.user.email,
-            id: card.id,
-            name: card.name,
-            friend: card.friend,
-            proprietary: card.proprietary
-        }, {
-            animate: true,
-            animation: "ios-transition",
-            direction: "backward"
-        });
-    };
-    HomeListe.prototype.action = function (card, index) {
-        this.presentActionSheet(card, index);
-    };
-    HomeListe.prototype.presentActionSheet = function (card, index) {
-        var _this = this;
-        var popup = this.actionSheet.create({
-            title: 'Cosa vuoi fare con questa lista ?',
-            buttons: [
-                {
-                    text: "Aggiungi amico",
-                    handler: function () { _this.addFriend(); }
-                }, {
-                    text: "modifica",
-                    handler: function () { _this.choseImage(index); }
-                }, {
-                    text: 'Annulla',
-                    role: 'cancel',
-                    handler: function () { }
-                }, {
-                    text: 'Elimina',
-                    cssClass: 'deleteButton',
-                    role: 'delete',
-                    handler: function () { _this.removePost(card); }
-                }
-            ]
-        });
-        popup.present();
-    };
-    HomeListe.prototype.removePost = function (post) {
-        var index = this.cards.indexOf(post);
-        if (index > -1) {
-            this.cards.splice(index, 1);
-            this.cardCount--;
-            this.storage.set("cards", this.cards);
-            this.storage.set("cardCount", this.cardCount);
-        }
-    };
     HomeListe = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/'<!-- <ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header> -->\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">\n    <img id="immagine"/>\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description">\n        <!-- Condivisa con {{ card.friends }} -->\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/home-liste/home-liste.html"*/,
+            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/'<!-- <ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header> -->\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">\n    <img id="immagine"/>\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description">\n        <!-- Condivisa con {{ card.friends }} -->\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/,
         }),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */]) === "function" && _e || Object])
     ], HomeListe);
@@ -429,7 +436,7 @@ var ListPage = /** @class */ (function () {
     ;
     ListPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-list',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/list/list.html"*/'<ion-header>\n  <ion-navbar padding>\n    <ion-title text-center>\n      <!-- <p>{{ toUser.name }}</p>\n      <p>{{ toUser.link }}</p>\n      <p>Il tuo nickname: {{ toUser.nickname }}</p> -->\n    </ion-title>\n    <ion-buttons start>\n    </ion-buttons>\n    <ion-buttons end>\n      <button (click)="createTodo()" ion-button icon-only large >\n        <ion-icon name="create"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <ion-list>\n    <ion-item-sliding *ngFor="let task of todos | async ; let i = index ">\n      <ion-item>\n        <div *ngIf="task.status == 0" > <h1 #elemento>{{ task.content }}</h1></div>\n        <div *ngIf="task.status == 1" > <h1 #elemento class=\'lineThrough\'>{{ task.content }}</h1></div>       \n      </ion-item>\n\n      <ion-item-options side="right">\n        <button ion-button icon-only color="light" (click)="updateTodo(task)">\n          <ion-icon name="create"></ion-icon>\n        </button>\n        <button ion-button icon-only color="danger" (click)="deleteTodo(task.key)">\n          <ion-icon name="trash"></ion-icon>\n        </button>\n      </ion-item-options>\n      <ion-item-options side="left">\n        <button ion-button icon-only color="secondary" (click)="checkUncheck(task)">\n          <ion-icon name="checkmark"></ion-icon>\n        </button>\n      </ion-item-options>\n    </ion-item-sliding>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/list/list.html"*/,
+            selector: 'page-list',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/list/list.html"*/'<ion-header>\n  <ion-navbar padding>\n    <ion-title text-center>\n      <!-- <p>{{ toUser.name }}</p>\n      <p>{{ toUser.link }}</p>\n      <p>Il tuo nickname: {{ toUser.nickname }}</p> -->\n    </ion-title>\n    <ion-buttons start>\n    </ion-buttons>\n    <ion-buttons end>\n      <button (click)="createTodo()" ion-button icon-only large >\n        <ion-icon name="create"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <ion-list>\n    <ion-item-sliding *ngFor="let task of todos | async ; let i = index ">\n      <ion-item>\n        <div *ngIf="task.status == 0" > <h1 #elemento>{{ task.content }}</h1></div>\n        <div *ngIf="task.status == 1" > <h1 #elemento class=\'lineThrough\'>{{ task.content }}</h1></div>       \n      </ion-item>\n\n      <ion-item-options side="right">\n        <button ion-button icon-only color="light" (click)="updateTodo(task)">\n          <ion-icon name="create"></ion-icon>\n        </button>\n        <button ion-button icon-only color="danger" (click)="deleteTodo(task.key)">\n          <ion-icon name="trash"></ion-icon>\n        </button>\n      </ion-item-options>\n      <ion-item-options side="left">\n        <button ion-button icon-only color="secondary" (click)="checkUncheck(task)">\n          <ion-icon name="checkmark"></ion-icon>\n        </button>\n      </ion-item-options>\n    </ion-item-sliding>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/list/list.html"*/,
         }),
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */])({
             selector: '[elemento]'
@@ -472,7 +479,7 @@ var TabsPage = /** @class */ (function () {
     }
     TabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-tabs',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/tabs/tabs.html"*/'<ion-tabs>\n  <ion-tab [root]="home" tabTitle="Liste" tabIcon="home"></ion-tab>\n  <ion-tab [root]="impostazioni" tabTitle="Impostazioni" tabIcon="settings"></ion-tab>\n</ion-tabs>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/tabs/tabs.html"*/,
+            selector: 'page-tabs',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/tabs/tabs.html"*/'<ion-tabs>\n  <ion-tab [root]="home" tabTitle="Liste" tabIcon="home"></ion-tab>\n  <ion-tab [root]="impostazioni" tabTitle="Impostazioni" tabIcon="settings"></ion-tab>\n</ion-tabs>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/tabs/tabs.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* NavController */]])
     ], TabsPage);
@@ -552,7 +559,7 @@ var SettingsPage = /** @class */ (function () {
     };
     SettingsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-settings',template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/pages/settings/settings.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Impostazioni</ion-title>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content padding>\n  <ion-list>\n    <ion-item>\n      <ion-avatar item-start>\n        <ion-icon name="heart"></ion-icon>\n      </ion-avatar>\n      <h2>Email: {{ user.email }}</h2>\n      <p>La tua email</p>\n    </ion-item>\n    <ion-item (tap)="copy()">\n      <ion-avatar item-start>\n        <ion-icon name="person"></ion-icon>\n      </ion-avatar>\n      <div >\n      <h2 >Id: {{ user.uid }}</h2>\n      <p>Ti servirà per condividere le tue liste</p>\n    </div>\n    </ion-item>\n  </ion-list>\n  <button ion-button block  (click)="logout()" color="danger">Esci</button>\n</ion-content>'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/pages/settings/settings.html"*/,
+            selector: 'page-settings',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/settings/settings.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Impostazioni</ion-title>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content padding>\n  <ion-list>\n    <ion-item>\n      <ion-avatar item-start>\n        <ion-icon name="heart"></ion-icon>\n      </ion-avatar>\n      <h2>Email: {{ user.email }}</h2>\n      <p>La tua email</p>\n    </ion-item>\n    <ion-item (tap)="copy()">\n      <ion-avatar item-start>\n        <ion-icon name="person"></ion-icon>\n      </ion-avatar>\n      <div >\n      <h2 >Id: {{ user.uid }}</h2>\n      <p>Ti servirà per condividere le tue liste</p>\n    </div>\n    </ion-item>\n  </ion-list>\n  <button ion-button block  (click)="logout()" color="danger">Esci</button>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/settings/settings.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ToastController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_2__providers_session_session__["a" /* SessionProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_profile_profile__["a" /* ProfileProvider */], __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__["a" /* Clipboard */]])
     ], SettingsPage);
@@ -596,7 +603,6 @@ var SessionProvider = /** @class */ (function () {
         this.afAuth = afAuth;
         this.user = { uid: "", email: "", name: "" };
         this.authState = null;
-        console.log('Hello SessionProvider Provider');
         this.afAuth.authState.subscribe(function (auth) {
             _this.authState = auth;
             console.log("authState: ", _this.authState);
@@ -611,7 +617,7 @@ var SessionProvider = /** @class */ (function () {
             .createUserWithEmailAndPassword(email, password)
             .then(function (newUserCredential) {
             __WEBPACK_IMPORTED_MODULE_1_firebase_app__["database"]()
-                .ref("/userProfile/" + newUserCredential.user.uid + "/email")
+                .ref("/userProfile/" + newUserCredential.user.uid + "/")
                 .set({ email: email });
         })
             .catch(function (error) {
@@ -635,9 +641,10 @@ var SessionProvider = /** @class */ (function () {
     };
     SessionProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _a || Object])
     ], SessionProvider);
     return SessionProvider;
+    var _a;
 }());
 
 //# sourceMappingURL=session.js.map
@@ -734,8 +741,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */], {}, {
                     links: [
                         { loadChildren: '../pages/home-liste/home-liste.module#HomeListeModule', name: 'HomeListe', segment: 'home-liste', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/list/list.module#ListPageModule', name: 'ListPage', segment: 'list', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/settings/settings.module#SettingsPageModule', name: 'SettingsPage', segment: 'settings', priority: 'low', defaultHistory: [] }
                     ]
                 }),
@@ -781,11 +788,11 @@ var map = {
 		3
 	],
 	"../pages/list/list.module": [
-		500,
+		499,
 		2
 	],
 	"../pages/login/login.module": [
-		499,
+		500,
 		0
 	],
 	"../pages/settings/settings.module": [
@@ -876,7 +883,7 @@ var MyApp = /** @class */ (function () {
         });
     }
     MyApp = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/Users/micky/Documents/GitHub/myDudo/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/micky/Documents/GitHub/myDudo/src/app/app.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/Users/micky/myDudo/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/micky/myDudo/src/app/app.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */]])
     ], MyApp);
