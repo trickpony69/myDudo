@@ -21,9 +21,11 @@ export class HomeListe {
   immagine = "src=\"./../assets/imgs/sfondo0.jpg\"";
 
   constructor(private storage: Storage, public actionSheet: ActionSheetController, public alertCtrl: AlertController, public navCtrl: NavController, public profileProv: ProfileProvider) {
+
     this.storage.get('cards').then((val) => {
       if (val != null) {
-        this.cards = val;
+        console.log(val)
+        this.cards.push(val);
       }
     });
     this.storage.get('cardCount').then((val) => {
@@ -35,6 +37,18 @@ export class HomeListe {
 
   ionViewWillEnter() {
     this.user = { email: "", uid: this.profileProv.getUserProfile().key };
+    this.profileProv.getLists().then(data => {
+      var trovato = false;
+      this.cards.forEach(element => {
+        if (element.name == data.cardTitle)
+          trovato = true;
+      });
+      if (!trovato) {
+        this.cards.push({ id: '0', name: data.cardTitle, friends: "null", proprietary: 0, path: data.cardPath });
+        this.cardCount++;
+      }
+    }
+    );
   }
 
   add() {
@@ -51,7 +65,7 @@ export class HomeListe {
         {
           text: 'Crea',
           handler: (data) => {
-            this.cards.push({ id: this.cardCount, name: data.title, friends: "null", proprietary: "yes" });
+            this.cards.push({ id: this.cardCount, name: data.title, friends: "null", proprietary: 1, path: data.cardPath });
             this.cardCount++;
             this.storage.set("cards", this.cards);
             this.storage.set("cardCount", this.cardCount);
@@ -78,7 +92,8 @@ export class HomeListe {
       alert.addButton({
         text: 'Aggiungi',
         handler: data => {
-         this.profileProv.setFriends(data,this.cards[i].name,i);
+          let path = "/todos/" + this.user.uid + "/" + this.cards[i].name + "/";
+          this.profileProv.setFriends(data, this.cards[i].name, i, path);
         }
       });
       alert.present()
@@ -87,6 +102,7 @@ export class HomeListe {
 
   openTodo(card) {
     this.navCtrl.push(ListPage, {
+      path: card.path,
       uid: this.user.uid,
       email: this.user.email,
       id: card.id,
@@ -158,7 +174,7 @@ export class HomeListe {
         {
           text: 'Aggiungi',
           handler: (data) => {
-            this.cards.push({ id: this.cardCount, name: data.title, friend: data.friendId, proprietary: "no" });
+            this.cards.push({ id: this.cardCount, name: data.title, friend: data.friendId, proprietary: 0 });
             this.cardCount++;
             this.storage.set("cards", this.cards);
             this.storage.set("cardCount", this.cardCount);

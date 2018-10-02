@@ -8,14 +8,30 @@ export class ProfileProvider {
 
   public userProfile: firebase.database.Reference;
   public currentUser: User;
+  public listsRef;
+  public lists;
 
   constructor() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.currentUser = user;
         this.userProfile = firebase.database().ref(`/userProfile/${user.uid}`);
+        this.listsRef = firebase.database().ref('/userProfile/' + user.uid);
       }
     });
+  }
+
+  getLists(): any {
+    return new Promise((resolve, reject) => {
+      var ref = this.listsRef;
+      ref.once("value")
+        .then(function (snapshot) {
+          var CardTitle = snapshot.child('sharedLists/list0/title').val();
+          var CardPath = snapshot.child('sharedLists/list0/path').val();
+          var payload = { cardTitle: CardTitle, cardPath: CardPath };
+          resolve(payload);
+        });
+    })
   }
 
   getEmail(): string {
@@ -39,11 +55,11 @@ export class ProfileProvider {
     });
   }
 
-  setFriends(userId, list, i) {
-    firebase.database().ref('userProfile/' + userId + '/sharedLists'+'/list'+i).update({
+  setFriends(userId, list, i, path) {
+    firebase.database().ref('userProfile/' + userId + '/sharedLists' + '/list' + i).update({
       n: i,
       title: list,
-      path: 'percorso'
+      path: path
     });
   }
 

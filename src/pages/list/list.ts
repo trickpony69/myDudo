@@ -19,6 +19,7 @@ export class ListPage {
   itemsRef: AngularFireList<any>;
   constructor(public afDatabase: AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
     this.toUser = {
+      path: navParams.get("path"),
       uid: navParams.get("uid"),
       email: navParams.get("email"),
       name: navParams.get("name"),
@@ -26,10 +27,11 @@ export class ListPage {
       friendId: navParams.get("friend"),
       proprietary: navParams.get("proprietary")
     }
-    if (this.toUser.proprietary == "yes")
-      this.itemsRef = afDatabase.list("/todos/" +  this.toUser.uid + "/" + this.toUser.name + "/");
-    else
-      this.itemsRef = afDatabase.list("/todos/" + this.toUser.friendId + "/" + this.toUser.name + "/");
+    // if (this.toUser.proprietary == "yes")
+    console.log(this.toUser.path);
+      this.itemsRef = afDatabase.list(this.toUser.path);
+    // else
+    //   this.itemsRef = afDatabase.list("/todos/" + this.toUser.friendId + "/" + this.toUser.name + "/");
 
     this.todos = this.itemsRef.snapshotChanges().pipe(
       map(changes =>

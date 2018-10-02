@@ -28,9 +28,23 @@ var ProfileProvider = /** @class */ (function () {
             if (user) {
                 _this.currentUser = user;
                 _this.userProfile = __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref("/userProfile/" + user.uid);
+                _this.listsRef = __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/userProfile/' + user.uid);
             }
         });
     }
+    ProfileProvider.prototype.getLists = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var ref = _this.listsRef;
+            ref.once("value")
+                .then(function (snapshot) {
+                var CardTitle = snapshot.child('sharedLists/list0/title').val();
+                var CardPath = snapshot.child('sharedLists/list0/path').val();
+                var payload = { cardTitle: CardTitle, cardPath: CardPath };
+                resolve(payload);
+            });
+        });
+    };
     ProfileProvider.prototype.getEmail = function () {
         return this.currentUser.email;
     };
@@ -49,11 +63,11 @@ var ProfileProvider = /** @class */ (function () {
             }
         });
     };
-    ProfileProvider.prototype.setFriends = function (userId, list, i) {
+    ProfileProvider.prototype.setFriends = function (userId, list, i, path) {
         __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('userProfile/' + userId + '/sharedLists' + '/list' + i).update({
             n: i,
             title: list,
-            path: 'percorso'
+            path: path
         });
     };
     ProfileProvider.prototype.updateName = function (firstName, lastName) {
@@ -108,7 +122,8 @@ var HomeListe = /** @class */ (function () {
         this.immagine = "src=\"./../assets/imgs/sfondo0.jpg\"";
         this.storage.get('cards').then(function (val) {
             if (val != null) {
-                _this.cards = val;
+                console.log(val);
+                _this.cards.push(val);
             }
         });
         this.storage.get('cardCount').then(function (val) {
@@ -117,7 +132,19 @@ var HomeListe = /** @class */ (function () {
         });
     }
     HomeListe.prototype.ionViewWillEnter = function () {
+        var _this = this;
         this.user = { email: "", uid: this.profileProv.getUserProfile().key };
+        this.profileProv.getLists().then(function (data) {
+            var trovato = false;
+            _this.cards.forEach(function (element) {
+                if (element.name == data.cardTitle)
+                    trovato = true;
+            });
+            if (!trovato) {
+                _this.cards.push({ id: '0', name: data.cardTitle, friends: "null", proprietary: 0, path: data.cardPath });
+                _this.cardCount++;
+            }
+        });
     };
     HomeListe.prototype.add = function () {
         var _this = this;
@@ -134,7 +161,7 @@ var HomeListe = /** @class */ (function () {
                 {
                     text: 'Crea',
                     handler: function (data) {
-                        _this.cards.push({ id: _this.cardCount, name: data.title, friends: "null", proprietary: "yes" });
+                        _this.cards.push({ id: _this.cardCount, name: data.title, friends: "null", proprietary: 1, path: data.cardPath });
                         _this.cardCount++;
                         _this.storage.set("cards", _this.cards);
                         _this.storage.set("cardCount", _this.cardCount);
@@ -161,7 +188,8 @@ var HomeListe = /** @class */ (function () {
             alert.addButton({
                 text: 'Aggiungi',
                 handler: function (data) {
-                    _this.profileProv.setFriends(data, _this.cards[i].name, i);
+                    var path = "/todos/" + _this.user.uid + "/" + _this.cards[i].name + "/";
+                    _this.profileProv.setFriends(data, _this.cards[i].name, i, path);
                 }
             });
             alert.present();
@@ -169,6 +197,7 @@ var HomeListe = /** @class */ (function () {
     };
     HomeListe.prototype.openTodo = function (card) {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__list_list__["a" /* ListPage */], {
+            path: card.path,
             uid: this.user.uid,
             email: this.user.email,
             id: card.id,
@@ -238,7 +267,7 @@ var HomeListe = /** @class */ (function () {
                 {
                     text: 'Aggiungi',
                     handler: function (data) {
-                        _this.cards.push({ id: _this.cardCount, name: data.title, friend: data.friendId, proprietary: "no" });
+                        _this.cards.push({ id: _this.cardCount, name: data.title, friend: data.friendId, proprietary: 0 });
                         _this.cardCount++;
                         _this.storage.set("cards", _this.cards);
                         _this.storage.set("cardCount", _this.cardCount);
@@ -311,7 +340,7 @@ var HomeListe = /** @class */ (function () {
     };
     HomeListe = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/'<!-- <ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header> -->\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">\n    <img id="immagine"/>\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description">\n        <!-- Condivisa con {{ card.friends }} -->\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/,
+            selector: 'page-home-liste',template:/*ion-inline-start:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/'<!-- <ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header> -->\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab>\n      <ion-icon name="create"></ion-icon>\n    </button>\n    <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list>\n    <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list>\n  </ion-fab>\n  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">\n    <img id="immagine"/>\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description" *ngIf="card.proprietary == 1">\n        Questa lista è tua\n      </p>\n      <p id="description" *ngIf="card.proprietary == 0">\n        Questa lista è di un tuo amico\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>'/*ion-inline-end:"/Users/micky/myDudo/src/pages/home-liste/home-liste.html"*/,
         }),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */]) === "function" && _e || Object])
     ], HomeListe);
@@ -360,6 +389,7 @@ var ListPage = /** @class */ (function () {
         this.navParams = navParams;
         this.alertCtrl = alertCtrl;
         this.toUser = {
+            path: navParams.get("path"),
             uid: navParams.get("uid"),
             email: navParams.get("email"),
             name: navParams.get("name"),
@@ -367,10 +397,11 @@ var ListPage = /** @class */ (function () {
             friendId: navParams.get("friend"),
             proprietary: navParams.get("proprietary")
         };
-        if (this.toUser.proprietary == "yes")
-            this.itemsRef = afDatabase.list("/todos/" + this.toUser.uid + "/" + this.toUser.name + "/");
-        else
-            this.itemsRef = afDatabase.list("/todos/" + this.toUser.friendId + "/" + this.toUser.name + "/");
+        // if (this.toUser.proprietary == "yes")
+        console.log(this.toUser.path);
+        this.itemsRef = afDatabase.list(this.toUser.path);
+        // else
+        //   this.itemsRef = afDatabase.list("/todos/" + this.toUser.friendId + "/" + this.toUser.name + "/");
         this.todos = this.itemsRef.snapshotChanges().pipe(Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["map"])(function (changes) {
             return changes.map(function (c) { return (__assign({ key: c.payload.key }, c.payload.val())); });
         }));
@@ -641,10 +672,9 @@ var SessionProvider = /** @class */ (function () {
     };
     SessionProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */]])
     ], SessionProvider);
     return SessionProvider;
-    var _a;
 }());
 
 //# sourceMappingURL=session.js.map

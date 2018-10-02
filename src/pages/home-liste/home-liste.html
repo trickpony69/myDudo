@@ -30,8 +30,11 @@
       <ion-card-title id="font">
         {{ card.name }}
       </ion-card-title>
-      <p id="description">
-        <!-- Condivisa con {{ card.friends }} -->
+      <p id="description" *ngIf="card.proprietary == 1">
+        Questa lista è tua
+      </p>
+      <p id="description" *ngIf="card.proprietary == 0">
+        Questa lista è di un tuo amico
       </p>
     </ion-card-content>
   </ion-card>
