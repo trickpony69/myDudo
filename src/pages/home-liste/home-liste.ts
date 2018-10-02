@@ -15,6 +15,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 export class HomeListe {
 
   public cards = [];
+  public sharedCards = [];
   public cardCount = 0;
   nickname;
   user = { email: "", uid: "" };
@@ -25,7 +26,7 @@ export class HomeListe {
     this.storage.get('cards').then((val) => {
       if (val != null) {
         console.log(val)
-        this.cards.push(val);
+        this.cards.push(val[0]);
       }
     });
     this.storage.get('cardCount').then((val) => {
@@ -37,16 +38,23 @@ export class HomeListe {
 
   ionViewWillEnter() {
     this.user = { email: "", uid: this.profileProv.getUserProfile().key };
-    this.profileProv.getLists().then(data => {
+    this.profileProv.getFriendLists().then(data => {
+      
+      console.log(data)
       var trovato = false;
-      this.cards.forEach(element => {
-        if (element.name == data.cardTitle)
-          trovato = true;
-      });
-      if (!trovato) {
-        this.cards.push({ id: '0', name: data.cardTitle, friends: "null", proprietary: 0, path: data.cardPath });
-        this.cardCount++;
-      }
+      data.forEach((element0) => {
+        this.sharedCards.forEach((local, index) => {
+          console.log(element0.path);
+          console.log(local.path)
+          if (element0.path == local.path) {
+            trovato = true;
+          }
+        });
+        if (!trovato) {
+          this.sharedCards.push({ id: '0', name: element0.title, friends: "null", proprietary: 0, path: element0.path });
+          this.cardCount++;
+        }
+      })
     }
     );
   }
@@ -106,7 +114,7 @@ export class HomeListe {
       uid: this.user.uid,
       email: this.user.email,
       id: card.id,
-      name: card.name,
+      cardName: card.name,
       friend: card.friend,
       proprietary: card.proprietary
     }, {

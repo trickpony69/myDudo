@@ -22,16 +22,15 @@ export class ListPage {
       path: navParams.get("path"),
       uid: navParams.get("uid"),
       email: navParams.get("email"),
-      name: navParams.get("name"),
+      cardName: navParams.get("cardName"),
       nickname: navParams.get("nickname"),
       friendId: navParams.get("friend"),
       proprietary: navParams.get("proprietary")
     }
-    // if (this.toUser.proprietary == "yes")
-    console.log(this.toUser.path);
+    if (this.toUser.proprietary == "0")
       this.itemsRef = afDatabase.list(this.toUser.path);
-    // else
-    //   this.itemsRef = afDatabase.list("/todos/" + this.toUser.friendId + "/" + this.toUser.name + "/");
+    else
+      this.itemsRef = afDatabase.list("/todos/" + this.toUser.uid + "/" + this.toUser.cardName);
 
     this.todos = this.itemsRef.snapshotChanges().pipe(
       map(changes =>

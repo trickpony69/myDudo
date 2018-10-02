@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import firebase, { User } from 'firebase/app';
 import 'firebase/database';
 import { Observable } from 'rxjs';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 @Injectable()
 export class ProfileProvider {
@@ -21,14 +22,22 @@ export class ProfileProvider {
     });
   }
 
-  getLists(): any {
+  getFriendLists(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
       var ref = this.listsRef;
+      var numListe;
+      ref.child("sharedLists/").on("value", function (snapshot) {
+        numListe = snapshot.numChildren();
+      })
       ref.once("value")
         .then(function (snapshot) {
-          var CardTitle = snapshot.child('sharedLists/list0/title').val();
-          var CardPath = snapshot.child('sharedLists/list0/path').val();
-          var payload = { cardTitle: CardTitle, cardPath: CardPath };
+          var payload = [];
+          for (let i = 0; i < numListe; i++) {
+            var title = snapshot.child('sharedLists/list' + i + '/title').val();
+            var path = snapshot.child('sharedLists/list' + i + '/path').val();
+            payload.push({ title: title, path: path });
+          }
+          // console.log(payload)
           resolve(payload);
         });
     })
