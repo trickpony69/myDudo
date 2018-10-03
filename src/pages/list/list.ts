@@ -27,6 +27,7 @@ export class ListPage {
       friendId: navParams.get("friend"),
       proprietary: navParams.get("proprietary")
     }
+    console.log(this.toUser.cardName)
     if (this.toUser.proprietary == "0")
       this.itemsRef = afDatabase.list(this.toUser.path);
     else

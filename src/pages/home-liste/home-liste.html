@@ -10,19 +10,19 @@
 
 <ion-content>
   <ion-fab bottom right>
-    <button ion-fab>
+    <button ion-fab (click)="add()">
       <ion-icon name="create"></ion-icon>
     </button>
-    <ion-fab-list side="top">
+    <!-- <ion-fab-list side="top">
       <button ion-fab (click)="add()">
         <ion-icon name="add"></ion-icon>
       </button>
-    </ion-fab-list>
-    <ion-fab-list side="left">
+    </ion-fab-list> -->
+    <!-- <ion-fab-list side="left">
       <button ion-fab (click)="addShared()">
         <ion-icon name="share"></ion-icon>
       </button>
-    </ion-fab-list>
+    </ion-fab-list> -->
   </ion-fab>
   <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">
     <img id="immagine" />

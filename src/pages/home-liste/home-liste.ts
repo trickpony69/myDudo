@@ -6,6 +6,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { LoginPage } from '../login/login';
 import { SessionProvider } from '../../providers/session/session';
 import { ProfileProvider } from '../../providers/profile/profile';
+import { Observable } from 'rxjs';
 
 @IonicPage()
 @Component({
@@ -24,9 +25,18 @@ export class HomeListe {
   constructor(private storage: Storage, public actionSheet: ActionSheetController, public alertCtrl: AlertController, public navCtrl: NavController, public profileProv: ProfileProvider) {
 
     this.storage.get('cards').then((val) => {
-      if (val != null) {
-        console.log(val)
-        this.cards.push(val[0]);
+      // Object.values(myObject).length forse funziona anche questa
+      var counterCards = function (obj) {
+        var size = 0, key;
+        for (key in obj) {
+          if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+      };
+      for (let i = 0; i < counterCards(val); i++) {
+        if (val != null && val[i].owner == profileProv.getUserProfile().key) {
+          this.cards.push(val[i]);
+        }
       }
     });
     this.storage.get('cardCount').then((val) => {
@@ -39,8 +49,8 @@ export class HomeListe {
   ionViewWillEnter() {
     this.user = { email: "", uid: this.profileProv.getUserProfile().key };
     this.profileProv.getFriendLists().then(data => {
-      
-      console.log(data)
+
+      console.log("friends: ", data)
       var trovato = false;
       data.forEach((element0) => {
         this.sharedCards.forEach((local, index) => {
@@ -73,7 +83,7 @@ export class HomeListe {
         {
           text: 'Crea',
           handler: (data) => {
-            this.cards.push({ id: this.cardCount, name: data.title, friends: "null", proprietary: 1, path: data.cardPath });
+            this.cards.push({ owner: this.profileProv.getUserProfile().key, id: this.cardCount, name: data.title, friends: "null", proprietary: 1, path: data.cardPath });
             this.cardCount++;
             this.storage.set("cards", this.cards);
             this.storage.set("cardCount", this.cardCount);
