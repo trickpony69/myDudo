@@ -40,8 +40,6 @@ $wizard: #4FACFF;
   }
 }
 
-
-
 .clash-card {
   margin-left: 20px;
   background: white;
@@ -57,19 +55,22 @@ $wizard: #4FACFF;
 
 .clash-card__image {
   position: relative;
-  height: 230px;
-  margin-bottom: 35px;
+  height: 290px;
+  margin-bottom: 20px;
   border-top-left-radius: $border-radius-size;
   border-top-right-radius: $border-radius-size;
 }
 
 .clash-card__image--barbarian {
-  // background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/barbarian-bg.jpg');
+  background: url('../assets/imgs/animatedRainbow.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   img {
-    width: 250px;
-    position: absolute;    
-    top: 10px;
-    left: 60px;
+    width: 180px;
+    position: absolute;
+    top: 20px;
+    left: 90px;
   }
 }
 

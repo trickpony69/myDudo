@@ -47,6 +47,10 @@ export class HomeListe {
   }
 
   ionViewWillEnter() {
+    this.profileProv.getFriendForAList("matteo").then(data => {      
+      console.log(data[0].name);
+    })
+
     this.user = { email: "", uid: this.profileProv.getUserProfile().key };
     this.profileProv.getFriendLists().then(data => {
 
@@ -95,7 +99,7 @@ export class HomeListe {
   }
 
   addFriend(i) {
-    var friends = this.profileProv.getFriends().then((data) => {
+    var friends = this.profileProv.getPeople().then((data) => {
       let alert = this.alertCtrl.create();
       data.forEach((element, index) => {
         alert.addInput({

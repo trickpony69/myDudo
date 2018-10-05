@@ -25780,17 +25780,24 @@ page-login {
 
 .clash-card__image {
   position: relative;
-  height: 230px;
-  margin-bottom: 35px;
+  height: 290px;
+  margin-bottom: 20px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
 
+.clash-card__image--barbarian {
+  background: url("../assets/imgs/animatedRainbow.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
 .clash-card__image--barbarian img {
-  width: 250px;
+  width: 180px;
   position: absolute;
-  top: 10px;
-  left: 60px;
+  top: 20px;
+  left: 90px;
 }
 
 .clash-card__level {

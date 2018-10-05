@@ -3,6 +3,7 @@ import firebase, { User } from 'firebase/app';
 import 'firebase/database';
 import { Observable } from 'rxjs';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { ScrollView } from 'ionic-angular/umd/util/scroll-view';
 
 @Injectable()
 export class ProfileProvider {
@@ -51,7 +52,7 @@ export class ProfileProvider {
     return this.userProfile;
   }
 
-  getFriends(): Promise<Array<any>> {
+  getPeople(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
       var friends = firebase.database().ref('userProfile/');
       friends.on('value', getData);
@@ -62,6 +63,20 @@ export class ProfileProvider {
         resolve(keys);
       }
     });
+  }
+
+  getFriendForAList(list: string): Promise<Array<any>> { // ritorna gli amici di una lista, da sistemare
+    return new Promise((resolve) => {
+      var arr = [];
+      var friendsLists = firebase.database().ref('/todos/' + this.userProfile.key + '/matteo/' + '/friends/');
+      friendsLists.once('value', function (snapshot) {
+        snapshot.forEach(function (child) {
+          arr.push({uid: child.key,name: child.val()});
+        });
+      }).then(data => {
+        resolve(arr);
+      })      
+    })
   }
 
   setFriends(userId, list, i, path) {
