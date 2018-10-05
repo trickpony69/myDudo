@@ -38,7 +38,6 @@ export class ProfileProvider {
             var path = snapshot.child('sharedLists/list' + i + '/path').val();
             payload.push({ title: title, path: path });
           }
-          // console.log(payload)
           resolve(payload);
         });
     })
@@ -57,10 +56,11 @@ export class ProfileProvider {
       var friends = firebase.database().ref('userProfile/');
       friends.on('value', getData);
       function getData(data) {
-        var obj = data.val();
-        var keys = Object.keys(obj);
-        console.log(keys);
-        resolve(keys);
+        var obj = [];
+        data.forEach(element => {
+          obj.push({ key: element.key, payload: element.val() });
+        });
+        resolve(obj)
       }
     });
   }
@@ -68,23 +68,27 @@ export class ProfileProvider {
   getFriendForAList(list: string): Promise<Array<any>> { // ritorna gli amici di una lista, da sistemare
     return new Promise((resolve) => {
       var arr = [];
-      var friendsLists = firebase.database().ref('/todos/' + this.userProfile.key + '/matteo/' + '/friends/');
+      var friendsLists = firebase.database().ref('/todos/' + this.userProfile.key + '/' + list + '/' + '/friends/');
       friendsLists.once('value', function (snapshot) {
         snapshot.forEach(function (child) {
-          arr.push({uid: child.key,name: child.val()});
+          arr.push({ uid: child.key, name: child.val() });
         });
-      }).then(data => {
+      }).then(() => {
         resolve(arr);
-      })      
+      })
     })
   }
 
-  setFriends(userId, list, i, path) {
-    firebase.database().ref('userProfile/' + userId + '/sharedLists' + '/list' + i).update({
+  setFriends(friendId, list, i, path) {
+    firebase.database().ref('userProfile/' + friendId + '/sharedLists' + '/list' + i).update({
       n: i,
       title: list,
       path: path
     });
+    firebase.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/' + friendId).set({
+      name: 'utente amico'
+
+    })
   }
 
   updateName(firstName: string, lastName: string): Promise<any> {

@@ -4873,6 +4873,10 @@ textarea::-webkit-input-placeholder {
   padding-left: 2px;
 }
 
+textarea:-ms-input-placeholder {
+  padding-left: 2px;
+}
+
 textarea::-ms-input-placeholder {
   padding-left: 2px;
 }
@@ -25780,8 +25784,9 @@ page-login {
 
 .clash-card__image {
   position: relative;
-  height: 290px;
-  margin-bottom: 20px;
+  height: 250px;
+  margin-bottom: 60px;
+  margin-top: 0px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
@@ -25789,15 +25794,14 @@ page-login {
 .clash-card__image--barbarian {
   background: url("../assets/imgs/animatedRainbow.gif");
   background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+  background-position: bottom;
 }
 
 .clash-card__image--barbarian img {
-  width: 180px;
+  width: 160px;
   position: absolute;
-  top: 20px;
-  left: 90px;
+  top: 40px;
+  left: 110px;
 }
 
 .clash-card__level {

@@ -48,7 +48,6 @@ export class HomeListe {
 
   ionViewWillEnter() {
     this.profileProv.getFriendForAList("matteo").then(data => {      
-      console.log(data[0].name);
     })
 
     this.user = { email: "", uid: this.profileProv.getUserProfile().key };
@@ -58,8 +57,6 @@ export class HomeListe {
       var trovato = false;
       data.forEach((element0) => {
         this.sharedCards.forEach((local, index) => {
-          console.log(element0.path);
-          console.log(local.path)
           if (element0.path == local.path) {
             trovato = true;
           }
@@ -104,18 +101,18 @@ export class HomeListe {
       data.forEach((element, index) => {
         alert.addInput({
           type: 'radio',
-          label: element,
-          value: element,
+          label: element.payload.name,
+          value: element.key,
           checked: false
         })
       })
-      alert.setTitle('Amici');
+      alert.setTitle('Persone');
       alert.addButton('Annulla');
       alert.addButton({
         text: 'Aggiungi',
-        handler: data => {
+        handler: friend => {
           let path = "/todos/" + this.user.uid + "/" + this.cards[i].name + "/";
-          this.profileProv.setFriends(data, this.cards[i].name, i, path);
+          this.profileProv.setFriends(friend, this.cards[i].name, i, path);
         }
       });
       alert.present()

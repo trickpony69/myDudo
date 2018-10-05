@@ -55,8 +55,9 @@ $wizard: #4FACFF;
 
 .clash-card__image {
   position: relative;
-  height: 290px;
-  margin-bottom: 20px;
+  height: 250px;
+  margin-bottom: 60px;
+  margin-top: 0px;
   border-top-left-radius: $border-radius-size;
   border-top-right-radius: $border-radius-size;
 }
@@ -64,13 +65,13 @@ $wizard: #4FACFF;
 .clash-card__image--barbarian {
   background: url('../assets/imgs/animatedRainbow.gif');
   background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+  background-position: bottom; 
+  // background-size: cover;
   img {
-    width: 180px;
+    width: 160px;
     position: absolute;
-    top: 20px;
-    left: 90px;
+    top: 40px;
+    left: 110px;
   }
 }
 
