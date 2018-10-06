@@ -25798,10 +25798,10 @@ page-login {
 }
 
 .clash-card__image--barbarian img {
-  width: 160px;
+  width: 250px;
   position: absolute;
-  top: 40px;
-  left: 110px;
+  top: -90px;
+  left: 150px;
 }
 
 .clash-card__level {

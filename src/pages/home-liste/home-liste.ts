@@ -95,6 +95,19 @@ export class HomeListe {
     splash.present();
   }
 
+  checkAlreadyAdded(friend,list): boolean{
+  //   return new Promise((resolve, reject) => {
+  //   var friendsList = this.profileProv.getFriendForAList(list).then( data =>{
+  //     // if(data == list){
+  //     //   resolve(true)
+  //     // }
+  //     // else reject(false);
+  //   })
+  // }.then(()=>{
+  //   resolve(true);
+  // })
+  }
+  
   addFriend(i) {
     var friends = this.profileProv.getPeople().then((data) => {
       let alert = this.alertCtrl.create();
@@ -103,7 +116,8 @@ export class HomeListe {
           type: 'radio',
           label: element.payload.name,
           value: element.key,
-          checked: false
+          checked: false,
+          disabled: this.checkAlreadyAdded(element,element.key),
         })
       })
       alert.setTitle('Persone');
