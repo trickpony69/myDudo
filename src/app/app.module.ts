@@ -17,6 +17,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { SessionProvider } from '../providers/session/session';
 import { ProfileProvider } from '../providers/profile/profile';
 import { Clipboard } from '@ionic-native/clipboard';
+import { FriendsListPage } from '../pages/friends-list/friends-list';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCJf4aqwkCNGixvmTKHm8NnnzksXmTnpE0",
@@ -34,6 +35,7 @@ export const firebaseConfig = {
     SettingsPage,
     TabsPage,
     ListPage,
+    FriendsListPage
   ],
   imports: [
     BrowserModule,
@@ -49,6 +51,7 @@ export const firebaseConfig = {
     SettingsPage,
     TabsPage,
     ListPage,
+    FriendsListPage
   ],
   providers: [
     StatusBar,

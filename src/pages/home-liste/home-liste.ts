@@ -52,7 +52,6 @@ export class HomeListe {
     this.user = { email: "", uid: this.profileProv.getUserProfile().key };
     this.profileProv.getFriendLists().then(data => {
 
-      console.log("friends: ", data)
       var trovato = false;
       data.forEach((element0) => {
         this.sharedCards.forEach((local, index) => {
@@ -96,10 +95,10 @@ export class HomeListe {
 
   checkAlreadyAdded(list, friendKey): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      var friendsList = this.profileProv.getFriendForAList(list).then(data => {
-        data.forEach( element =>{
+      this.profileProv.getFriendForAList(list).then(data => {
+        data.forEach(element => {
           if (friendKey == element.uid) {
-            resolve(true);          
+            resolve(true);
           }
         })
         resolve(false);
@@ -107,7 +106,7 @@ export class HomeListe {
     })
   }
 
-  addFriend(card,i) {
+  addFriend(card, i) {
     var friends = this.profileProv.getPeople().then((people) => {
       let alert = this.alertCtrl.create();
       people.forEach((person, index) => {
@@ -161,7 +160,7 @@ export class HomeListe {
       buttons: [
         {
           text: "Aggiungi amico",
-          handler: () => { this.addFriend(card,index) }
+          handler: () => { this.addFriend(card, index) }
         }, {
           text: "modifica",
           handler: () => { this.choseImage(index) }

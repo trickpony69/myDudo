@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from '../../../node_modules/rxjs';
 import { map } from 'rxjs/operators';
+import { FriendsListPage } from '../friends-list/friends-list';
 
 @IonicPage()
 @Component({
@@ -105,7 +106,7 @@ export class ListPage {
   };
 
   viewListFriends(){
-    
+    this.navCtrl.push(FriendsListPage)
   }
 
 }
