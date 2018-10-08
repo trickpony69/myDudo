@@ -4873,10 +4873,6 @@ textarea::-webkit-input-placeholder {
   padding-left: 2px;
 }
 
-textarea:-ms-input-placeholder {
-  padding-left: 2px;
-}
-
 textarea::-ms-input-placeholder {
   padding-left: 2px;
 }
@@ -25798,10 +25794,10 @@ page-login {
 }
 
 .clash-card__image--barbarian img {
-  width: 250px;
+  width: 160px;
   position: absolute;
-  top: -90px;
-  left: 150px;
+  top: 30px;
+  left: 120px;
 }
 
 .clash-card__level {

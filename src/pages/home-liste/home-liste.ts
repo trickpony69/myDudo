@@ -7,6 +7,7 @@ import { LoginPage } from '../login/login';
 import { SessionProvider } from '../../providers/session/session';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { Observable } from 'rxjs';
+import { elementAt } from 'rxjs/operators';
 
 @IonicPage()
 @Component({
@@ -47,8 +48,6 @@ export class HomeListe {
   }
 
   ionViewWillEnter() {
-    this.profileProv.getFriendForAList("matteo").then(data => {      
-    })
 
     this.user = { email: "", uid: this.profileProv.getUserProfile().key };
     this.profileProv.getFriendLists().then(data => {
@@ -95,29 +94,32 @@ export class HomeListe {
     splash.present();
   }
 
-  checkAlreadyAdded(friend,list): boolean{
-  //   return new Promise((resolve, reject) => {
-  //   var friendsList = this.profileProv.getFriendForAList(list).then( data =>{
-  //     // if(data == list){
-  //     //   resolve(true)
-  //     // }
-  //     // else reject(false);
-  //   })
-  // }.then(()=>{
-  //   resolve(true);
-  // })
+  checkAlreadyAdded(list, friendKey): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      var friendsList = this.profileProv.getFriendForAList(list).then(data => {
+        data.forEach( element =>{
+          if (friendKey == element.uid) {
+            resolve(true);          
+          }
+        })
+        resolve(false);
+      })
+    })
   }
-  
-  addFriend(i) {
-    var friends = this.profileProv.getPeople().then((data) => {
+
+  addFriend(card,i) {
+    var friends = this.profileProv.getPeople().then((people) => {
       let alert = this.alertCtrl.create();
-      data.forEach((element, index) => {
-        alert.addInput({
-          type: 'radio',
-          label: element.payload.name,
-          value: element.key,
-          checked: false,
-          disabled: this.checkAlreadyAdded(element,element.key),
+      people.forEach((person, index) => {
+        this.checkAlreadyAdded(card.name, person.key).then(condition => {
+          // console.log("condition: ", condition)
+          alert.addInput({
+            type: 'radio',
+            label: person.payload.name,
+            value: person.key,
+            checked: false,
+            disabled: condition
+          })
         })
       })
       alert.setTitle('Persone');
@@ -159,7 +161,7 @@ export class HomeListe {
       buttons: [
         {
           text: "Aggiungi amico",
-          handler: () => { this.addFriend(index) }
+          handler: () => { this.addFriend(card,index) }
         }, {
           text: "modifica",
           handler: () => { this.choseImage(index) }

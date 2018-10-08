@@ -25,7 +25,7 @@ export class SessionProvider {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   };
 
-  signupUser(email: string, password: string): Promise<any> {
+  signupUser(email: string, password: string, name:string): Promise<any> {
     return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -33,7 +33,7 @@ export class SessionProvider {
         firebase
           .database()
           .ref(`/userProfile/${newUserCredential.user.uid}/`)
-          .set({email});
+          .set({email,name});
       })
       .catch(error => {
         console.error(error);

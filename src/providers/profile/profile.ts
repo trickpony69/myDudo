@@ -23,7 +23,7 @@ export class ProfileProvider {
     });
   }
 
-  getFriendLists(): Promise<Array<any>> {
+  getFriendLists(): Promise<Array<any>> { //ritorna le liste condivise con te
     return new Promise((resolve, reject) => {
       var ref = this.listsRef;
       var numListe;
@@ -65,10 +65,11 @@ export class ProfileProvider {
     });
   }
 
-  getFriendForAList(list: string): Promise<Array<any>> { // ritorna gli amici di una lista, da sistemare
+  getFriendForAList(list): Promise<Array<any>> { // ritorna gli amici della tua lista, da sistemare
     return new Promise((resolve) => {
+      console.log('/todos/' + this.userProfile.key + '/' + list + '/friends/')
       var arr = [];
-      var friendsLists = firebase.database().ref('/todos/' + this.userProfile.key + '/' + list + '/' + '/friends/');
+      var friendsLists = firebase.database().ref('/todos/' + this.userProfile.key + '/' + list + '/friends/');
       friendsLists.once('value', function (snapshot) {
         snapshot.forEach(function (child) {
           arr.push({ uid: child.key, name: child.val() });
@@ -86,7 +87,7 @@ export class ProfileProvider {
       path: path
     });
     firebase.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/' + friendId).set({
-      name: 'utente amico'
+      name: 'nome utente amico'
 
     })
   }

@@ -104,4 +104,8 @@ export class ListPage {
     else this.itemsRef.update(todo.key, { status: 0 });
   };
 
+  viewListFriends(){
+    
+  }
+
 }

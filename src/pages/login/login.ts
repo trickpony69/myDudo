@@ -13,12 +13,13 @@ export class LoginPage {
   public loading: Loading;
   private email;
   private password;
+  private name;
   constructor(public navCtrl: NavController, public session: SessionProvider, public loadingCtrl: LoadingController) { }
 
   register() {
     this.loading = this.loadingCtrl.create();
     this.loading.present();
-    this.session.signupUser(this.email, this.password).then(
+    this.session.signupUser(this.email, this.password, this.name).then(
       () => {
         this.loading.dismiss().then(() => {
           this.navCtrl.setRoot(TabsPage);
