@@ -19,7 +19,7 @@ export class FriendsListPage {
 
   private friends = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, private profileProv: ProfileProvider) {
-    profileProv.getFriendForAList("prova").then( data => {
+    profileProv.getFriendForAList(navParams.get("title")).then( data => {
       data.forEach((element) =>{
         profileProv.getNameByUid(element.uid).then(name =>{
           this.friends.push({name});

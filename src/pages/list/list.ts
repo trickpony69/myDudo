@@ -106,7 +106,9 @@ export class ListPage {
   };
 
   viewListFriends(){
-    this.navCtrl.push(FriendsListPage)
+    this.navCtrl.push(FriendsListPage,{
+      title: this.toUser.cardName
+    })
   }
 
 }
