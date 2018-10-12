@@ -60,7 +60,7 @@ export class HomeListe {
           }
         });
         if (!trovato) {
-          this.sharedCards.push({ id: '0', name: element0.title, friends: "null", proprietary: 0, path: element0.path });
+          this.sharedCards.push({ id: '0', name: element0.title, friends: "null", proprietary: 0, path: element0.path, proprietaryUid:element0.proprietaryUid });
           this.cardCount++;
         }
       })
@@ -95,7 +95,7 @@ export class HomeListe {
 
   checkAlreadyAdded(list, friendKey): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.profileProv.getFriendForAList(list).then(data => {
+      this.profileProv.getFriendForAList(this.profileProv.getUserProfile().key, list).then(data => {
         data.forEach(element => {
           if (friendKey == element.uid) {
             resolve(true);
@@ -127,7 +127,7 @@ export class HomeListe {
         text: 'Aggiungi',
         handler: friend => {
           let path = "/todos/" + this.user.uid + "/" + this.cards[i].name + "/";
-          this.profileProv.setFriends(friend, this.cards[i].name, i, path);
+          this.profileProv.setFriends(friend, this.cards[i].name, i, path, this.user.uid);
         }
       });
       alert.present()
@@ -142,7 +142,8 @@ export class HomeListe {
       id: card.id,
       cardName: card.name,
       friend: card.friend,
-      proprietary: card.proprietary
+      proprietary: card.proprietary,
+      proprietaryUid: card.proprietaryUid
     }, {
         animate: true,
         animation: "ios-transition",

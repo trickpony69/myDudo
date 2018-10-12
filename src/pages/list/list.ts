@@ -26,9 +26,9 @@ export class ListPage {
       cardName: navParams.get("cardName"),
       nickname: navParams.get("nickname"),
       friendId: navParams.get("friend"),
-      proprietary: navParams.get("proprietary")
+      proprietary: navParams.get("proprietary"),
+      proprietaryUid: navParams.get("proprietaryUid")
     }
-    console.log(this.toUser.cardName)
     if (this.toUser.proprietary == "0")
       this.itemsRef = afDatabase.list(this.toUser.path);
     else
@@ -107,7 +107,8 @@ export class ListPage {
 
   viewListFriends(){
     this.navCtrl.push(FriendsListPage,{
-      title: this.toUser.cardName
+      title: this.toUser.cardName,
+      proprietaryUid: this.toUser.proprietaryUid
     })
   }
 

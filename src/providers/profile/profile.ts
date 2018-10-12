@@ -36,7 +36,8 @@ export class ProfileProvider {
           for (let i = 0; i < numListe; i++) {
             var title = snapshot.child('sharedLists/list' + i + '/title').val();
             var path = snapshot.child('sharedLists/list' + i + '/path').val();
-            payload.push({ title: title, path: path });
+            var friendUid = snapshot.child('sharedLists/list' + i + '/proprietaryUid').val();
+            payload.push({ title: title, path: path, proprietaryUid: friendUid });
           }
           resolve(payload);
         });
@@ -65,13 +66,13 @@ export class ProfileProvider {
     });
   }
 
-  getFriendForAList(list): Promise<Array<any>> { // ritorna gli amici della tua lista, da sistemare
+  getFriendForAList(owner, list): Promise<Array<any>> { // ritorna gli amici della tua lista, da sistemare
     return new Promise((resolve) => {
       var arr = [];
-      var friendsLists = firebase.database().ref('/todos/' + this.userProfile.key + '/' + list + '/friends/');
+      var friendsLists = firebase.database().ref('/todos/' + owner + '/' + list + '/friends/');
       friendsLists.once('value', function (snapshot) {
         snapshot.forEach(function (child) {
-          arr.push({ uid: child.key, data: child.val() });
+          arr.push({ data: child.val() });
         });
       }).then(() => {
         resolve(arr);
@@ -81,22 +82,23 @@ export class ProfileProvider {
 
   getNameByUid(uid): Promise<any> {
     return new Promise(resolve => {
+      
       firebase.database().ref(('/userProfile/' + uid + '/' + '/name/'))
         .once('value', function (snapshot) {
-          resolve(snapshot.val()) 
+          resolve(snapshot.val())
         })
     })
   }
 
-  setFriends(friendId, list, i, path) {
+  setFriends(friendId, list, i, path, proprietaryUid) {
     firebase.database().ref('userProfile/' + friendId + '/sharedLists' + '/list' + i).update({
       n: i,
       title: list,
-      path: path
+      path: path,
+      proprietaryUid: proprietaryUid
     });
-    firebase.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/' + friendId).set({
-      name: 'nome utente amico'
-
+    firebase.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/').set({
+      friendUid: friendId
     })
   }
 
