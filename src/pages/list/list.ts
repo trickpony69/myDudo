@@ -16,7 +16,7 @@ import { FriendsListPage } from '../friends-list/friends-list';
 export class ListPage {
   // @ViewChildren('elemento') elemento: QueryList<any>;
   toUser: any;
-  todos: Observable<any[]>;
+  todos; //Observable<any[]>;
   itemsRef: AngularFireList<any>;
   constructor(public afDatabase: AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
     this.toUser = {
@@ -29,17 +29,19 @@ export class ListPage {
       proprietary: navParams.get("proprietary"),
       proprietaryUid: navParams.get("proprietaryUid")
     }
+    console.log(this.toUser.proprietaryUid)
     if (this.toUser.proprietary == "0")
       this.itemsRef = afDatabase.list(this.toUser.path);
     else
       this.itemsRef = afDatabase.list("/todos/" + this.toUser.uid + "/" + this.toUser.cardName);
 
-    this.todos = this.itemsRef.snapshotChanges().pipe(
-      map(changes =>
-        changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))
-      )
-    );
+    //-----------------------------Sostituito dalla funzione sottostante---------------------
+    // this.todos = this.itemsRef.snapshotChanges().pipe(
+    //   map(changes =>
+    //     changes.map(c => ({ key: c.payload.key, ...c.payload.val()}))
+    //   ))
 
+     this.itemsRef.valueChanges().subscribe(item => this.todos = item); 
   }
 
   createTodo() {

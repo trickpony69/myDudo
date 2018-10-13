@@ -19,8 +19,8 @@
 
 <ion-content>
   <ion-list>
-    <ion-item-sliding *ngFor="let task of todos | async ; let i = index ">
-      <ion-item>
+    <ion-item-sliding *ngFor="let task of todos  ; let i = index ">
+      <ion-item *ngIf="task.content">
         <div *ngIf="task.status == 0" > <h1 #elemento>{{ task.content }}</h1></div>
         <div *ngIf="task.status == 1" > <h1 #elemento class='lineThrough'>{{ task.content }}</h1></div>       
       </ion-item>

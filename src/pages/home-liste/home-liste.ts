@@ -96,7 +96,10 @@ export class HomeListe {
   checkAlreadyAdded(list, friendKey): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.profileProv.getFriendForAList(this.profileProv.getUserProfile().key, list).then(data => {
+        console.log(data)
+
         data.forEach(element => {
+
           if (friendKey == element.uid) {
             resolve(true);
           }
@@ -143,7 +146,7 @@ export class HomeListe {
       cardName: card.name,
       friend: card.friend,
       proprietary: card.proprietary,
-      proprietaryUid: card.proprietaryUid
+      proprietaryUid: card.owner
     }, {
         animate: true,
         animation: "ios-transition",

@@ -26,7 +26,7 @@
   </ion-fab>
   <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">
     <img id="immagine" />
-    <ion-card-content>
+    <ion-card-content id="gradient">
       <ion-card-title id="font">
         {{ card.name }}
       </ion-card-title>

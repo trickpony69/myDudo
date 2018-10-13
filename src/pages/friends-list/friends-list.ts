@@ -19,8 +19,10 @@ export class FriendsListPage {
 
   private friends = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, private profileProv: ProfileProvider) {
+    console.log(navParams.get("proprietaryUid"),"---", navParams.get("title"))    
     profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).then( data => {
       data.forEach((element) =>{
+        console.log(element)
         profileProv.getNameByUid(element.data).then(name =>{
           this.friends.push({name});
         })
