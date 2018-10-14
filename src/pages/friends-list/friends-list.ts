@@ -22,7 +22,7 @@ export class FriendsListPage {
     console.log(navParams.get("proprietaryUid"),"---", navParams.get("title"))    
     profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).then( data => {
       data.forEach((element) =>{
-        console.log(element)
+        console.log("element",element)
         profileProv.getNameByUid(element.data).then(name =>{
           this.friends.push({name});
         })

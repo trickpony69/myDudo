@@ -69,12 +69,15 @@ export class ProfileProvider {
   getFriendForAList(owner, list): Promise<Array<any>> { // ritorna gli amici della tua lista, da sistemare
     return new Promise((resolve) => {
       var arr = [];
+      console.log("list",'/todos/' + owner + '/' + list + '/friends/')
       var friendsLists = firebase.database().ref('/todos/' + owner + '/' + list + '/friends/');
       friendsLists.once('value', function (snapshot) {
+        
         snapshot.forEach(function (child) {
-          arr.push({ data: child.val() });
+          arr.push({ data: child.val().friendUid });
         });
       }).then(() => {
+        console.log("arr",arr)
         resolve(arr);
       })
     })
@@ -97,7 +100,7 @@ export class ProfileProvider {
       path: path,
       proprietaryUid: proprietaryUid
     });
-    firebase.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/').set({
+    firebase.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/').push({
       friendUid: friendId
     })
   }

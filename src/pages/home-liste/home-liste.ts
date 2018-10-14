@@ -99,8 +99,8 @@ export class HomeListe {
         console.log(data)
 
         data.forEach(element => {
-
-          if (friendKey == element.uid) {
+          console.log("element",element.data)
+          if (friendKey == element.data) {
             resolve(true);
           }
         })
@@ -114,7 +114,7 @@ export class HomeListe {
       let alert = this.alertCtrl.create();
       people.forEach((person, index) => {
         this.checkAlreadyAdded(card.name, person.key).then(condition => {
-          // console.log("condition: ", condition)
+          console.log("check su add friend",card.name,"---",person.key, condition)
           alert.addInput({
             type: 'radio',
             label: person.payload.name,
