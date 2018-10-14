@@ -54,12 +54,14 @@ export class ProfileProvider {
 
   getPeople(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
+      var currentUser = this.userProfile;
       var friends = firebase.database().ref('userProfile/');
       friends.on('value', getData);
       function getData(data) {
         var obj = [];
         data.forEach(element => {
-          obj.push({ key: element.key, payload: element.val() });
+          if(currentUser.key != element.key)
+            obj.push({ key: element.key, payload: element.val() });
         });
         resolve(obj)
       }
@@ -69,15 +71,13 @@ export class ProfileProvider {
   getFriendForAList(owner, list): Promise<Array<any>> { // ritorna gli amici della tua lista, da sistemare
     return new Promise((resolve) => {
       var arr = [];
-      console.log("list",'/todos/' + owner + '/' + list + '/friends/')
       var friendsLists = firebase.database().ref('/todos/' + owner + '/' + list + '/friends/');
       friendsLists.once('value', function (snapshot) {
-        
         snapshot.forEach(function (child) {
           arr.push({ data: child.val().friendUid });
         });
       }).then(() => {
-        console.log("arr",arr)
+        console.log("arr", arr)
         resolve(arr);
       })
     })
@@ -85,7 +85,7 @@ export class ProfileProvider {
 
   getNameByUid(uid): Promise<any> {
     return new Promise(resolve => {
-      
+
       firebase.database().ref(('/userProfile/' + uid + '/' + '/name/'))
         .once('value', function (snapshot) {
           resolve(snapshot.val())

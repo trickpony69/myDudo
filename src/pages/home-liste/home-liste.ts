@@ -114,7 +114,6 @@ export class HomeListe {
       let alert = this.alertCtrl.create();
       people.forEach((person, index) => {
         this.checkAlreadyAdded(card.name, person.key).then(condition => {
-          console.log("check su add friend",card.name,"---",person.key, condition)
           alert.addInput({
             type: 'radio',
             label: person.payload.name,
