@@ -15,20 +15,17 @@ import { Clipboard } from '@ionic-native/clipboard';
 })
 export class SettingsPage {
 
-  user = { email: "", uid: "" };
-  constructor(public toastCtrl: ToastController, public loadingCtrl: LoadingController, public session: SessionProvider, public profileProv: ProfileProvider, private clipboard: Clipboard) {
+  private profile = { name: "", email: "",uid:"" };
 
+  constructor(public toastCtrl: ToastController, public loadingCtrl: LoadingController, public session: SessionProvider, public profileProv: ProfileProvider, private clipboard: Clipboard) {
+    this.profileProv.getUserProfile().then(data => {
+      data.on("value", userProfileSnapshot => {
+        this.profile = userProfileSnapshot.val();
+        this.profile.uid = data.key;
+      });
+    })
   }
-  ionViewWillEnter() {
-    // non ho capito come funzioni
-    //  var profilex;
-    //  this.profileProv.getUserProfile().on("value", userProfileSnapshot => {
-    //  profilex = userProfileSnapshot.val();
-    //  });
-    //  console.log(profilex);
-    var profile1 = this.profileProv.getUserProfile();
-    this.user = { email: this.profileProv.getEmail(), uid: profile1.key };
-  }
+
 
   presentToast() {
     let toast = this.toastCtrl.create({
@@ -45,7 +42,7 @@ export class SettingsPage {
   }
 
   copy() {
-    this.clipboard.copy(this.user.uid);
+    this.clipboard.copy(this.profile.uid);
     this.presentToast();
   }
 

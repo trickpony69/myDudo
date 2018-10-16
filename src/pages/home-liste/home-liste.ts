@@ -35,9 +35,12 @@ export class HomeListe {
         return size;
       };
       for (let i = 0; i < counterCards(val); i++) {
-        if (val != null && val[i].owner == profileProv.getUserProfile().key) {
-          this.cards.push(val[i]);
-        }
+        profileProv.getUserProfile().then((data) => {
+          if (val != null && val[i].owner == data.key) {
+            this.cards.push(val[i]);
+          }
+        })
+
       }
     });
     this.storage.get('cardCount').then((val) => {
@@ -49,7 +52,8 @@ export class HomeListe {
 
   ionViewWillEnter() {
 
-    this.user = { email: "", uid: this.profileProv.getUserProfile().key };
+    this.user = { email: "", uid:"" };
+    this.profileProv.getUserProfile().then(data => this.user.uid = data.key)
     this.profileProv.getFriendLists().then(data => {
 
       var trovato = false;
@@ -60,7 +64,7 @@ export class HomeListe {
           }
         });
         if (!trovato) {
-          this.sharedCards.push({ id: '0', name: element0.title, friends: "null", proprietary: 0, path: element0.path, proprietaryUid:element0.proprietaryUid });
+          this.sharedCards.push({ id: '0', name: element0.title, friends: "null", proprietary: 0, path: element0.path, proprietaryUid: element0.proprietaryUid });
           this.cardCount++;
         }
       })
@@ -82,7 +86,7 @@ export class HomeListe {
         {
           text: 'Crea',
           handler: (data) => {
-            this.cards.push({ owner: this.profileProv.getUserProfile().key, id: this.cardCount, name: data.title, friends: "null", proprietary: 1, path: data.cardPath });
+            this.cards.push({ owner: this.user.uid, id: this.cardCount, name: data.title, friends: "null", proprietary: 1, path: data.cardPath });
             this.cardCount++;
             this.storage.set("cards", this.cards);
             this.storage.set("cardCount", this.cardCount);
@@ -95,11 +99,11 @@ export class HomeListe {
 
   checkAlreadyAdded(list, friendKey): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.profileProv.getFriendForAList(this.profileProv.getUserProfile().key, list).then(data => {
+      this.profileProv.getFriendForAList(this.user.uid, list).then(data => {
         console.log(data)
 
         data.forEach(element => {
-          console.log("element",element.data)
+          console.log("element", element.data)
           if (friendKey == element.data) {
             resolve(true);
           }
@@ -110,6 +114,11 @@ export class HomeListe {
   }
 
   addFriend(card, i) {
+    console.log(card)
+    if (card.proprietary == 0) {
+      alert("Non puoi aggiungere amici perchè la lista non è tua");
+      return;
+    }
     var friends = this.profileProv.getPeople().then((people) => {
       let alert = this.alertCtrl.create();
       people.forEach((person, index) => {
@@ -145,7 +154,7 @@ export class HomeListe {
       cardName: card.name,
       friend: card.friend,
       proprietary: card.proprietary,
-      proprietaryUid: card.owner
+      proprietaryUid: card.proprietaryUid
     }, {
         animate: true,
         animation: "ios-transition",

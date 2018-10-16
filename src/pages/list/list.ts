@@ -35,13 +35,13 @@ export class ListPage {
     else
       this.itemsRef = afDatabase.list("/todos/" + this.toUser.uid + "/" + this.toUser.cardName);
 
-    //-----------------------------Sostituito dalla funzione sottostante---------------------
-    // this.todos = this.itemsRef.snapshotChanges().pipe(
-    //   map(changes =>
-    //     changes.map(c => ({ key: c.payload.key, ...c.payload.val()}))
-    //   ))
+    //-----------------------------Tornato a questa funzione e a non quella subito sotto---------------------
+    this.todos = this.itemsRef.snapshotChanges().pipe(
+      map(changes =>
+        changes.map(c => ({ key: c.payload.key, ...c.payload.val()}))
+      ))
 
-     this.itemsRef.valueChanges().subscribe(item => this.todos = item); 
+    //  this.itemsRef.valueChanges().subscribe(item => this.todos = item); 
   }
 
   createTodo() {
@@ -103,14 +103,18 @@ export class ListPage {
   }
 
   checkUncheck(todo, i) {
+    console.log(todo)
     if (todo.status == 0) this.itemsRef.update(todo.key, { status: 1 });
     else this.itemsRef.update(todo.key, { status: 0 });
   };
 
   viewListFriends(){
+    var proprietaryUid = this.toUser.proprietaryUid;
+    if(!proprietaryUid)
+      proprietaryUid = this.toUser.uid;
     this.navCtrl.push(FriendsListPage,{
       title: this.toUser.cardName,
-      proprietaryUid: this.toUser.proprietaryUid
+      proprietaryUid: proprietaryUid
     })
   }
 

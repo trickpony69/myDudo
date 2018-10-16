@@ -10,63 +10,38 @@
     <div class="wrapper">
       <div class="clash-card barbarian">
         <div class="clash-card__image clash-card__image--barbarian">
-          <!-- <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/barbarian.png" alt="barbarian" /> -->
           <img src="assets/imgs/bogi.png" alt="barbarian" />
-          <!-- https://cdn4.iconfinder.com/data/icons/cute-funny-monster-characters/66/20-512.png -->
         </div>
-        <!-- <div class="clash-card__level clash-card__level--barbarian">Level 4</div> -->
         <div class="clash-card__unit-name">Il tuo profilo</div>
         <div class="clash-card__unit-description">
           <ion-list>
-            <ion-item>email: {{user.email}}</ion-item>
-            <ion-item>uid: {{user.uid}}</ion-item>
+            <ion-item>nome: {{profile.name}}</ion-item>
+            <ion-item>email: {{profile.email}}</ion-item>
+            <ion-item (tap)="copy()">uid: {{profile.uid}}</ion-item>
           </ion-list>
-          <!-- <h1></h1>
-          <h1></h1> -->
+
           <button ion-button block (click)="logout()" color="danger">Esci</button>
         </div>
 
         <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">
           <div class="one-third">
-            <!-- <div class="stat">20<sup>S</sup></div> -->
-            <!-- <div class="stat-value">Training</div> -->
+            <div class="stat">nd<sup>liste</sup></div>
+            <div class="stat-value">tue</div>
           </div>
 
           <div class="one-third">
-            <!-- <div class="stat">16</div> -->
-            <!-- <div class="stat-value">Speed</div> -->
+              <div class="stat">nd<sup>liste</sup></div>
+              <div class="stat-value">condivise con altri</div>
           </div>
 
           <div class="one-third no-border">
-            <!-- <div class="stat">150</div> -->
-            <!-- <div class="stat-value">Cost</div> -->
+              <div class="stat">nd<sup>liste</sup></div>
+              <div class="stat-value">di amici</div>
           </div>
 
         </div>
 
-      </div> <!-- end clash-card barbarian-->
-    </div> <!-- end wrapper -->
+      </div>
+    </div>
   </div>
 </ion-content>
-
-<!-- <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <ion-avatar item-start>
-        <ion-icon name="heart"></ion-icon>
-      </ion-avatar>
-      <h2>Email: {{ user.email }}</h2>
-      <p>La tua email</p>
-    </ion-item>
-    <ion-item (tap)="copy()">
-      <ion-avatar item-start>
-        <ion-icon name="person"></ion-icon>
-      </ion-avatar>
-      <div >
-      <h2 >Id: {{ user.uid }}</h2>
-      <p>Ti servirà per condividere le tue liste</p>
-    </div>
-    </ion-item>
-  </ion-list>
-  <button ion-button block  (click)="logout()" color="danger">Esci</button>
-</ion-content> -->

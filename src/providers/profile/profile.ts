@@ -48,8 +48,11 @@ export class ProfileProvider {
     return this.currentUser.email;
   }
 
-  getUserProfile(): firebase.database.Reference {
-    return this.userProfile;
+  getUserProfile(): Promise<firebase.database.Reference> {
+    return new Promise((resolve) => {
+      resolve(this.userProfile)
+    })
+
   }
 
   getPeople(): Promise<Array<any>> {
@@ -60,7 +63,7 @@ export class ProfileProvider {
       function getData(data) {
         var obj = [];
         data.forEach(element => {
-          if(currentUser.key != element.key)
+          if (currentUser.key != element.key)
             obj.push({ key: element.key, payload: element.val() });
         });
         resolve(obj)
