@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import firebase, { User } from 'firebase/app';
 import 'firebase/database';
 import { Observable } from 'rxjs';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { ScrollView } from 'ionic-angular/umd/util/scroll-view';
+import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ProfileProvider {
@@ -12,36 +14,33 @@ export class ProfileProvider {
   public currentUser: User;
   public listsRef;
   public lists;
+  private payload;
+  public friendListRef: firebase.database.Reference;
 
-  constructor() {
+
+  constructor(private afDatabase: AngularFireDatabase) {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.currentUser = user;
         this.userProfile = firebase.database().ref(`/userProfile/${user.uid}`);
         this.listsRef = firebase.database().ref('/userProfile/' + user.uid);
+        this.friendListRef = firebase
+        .database()
+        .ref(`/userProfile/${user.uid}/sharedLists`);
       }
     });
   }
 
-  getFriendLists(): Promise<Array<any>> { //ritorna le liste condivise con te
-    return new Promise((resolve, reject) => {
-      var ref = this.listsRef;
-      var numListe;
-      ref.child("sharedLists/").on("value", function (snapshot) {
-        numListe = snapshot.numChildren();
-      })
-      ref.once("value")
-        .then(function (snapshot) {
-          var payload = [];
-          for (let i = 0; i < numListe; i++) {
-            var title = snapshot.child('sharedLists/list' + i + '/title').val();
-            var path = snapshot.child('sharedLists/list' + i + '/path').val();
-            var friendUid = snapshot.child('sharedLists/list' + i + '/proprietaryUid').val();
-            payload.push({ title: title, path: path, proprietaryUid: friendUid });
-          }
-          resolve(payload);
-        });
-    })
+  getFriendLists(): firebase.database.Reference { //ritorna una ref delle liste condivise con te
+      return this.friendListRef;
+  }
+
+  getSharedLists(uid){ //ritorna una ref delle liste dell'uid passato
+    return firebase.database().ref(`/userProfile/${uid}/sharedLists`);
+  }
+
+  createListRef(uid,listKey){ //ritorna una ref che hai condiviso con l'uid dell'utente
+    return firebase.database().ref(`/userProfile/${uid}/sharedLists/${listKey}`);
   }
 
   getEmail(): string {
@@ -52,7 +51,6 @@ export class ProfileProvider {
     return new Promise((resolve) => {
       resolve(this.userProfile)
     })
-
   }
 
   getPeople(): Promise<Array<any>> {
@@ -77,10 +75,9 @@ export class ProfileProvider {
       var friendsLists = firebase.database().ref('/todos/' + owner + '/' + list + '/friends/');
       friendsLists.once('value', function (snapshot) {
         snapshot.forEach(function (child) {
-          arr.push({ data: child.val().friendUid });
+          arr.push({ ref: friendsLists, data: child.val().friendUid });
         });
       }).then(() => {
-        console.log("arr", arr)
         resolve(arr);
       })
     })
@@ -97,8 +94,7 @@ export class ProfileProvider {
   }
 
   setFriends(friendId, list, i, path, proprietaryUid) {
-    firebase.database().ref('userProfile/' + friendId + '/sharedLists' + '/list' + i).update({
-      n: i,
+    firebase.database().ref('userProfile/' + friendId + '/sharedLists').push({
       title: list,
       path: path,
       proprietaryUid: proprietaryUid

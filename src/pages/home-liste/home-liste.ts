@@ -2,12 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController, ActionSheetController, NavParams } from 'ionic-angular';
 import { ListPage } from '../list/list';
 import { Storage } from '@ionic/storage';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { LoginPage } from '../login/login';
-import { SessionProvider } from '../../providers/session/session';
 import { ProfileProvider } from '../../providers/profile/profile';
-import { Observable } from 'rxjs';
-import { elementAt } from 'rxjs/operators';
 
 @IonicPage()
 @Component({
@@ -50,26 +45,23 @@ export class HomeListe {
 
   }
 
-  ionViewWillEnter() {
+  ionViewDidLoad() {
 
-    this.user = { email: "", uid:"" };
+    this.user = { email: "", uid: "" };
     this.profileProv.getUserProfile().then(data => this.user.uid = data.key)
-    this.profileProv.getFriendLists().then(data => {
-
-      var trovato = false;
-      data.forEach((element0) => {
-        this.sharedCards.forEach((local, index) => {
-          if (element0.path == local.path) {
-            trovato = true;
-          }
+    this.profileProv.getFriendLists().on("value", eventListSnapshot => {
+      this.sharedCards = [];
+      eventListSnapshot.forEach(snap => {
+        this.sharedCards.push({
+          id: snap.key,
+          name: snap.val().title,
+          proprietaryUid: snap.val().proprietaryUid,
+          path: snap.val().path,
+          proprietary: 0
         });
-        if (!trovato) {
-          this.sharedCards.push({ id: '0', name: element0.title, friends: "null", proprietary: 0, path: element0.path, proprietaryUid: element0.proprietaryUid });
-          this.cardCount++;
-        }
+
       })
-    }
-    );
+    })
   }
 
   add() {
@@ -199,6 +191,20 @@ export class HomeListe {
       this.storage.set("cards", this.cards);
       this.storage.set("cardCount", this.cardCount);
     }
+    this.profileProv.getFriendForAList(this.user.uid, post.name).then((data) => {
+      data.forEach(el => {
+        var friendListsRef = this.profileProv.getSharedLists(el.data);
+        friendListsRef.on('value', snap => {
+          snap.forEach(ele => {
+            if(ele.val().proprietaryUid == post.owner){
+              var ref = this.profileProv.createListRef(el.data,ele.key);
+              ref.remove()
+            }
+          })
+        })
+        el.ref.remove()
+      })
+    })
   }
 
   //-----------REFACTORING------------
