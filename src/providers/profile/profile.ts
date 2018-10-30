@@ -25,22 +25,31 @@ export class ProfileProvider {
         this.userProfile = firebase.database().ref(`/userProfile/${user.uid}`);
         this.listsRef = firebase.database().ref('/userProfile/' + user.uid);
         this.friendListRef = firebase
-        .database()
-        .ref(`/userProfile/${user.uid}/sharedLists`);
+          .database()
+          .ref(`/userProfile/${user.uid}/sharedLists`);
       }
     });
   }
 
   getFriendLists(): firebase.database.Reference { //ritorna una ref delle liste condivise con te
-      return this.friendListRef;
+    return this.friendListRef;
   }
 
-  getSharedLists(uid){ //ritorna una ref delle liste dell'uid passato
+  getSharedLists(uid) { //ritorna una ref delle liste dell'uid passato
     return firebase.database().ref(`/userProfile/${uid}/sharedLists`);
   }
 
-  createListRef(uid,listKey){ //ritorna una ref che hai condiviso con l'uid dell'utente
-    return firebase.database().ref(`/userProfile/${uid}/sharedLists/${listKey}`);
+  removeCloudList(uid, listKey) { //elimina la lista dal db
+    // console.log('/userProfile/'+ uid +'/sharedLists/' + listKey + '/path')
+    // console.log('/userProfile/'+ uid +'/sharedLists/' + listKey + '/proprietaryUid')
+    // console.log('/userProfile/'+ uid +'/sharedLists/' + listKey + '/title')
+    
+    return [
+        {'orig': firebase.database().ref('/todos/Dh1qYxxwiRNl6bQvaZxxJQW8MJg2/eis/friends/-LQ6FdxfGdBBGCgRc2Cu/friendUid').remove()},
+        {'rPath': firebase.database().ref('/userProfile/'+ uid +'/sharedLists/' + listKey + '/path').remove()},
+        {'rProprietaryUid': firebase.database().ref('/userProfile/'+ uid +'/sharedLists/' + listKey + '/proprietaryUid').remove()},
+        {'rTitle': firebase.database().ref('/userProfile/'+ uid +'/sharedLists/' + listKey + '/title').remove()}
+      ]
   }
 
   getEmail(): string {
@@ -93,15 +102,19 @@ export class ProfileProvider {
     })
   }
 
-  setFriends(friendId, list, i, path, proprietaryUid) {
-    firebase.database().ref('userProfile/' + friendId + '/sharedLists').push({
+  setFriends(friendId, list, path, proprietaryUid) {
+    console.log("riferimento", 'userProfile/' + friendId + '/sharedLists/')
+    firebase.database().ref('userProfile/' + friendId + '/sharedLists/').push({
       title: list,
       path: path,
       proprietaryUid: proprietaryUid
-    });
-    firebase.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/').push({
-      friendUid: friendId
+    }).then(() => {
+      console.error();
+      firebase.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/').push({
+        friendUid: friendId
+      })
     })
+
   }
 
   updateName(firstName: string, lastName: string): Promise<any> {

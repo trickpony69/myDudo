@@ -59,7 +59,6 @@ export class HomeListe {
           path: snap.val().path,
           proprietary: 0
         });
-
       })
     })
   }
@@ -130,7 +129,7 @@ export class HomeListe {
         text: 'Aggiungi',
         handler: friend => {
           let path = "/todos/" + this.user.uid + "/" + this.cards[i].name + "/";
-          this.profileProv.setFriends(friend, this.cards[i].name, i, path, this.user.uid);
+          this.profileProv.setFriends(friend, this.cards[i].name, path, this.user.uid);
         }
       });
       alert.present()
@@ -184,25 +183,28 @@ export class HomeListe {
   }
 
   removePost(post) {
-    let index = this.cards.indexOf(post);
-    if (index > -1) {
-      this.cards.splice(index, 1);
-      this.cardCount--;
-      this.storage.set("cards", this.cards);
-      this.storage.set("cardCount", this.cardCount);
+    if(post.proprietary == 0){
+      alert("Non puoi eliminare una lista non tua")
+      return
     }
+    let index = this.cards.indexOf(post);
+    // if (index > -1) {
+    //   this.cards.splice(index, 1);
+    //   this.cardCount--;
+    //   this.storage.set("cards", this.cards);
+    //   this.storage.set("cardCount", this.cardCount);
+    // }
     this.profileProv.getFriendForAList(this.user.uid, post.name).then((data) => {
       data.forEach(el => {
         var friendListsRef = this.profileProv.getSharedLists(el.data);
         friendListsRef.on('value', snap => {
           snap.forEach(ele => {
             if(ele.val().proprietaryUid == post.owner){
-              var ref = this.profileProv.createListRef(el.data,ele.key);
-              ref.remove()
+              var ref = [];
+              ref = this.profileProv.removeCloudList(el.data,ele.key);
             }
           })
         })
-        el.ref.remove()
       })
     })
   }

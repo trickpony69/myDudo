@@ -4,217 +4,10 @@ webpackJsonp([5],{
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FriendsListPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__ = __webpack_require__(82);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-/**
- * Generated class for the FriendsListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var FriendsListPage = /** @class */ (function () {
-    function FriendsListPage(navCtrl, navParams, profileProv) {
-        var _this = this;
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.profileProv = profileProv;
-        this.friends = [];
-        console.log(navParams.get("proprietaryUid"), "---", navParams.get("title"));
-        profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).then(function (data) {
-            console.log("arr", data);
-            data.forEach(function (element) {
-                profileProv.getNameByUid(element.data).then(function (name) {
-                    _this.friends.push({ name: name });
-                });
-            });
-            console.log("friends: ", _this.friends);
-        });
-    }
-    FriendsListPage.prototype.removeFriend = function (friend) {
-        console.log(friend);
-    };
-    FriendsListPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad FriendsListPage');
-    };
-    FriendsListPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-friends-list',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/'<!--\n  Generated template for the FriendsListPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Utenti della lista</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n  <ion-list *ngFor="let friend of friends">\n      <ion-item-sliding #item>\n    <ion-item-options side="right">\n      <button ion-button color="danger" (click)="removeFriend(friend)">Rimuovi</button>\n    </ion-item-options>\n    <ion-item>\n      <ion-avatar item-start>\n        <ion-icon name="contact" item-start></ion-icon>\n      </ion-avatar>\n      <h2>{{friend.name}}</h2>\n    </ion-item>\n  </ion-item-sliding>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__["a" /* ProfileProvider */]])
-    ], FriendsListPage);
-    return FriendsListPage;
-}());
-
-//# sourceMappingURL=friends-list.js.map
-
-/***/ }),
-
-/***/ 157:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(130);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__friends_list_friends_list__ = __webpack_require__(156);
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-var ListPage = /** @class */ (function () {
-    function ListPage(afDatabase, navCtrl, navParams, alertCtrl) {
-        this.afDatabase = afDatabase;
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.alertCtrl = alertCtrl;
-        this.toUser = {
-            path: navParams.get("path"),
-            uid: navParams.get("uid"),
-            email: navParams.get("email"),
-            cardName: navParams.get("cardName"),
-            nickname: navParams.get("nickname"),
-            friendId: navParams.get("friend"),
-            proprietary: navParams.get("proprietary"),
-            proprietaryUid: navParams.get("proprietaryUid")
-        };
-        console.log(this.toUser.proprietaryUid);
-        if (this.toUser.proprietary == "0")
-            this.itemsRef = afDatabase.list(this.toUser.path);
-        else
-            this.itemsRef = afDatabase.list("/todos/" + this.toUser.uid + "/" + this.toUser.cardName);
-        //-----------------------------Tornato a questa funzione e a non quella subito sotto---------------------
-        this.todos = this.itemsRef.snapshotChanges().pipe(Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["map"])(function (changes) {
-            return changes.map(function (c) { return (__assign({ key: c.payload.key }, c.payload.val())); });
-        }));
-        //  this.itemsRef.valueChanges().subscribe(item => this.todos = item); 
-    }
-    ListPage.prototype.createTodo = function () {
-        var _this = this;
-        var prompt = this.alertCtrl.create({
-            title: 'Aggiungi',
-            message: 'Cosa dovrai fare di bello oggi?',
-            inputs: [
-                {
-                    placeholder: 'task',
-                    name: 'title'
-                }
-            ],
-            buttons: [
-                {
-                    text: 'Annulla'
-                },
-                {
-                    text: 'Invia',
-                    handler: function (data) {
-                        _this.itemsRef.push({ content: data.title, status: 0 }); //status 0 è normale, 1 è sottolineata
-                    }
-                }
-            ]
-        });
-        prompt.present();
-    };
-    ListPage.prototype.updateTodo = function (todo) {
-        var _this = this;
-        var prompt = this.alertCtrl.create({
-            title: 'Cambiato idea ?',
-            inputs: [
-                {
-                    name: 'title',
-                    value: todo.content,
-                }
-            ],
-            buttons: [
-                {
-                    text: 'Annulla'
-                },
-                {
-                    text: 'Modifica',
-                    handler: function (data) {
-                        _this.itemsRef.update(todo.key, { content: data.title });
-                    }
-                }
-            ]
-        });
-        prompt.present();
-    };
-    ListPage.prototype.deleteTodo = function (key) {
-        this.itemsRef.remove(key);
-    };
-    ListPage.prototype.checkUncheck = function (todo, i) {
-        console.log(todo);
-        if (todo.status == 0)
-            this.itemsRef.update(todo.key, { status: 1 });
-        else
-            this.itemsRef.update(todo.key, { status: 0 });
-    };
-    ;
-    ListPage.prototype.viewListFriends = function () {
-        var proprietaryUid = this.toUser.proprietaryUid;
-        if (!proprietaryUid)
-            proprietaryUid = this.toUser.uid;
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__friends_list_friends_list__["a" /* FriendsListPage */], {
-            title: this.toUser.cardName,
-            proprietaryUid: proprietaryUid
-        });
-    };
-    ListPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-list',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/list/list.html"*/'<ion-header>\n  <ion-navbar padding>\n    <ion-title text-center>\n      <p (click)="viewListFriends()">{{toUser.cardName}}</p>\n      <!-- <p>{{ toUser.name }}</p>\n      <p>{{ toUser.link }}</p>\n      <p>Il tuo nickname: {{ toUser.nickname }}</p> -->\n    </ion-title>\n    <ion-buttons start>\n    </ion-buttons>\n    <ion-buttons end>\n      <button (click)="createTodo()" ion-button icon-only large >\n        <ion-icon name="create"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <ion-list>\n    <ion-item-sliding *ngFor="let task of todos | async ; let i = index ">\n      <ion-item *ngIf="task.content">\n        <div *ngIf="task.status == 0" > <h1 #elemento>{{ task.content }}</h1></div>\n        <div *ngIf="task.status == 1" > <h1 #elemento class=\'lineThrough\'>{{ task.content }}</h1></div>       \n      </ion-item>\n\n      <ion-item-options side="right">\n        <button ion-button icon-only color="light" (click)="updateTodo(task)">\n          <ion-icon name="create"></ion-icon>\n        </button>\n        <button ion-button icon-only color="danger" (click)="deleteTodo(task.key)">\n          <ion-icon name="trash"></ion-icon>\n        </button>\n      </ion-item-options>\n      <ion-item-options side="left">\n        <button ion-button icon-only color="secondary" (click)="checkUncheck(task)">\n          <ion-icon name="checkmark"></ion-icon>\n        </button>\n      </ion-item-options>\n    </ion-item-sliding>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/list/list.html"*/,
-        }),
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */])({
-            selector: '[elemento]'
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]])
-    ], ListPage);
-    return ListPage;
-}());
-
-//# sourceMappingURL=list.js.map
-
-/***/ }),
-
-/***/ 158:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings_settings__ = __webpack_require__(159);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_liste_home_liste__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings_settings__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_liste_home_liste__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(36);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -247,15 +40,15 @@ var TabsPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 159:
+/***/ 157:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_session_session__ = __webpack_require__(160);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_profile_profile__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_session_session__ = __webpack_require__(158);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_profile_profile__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__ = __webpack_require__(248);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -324,15 +117,15 @@ var SettingsPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 160:
+/***/ 158:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SessionProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_app__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_app__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_app___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_firebase_app__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__ = __webpack_require__(245);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__ = __webpack_require__(238);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -404,16 +197,16 @@ var SessionProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 161:
+/***/ 159:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeListe; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__list_list__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__list_list__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(250);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__ = __webpack_require__(83);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -550,7 +343,7 @@ var HomeListe = /** @class */ (function () {
                 text: 'Aggiungi',
                 handler: function (friend) {
                     var path = "/todos/" + _this.user.uid + "/" + _this.cards[i].name + "/";
-                    _this.profileProv.setFriends(friend, _this.cards[i].name, i, path, _this.user.uid);
+                    _this.profileProv.setFriends(friend, _this.cards[i].name, path, _this.user.uid);
                 }
             });
             alert.present();
@@ -602,25 +395,28 @@ var HomeListe = /** @class */ (function () {
     };
     HomeListe.prototype.removePost = function (post) {
         var _this = this;
-        var index = this.cards.indexOf(post);
-        if (index > -1) {
-            this.cards.splice(index, 1);
-            this.cardCount--;
-            this.storage.set("cards", this.cards);
-            this.storage.set("cardCount", this.cardCount);
+        if (post.proprietary == 0) {
+            alert("Non puoi eliminare una lista non tua");
+            return;
         }
+        var index = this.cards.indexOf(post);
+        // if (index > -1) {
+        //   this.cards.splice(index, 1);
+        //   this.cardCount--;
+        //   this.storage.set("cards", this.cards);
+        //   this.storage.set("cardCount", this.cardCount);
+        // }
         this.profileProv.getFriendForAList(this.user.uid, post.name).then(function (data) {
             data.forEach(function (el) {
                 var friendListsRef = _this.profileProv.getSharedLists(el.data);
                 friendListsRef.on('value', function (snap) {
                     snap.forEach(function (ele) {
                         if (ele.val().proprietaryUid == post.owner) {
-                            var ref = _this.profileProv.createListRef(el.data, ele.key);
-                            ref.remove();
+                            var ref = [];
+                            ref = _this.profileProv.removeCloudList(el.data, ele.key);
                         }
                     });
                 });
-                el.ref.remove();
             });
         });
     };
@@ -719,12 +515,220 @@ var HomeListe = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-home-liste',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/home-liste/home-liste.html"*/'<!-- <ion-header>\n\n  <ion-navbar hideBackButton="true">\n    <ion-buttons end>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header> -->\n\n\n<ion-content>\n  <ion-fab bottom right>\n    <button ion-fab (click)="add()">\n      <ion-icon name="add"></ion-icon>\n    </button>\n    <!-- <ion-fab-list side="top">\n      <button ion-fab (click)="add()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-fab-list> -->\n    <!-- <ion-fab-list side="left">\n      <button ion-fab (click)="addShared()">\n        <ion-icon name="share"></ion-icon>\n      </button>\n    </ion-fab-list> -->\n  </ion-fab>\n  <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">\n    <img id="immagine" />\n    <ion-card-content id="gradient">\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description" *ngIf="card.proprietary == 1">\n        Questa lista è tua\n      </p>\n      <p id="description" *ngIf="card.proprietary == 0">\n        Questa lista è di un tuo amico\n      </p>\n    </ion-card-content>\n  </ion-card>\n  <!-- <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of sharedCards; let i = index">\n    <ion-card-content>\n      <ion-card-title id="font">\n        {{ card.name }}\n      </ion-card-title>\n      <p id="description" *ngIf="card.proprietary == 1">\n        Questa lista è tua\n      </p>\n      <p id="description" *ngIf="card.proprietary == 0">\n        Questa lista è di un tuo amico\n      </p>\n    </ion-card-content>\n  </ion-card>  -->\n  <!-- test --> \n  <ion-list (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of sharedCards; let i = index">\n  <section class="cards" >\n    <article class="card card--2">\n      <div class="card__info-hover">\n        <svg class="card__like" viewBox="0 0 24 24">\n          <path fill="#000000" d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z" />\n        </svg>\n        <div class="card__clock-info">\n          <svg class="card__clock" viewBox="0 0 24 24">\n            <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />\n          </svg><span class="card__time">5 min</span>\n        </div>\n\n      </div>\n      <div class="card__img"></div>\n      <a href="#" class="card_link">\n        <div class="card__img--hover"></div>\n      </a>\n      <div class="card__info">\n        <span class="card__category">Questa lista è di un tuo amico</span>\n        <h1 class="card__title">{{card.name}}</h1>\n        <span class="card__by">by <a href="#" class="card__author" title="author">Lista di:</a></span>\n      </div>\n    </article>\n  </section>\n</ion-list>\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/home-liste/home-liste.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_profile_profile__["a" /* ProfileProvider */]) === "function" && _e || Object])
     ], HomeListe);
     return HomeListe;
+    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=home-liste.js.map
+
+/***/ }),
+
+/***/ 160:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(131);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__friends_list_friends_list__ = __webpack_require__(161);
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var ListPage = /** @class */ (function () {
+    function ListPage(afDatabase, navCtrl, navParams, alertCtrl) {
+        this.afDatabase = afDatabase;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.alertCtrl = alertCtrl;
+        this.toUser = {
+            path: navParams.get("path"),
+            uid: navParams.get("uid"),
+            email: navParams.get("email"),
+            cardName: navParams.get("cardName"),
+            nickname: navParams.get("nickname"),
+            friendId: navParams.get("friend"),
+            proprietary: navParams.get("proprietary"),
+            proprietaryUid: navParams.get("proprietaryUid")
+        };
+        console.log(this.toUser.proprietaryUid);
+        if (this.toUser.proprietary == "0")
+            this.itemsRef = afDatabase.list(this.toUser.path);
+        else
+            this.itemsRef = afDatabase.list("/todos/" + this.toUser.uid + "/" + this.toUser.cardName);
+        //-----------------------------Tornato a questa funzione e a non quella subito sotto---------------------
+        this.todos = this.itemsRef.snapshotChanges().pipe(Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["map"])(function (changes) {
+            return changes.map(function (c) { return (__assign({ key: c.payload.key }, c.payload.val())); });
+        }));
+        //  this.itemsRef.valueChanges().subscribe(item => this.todos = item); 
+    }
+    ListPage.prototype.createTodo = function () {
+        var _this = this;
+        var prompt = this.alertCtrl.create({
+            title: 'Aggiungi',
+            message: 'Cosa dovrai fare di bello oggi?',
+            inputs: [
+                {
+                    placeholder: 'task',
+                    name: 'title'
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Annulla'
+                },
+                {
+                    text: 'Invia',
+                    handler: function (data) {
+                        _this.itemsRef.push({ content: data.title, status: 0 }); //status 0 è normale, 1 è sottolineata
+                    }
+                }
+            ]
+        });
+        prompt.present();
+    };
+    ListPage.prototype.updateTodo = function (todo) {
+        var _this = this;
+        var prompt = this.alertCtrl.create({
+            title: 'Cambiato idea ?',
+            inputs: [
+                {
+                    name: 'title',
+                    value: todo.content,
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Annulla'
+                },
+                {
+                    text: 'Modifica',
+                    handler: function (data) {
+                        _this.itemsRef.update(todo.key, { content: data.title });
+                    }
+                }
+            ]
+        });
+        prompt.present();
+    };
+    ListPage.prototype.deleteTodo = function (key) {
+        this.itemsRef.remove(key);
+    };
+    ListPage.prototype.checkUncheck = function (todo, i) {
+        console.log(todo);
+        if (todo.status == 0)
+            this.itemsRef.update(todo.key, { status: 1 });
+        else
+            this.itemsRef.update(todo.key, { status: 0 });
+    };
+    ;
+    ListPage.prototype.viewListFriends = function () {
+        var proprietaryUid = this.toUser.proprietaryUid;
+        if (!proprietaryUid)
+            proprietaryUid = this.toUser.uid;
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__friends_list_friends_list__["a" /* FriendsListPage */], {
+            title: this.toUser.cardName,
+            proprietaryUid: proprietaryUid
+        });
+    };
+    ListPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'page-list',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/list/list.html"*/'<ion-header>\n  <ion-navbar padding>\n    <ion-title text-center>\n      <p (click)="viewListFriends()">{{toUser.cardName}}</p>\n      <!-- <p>{{ toUser.name }}</p>\n      <p>{{ toUser.link }}</p>\n      <p>Il tuo nickname: {{ toUser.nickname }}</p> -->\n    </ion-title>\n    <ion-buttons start>\n    </ion-buttons>\n    <ion-buttons end>\n      <button (click)="createTodo()" ion-button icon-only large >\n        <ion-icon name="create"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <ion-list>\n    <ion-item-sliding *ngFor="let task of todos | async ; let i = index ">\n      <ion-item *ngIf="task.content">\n        <div *ngIf="task.status == 0" > <h1 #elemento>{{ task.content }}</h1></div>\n        <div *ngIf="task.status == 1" > <h1 #elemento class=\'lineThrough\'>{{ task.content }}</h1></div>       \n      </ion-item>\n\n      <ion-item-options side="right">\n        <button ion-button icon-only color="light" (click)="updateTodo(task)">\n          <ion-icon name="create"></ion-icon>\n        </button>\n        <button ion-button icon-only color="danger" (click)="deleteTodo(task.key)">\n          <ion-icon name="trash"></ion-icon>\n        </button>\n      </ion-item-options>\n      <ion-item-options side="left">\n        <button ion-button icon-only color="secondary" (click)="checkUncheck(task)">\n          <ion-icon name="checkmark"></ion-icon>\n        </button>\n      </ion-item-options>\n    </ion-item-sliding>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/list/list.html"*/,
+        }),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* Directive */])({
+            selector: '[elemento]'
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]])
+    ], ListPage);
+    return ListPage;
+}());
+
+//# sourceMappingURL=list.js.map
+
+/***/ }),
+
+/***/ 161:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FriendsListPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__ = __webpack_require__(83);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+/**
+ * Generated class for the FriendsListPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var FriendsListPage = /** @class */ (function () {
+    function FriendsListPage(navCtrl, navParams, profileProv) {
+        var _this = this;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.profileProv = profileProv;
+        this.friends = [];
+        console.log(navParams.get("proprietaryUid"), "---", navParams.get("title"));
+        profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).then(function (data) {
+            console.log("arr", data);
+            data.forEach(function (element) {
+                profileProv.getNameByUid(element.data).then(function (name) {
+                    _this.friends.push({ name: name });
+                });
+            });
+            console.log("friends: ", _this.friends);
+        });
+    }
+    FriendsListPage.prototype.removeFriend = function (friend) {
+        console.log(friend);
+    };
+    FriendsListPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad FriendsListPage');
+    };
+    FriendsListPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'page-friends-list',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/'<!--\n  Generated template for the FriendsListPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Utenti della lista</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n  <ion-list *ngFor="let friend of friends">\n      <ion-item-sliding #item>\n    <ion-item-options side="right">\n      <button ion-button color="danger" (click)="removeFriend(friend)">Rimuovi</button>\n    </ion-item-options>\n    <ion-item>\n      <ion-avatar item-start>\n        <ion-icon name="contact" item-start></ion-icon>\n      </ion-avatar>\n      <h2>{{friend.name}}</h2>\n    </ion-item>\n  </ion-item-sliding>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__["a" /* ProfileProvider */]])
+    ], FriendsListPage);
+    return FriendsListPage;
+}());
+
+//# sourceMappingURL=friends-list.js.map
 
 /***/ }),
 
@@ -758,18 +762,18 @@ webpackEmptyAsyncContext.id = 194;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(291);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(487);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_to_do_to_do__ = __webpack_require__(488);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_settings_settings__ = __webpack_require__(159);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_tabs_tabs__ = __webpack_require__(158);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_list_list__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_home_liste_home_liste__ = __webpack_require__(161);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_angularfire2__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_angularfire2_database__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_settings_settings__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_tabs_tabs__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_list_list__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_home_liste_home_liste__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_angularfire2__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_angularfire2_database__ = __webpack_require__(131);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_storage__ = __webpack_require__(250);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_angularfire2_auth__ = __webpack_require__(245);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_session_session__ = __webpack_require__(160);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_profile_profile__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_angularfire2_auth__ = __webpack_require__(238);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_session_session__ = __webpack_require__(158);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_profile_profile__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ionic_native_clipboard__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_friends_list_friends_list__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_friends_list_friends_list__ = __webpack_require__(161);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -820,9 +824,9 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */], {}, {
                     links: [
+                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/friends-list/friends-list.module#FriendsListPageModule', name: 'FriendsListPage', segment: 'friends-list', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/list/list.module#ListPageModule', name: 'ListPage', segment: 'list', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/settings/settings.module#SettingsPageModule', name: 'SettingsPage', segment: 'settings', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/home-liste/home-liste.module#HomeListeModule', name: 'HomeListe', segment: 'home-liste', priority: 'low', defaultHistory: [] }
                     ]
@@ -866,7 +870,7 @@ var AppModule = /** @class */ (function () {
 
 var map = {
 	"../pages/friends-list/friends-list.module": [
-		499,
+		500,
 		4
 	],
 	"../pages/home-liste/home-liste.module": [
@@ -874,11 +878,11 @@ var map = {
 		3
 	],
 	"../pages/list/list.module": [
-		500,
+		501,
 		2
 	],
 	"../pages/login/login.module": [
-		501,
+		499,
 		0
 	],
 	"../pages/settings/settings.module": [
@@ -925,10 +929,10 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(291);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(290);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_tabs_tabs__ = __webpack_require__(158);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase_app__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_tabs_tabs__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase_app__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase_app___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_firebase_app__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_firebase_auth__ = __webpack_require__(247);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_firebase_auth__ = __webpack_require__(240);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_module__ = __webpack_require__(195);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1078,16 +1082,16 @@ var ToDoProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 82:
+/***/ 83:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProfileProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_app__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_app__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_app___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_firebase_app__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_firebase_database__ = __webpack_require__(238);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_firebase_database__ = __webpack_require__(241);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__ = __webpack_require__(131);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1122,8 +1126,16 @@ var ProfileProvider = /** @class */ (function () {
     ProfileProvider.prototype.getSharedLists = function (uid) {
         return __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref("/userProfile/" + uid + "/sharedLists");
     };
-    ProfileProvider.prototype.createListRef = function (uid, listKey) {
-        return __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref("/userProfile/" + uid + "/sharedLists/" + listKey);
+    ProfileProvider.prototype.removeCloudList = function (uid, listKey) {
+        // console.log('/userProfile/'+ uid +'/sharedLists/' + listKey + '/path')
+        // console.log('/userProfile/'+ uid +'/sharedLists/' + listKey + '/proprietaryUid')
+        // console.log('/userProfile/'+ uid +'/sharedLists/' + listKey + '/title')
+        return [
+            { 'orig': __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/todos/Dh1qYxxwiRNl6bQvaZxxJQW8MJg2/eis/friends/-LQ6FdxfGdBBGCgRc2Cu/friendUid').remove() },
+            { 'rPath': __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/userProfile/' + uid + '/sharedLists/' + listKey + '/path').remove() },
+            { 'rProprietaryUid': __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/userProfile/' + uid + '/sharedLists/' + listKey + '/proprietaryUid').remove() },
+            { 'rTitle': __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/userProfile/' + uid + '/sharedLists/' + listKey + '/title').remove() }
+        ];
     };
     ProfileProvider.prototype.getEmail = function () {
         return this.currentUser.email;
@@ -1171,14 +1183,18 @@ var ProfileProvider = /** @class */ (function () {
             });
         });
     };
-    ProfileProvider.prototype.setFriends = function (friendId, list, i, path, proprietaryUid) {
-        __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('userProfile/' + friendId + '/sharedLists').push({
+    ProfileProvider.prototype.setFriends = function (friendId, list, path, proprietaryUid) {
+        var _this = this;
+        console.log("riferimento", 'userProfile/' + friendId + '/sharedLists/');
+        __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('userProfile/' + friendId + '/sharedLists/').push({
             title: list,
             path: path,
             proprietaryUid: proprietaryUid
-        });
-        __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/').push({
-            friendUid: friendId
+        }).then(function () {
+            console.error();
+            __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('todos/' + _this.userProfile.key + '/' + list + '/' + 'friends/').push({
+                friendUid: friendId
+            });
         });
     };
     ProfileProvider.prototype.updateName = function (firstName, lastName) {
@@ -1186,9 +1202,10 @@ var ProfileProvider = /** @class */ (function () {
     };
     ProfileProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["a" /* AngularFireDatabase */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["a" /* AngularFireDatabase */]) === "function" && _a || Object])
     ], ProfileProvider);
     return ProfileProvider;
+    var _a;
 }());
 
 //# sourceMappingURL=profile.js.map
