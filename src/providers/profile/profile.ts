@@ -26,7 +26,7 @@ export class ProfileProvider {
         this.listsRef = firebase.database().ref('/userProfile/' + user.uid);
         this.friendListRef = firebase
           .database()
-          .ref(`/userProfile/${user.uid}/sharedLists`);
+          .ref(`/userProfile/${user.uid}/sharedLists/debugNode`);
       }
     });
   }
@@ -36,20 +36,12 @@ export class ProfileProvider {
   }
 
   getSharedLists(uid) { //ritorna una ref delle liste dell'uid passato
-    return firebase.database().ref(`/userProfile/${uid}/sharedLists`);
+    return firebase.database().ref(`/userProfile/${uid}/sharedLists/debugNode`);
   }
 
-  removeCloudList(uid, listKey) { //elimina la lista dal db
-    // console.log('/userProfile/'+ uid +'/sharedLists/' + listKey + '/path')
-    // console.log('/userProfile/'+ uid +'/sharedLists/' + listKey + '/proprietaryUid')
-    // console.log('/userProfile/'+ uid +'/sharedLists/' + listKey + '/title')
-    
-    return [
-        {'orig': firebase.database().ref('/todos/Dh1qYxxwiRNl6bQvaZxxJQW8MJg2/eis/friends/-LQ6FdxfGdBBGCgRc2Cu/friendUid').remove()},
-        {'rPath': firebase.database().ref('/userProfile/'+ uid +'/sharedLists/' + listKey + '/path').remove()},
-        {'rProprietaryUid': firebase.database().ref('/userProfile/'+ uid +'/sharedLists/' + listKey + '/proprietaryUid').remove()},
-        {'rTitle': firebase.database().ref('/userProfile/'+ uid +'/sharedLists/' + listKey + '/title').remove()}
-      ]
+  removeCloudList(uid, sharedLists) { //elimina la lista dal db
+    firebase.database().ref('/todos/Dh1qYxxwiRNl6bQvaZxxJQW8MJg2/eis/friends/').remove()
+    firebase.database().ref('/userProfile/' + uid + '/sharedLists/debugNode/' + sharedLists.listKey + '/').remove()
   }
 
   getEmail(): string {
@@ -104,7 +96,7 @@ export class ProfileProvider {
 
   setFriends(friendId, list, path, proprietaryUid) {
     console.log("riferimento", 'userProfile/' + friendId + '/sharedLists/')
-    firebase.database().ref('userProfile/' + friendId + '/sharedLists/').push({
+    firebase.database().ref('userProfile/' + friendId + '/sharedLists/debugNode/').push({
       title: list,
       path: path,
       proprietaryUid: proprietaryUid

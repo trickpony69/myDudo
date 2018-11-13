@@ -51,7 +51,9 @@ export class HomeListe {
     this.profileProv.getUserProfile().then(data => this.user.uid = data.key)
     this.profileProv.getFriendLists().on("value", eventListSnapshot => {
       this.sharedCards = [];
+      console.log('snap0: ' + eventListSnapshot.val())
       eventListSnapshot.forEach(snap => {
+        console.log('snap: ' + snap.val())
         this.sharedCards.push({
           id: snap.key,
           name: snap.val().title,
@@ -183,7 +185,7 @@ export class HomeListe {
   }
 
   removePost(post) {
-    if(post.proprietary == 0){
+    if (post.proprietary == 0) {
       alert("Non puoi eliminare una lista non tua")
       return
     }
@@ -194,17 +196,32 @@ export class HomeListe {
     //   this.storage.set("cards", this.cards);
     //   this.storage.set("cardCount", this.cardCount);
     // }
+    var sharedLists = [{}];
     this.profileProv.getFriendForAList(this.user.uid, post.name).then((data) => {
       data.forEach(el => {
+        console.log('el: ',el)
         var friendListsRef = this.profileProv.getSharedLists(el.data);
-        friendListsRef.on('value', snap => {
-          snap.forEach(ele => {
-            if(ele.val().proprietaryUid == post.owner){
-              var ref = [];
-              ref = this.profileProv.removeCloudList(el.data,ele.key);
+        friendListsRef.once('value', snap => {
+          console.log('snap3', snap.val())
+          snap.forEach(list =>{
+            console.log('list: ',list.val())
+            if (snap.key != 'debugNestedNode') {
+              sharedLists.push({
+                path: snap.val().path,
+                proprietaryUid: snap.val().proprietaryUid,
+                title: snap.val().title,
+                listKey: snap.key
+              })
             }
           })
+         
+          // if (ele.val().proprietaryUid == post.owner) {
+
+
+          // }
         })
+        this.profileProv.removeCloudList(el.data, sharedLists[1]);
+        console.log('arr ', sharedLists)
       })
     })
   }
