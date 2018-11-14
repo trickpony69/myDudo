@@ -34,14 +34,12 @@ var FriendsListPage = /** @class */ (function () {
         this.profileProv = profileProv;
         this.friends = [];
         console.log(navParams.get("proprietaryUid"), "---", navParams.get("title"));
-        profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).then(function (data) {
-            console.log("arr", data);
-            data.forEach(function (element) {
-                profileProv.getNameByUid(element.data).then(function (name) {
-                    _this.friends.push({ name: name });
+        profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).on('value', function (snap) {
+            snap.forEach(function (el) {
+                profileProv.getNameByUid(el.val().friendUid).then(function (name) {
+                    _this.friends.push({ name: name, friendUid: el.val().friendUid });
                 });
             });
-            console.log("friends: ", _this.friends);
         });
     }
     FriendsListPage.prototype.removeFriend = function (friend) {
@@ -54,9 +52,10 @@ var FriendsListPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-friends-list',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/'<!--\n  Generated template for the FriendsListPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Utenti della lista</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n  <ion-list *ngFor="let friend of friends">\n      <ion-item-sliding #item>\n    <ion-item-options side="right">\n      <button ion-button color="danger" (click)="removeFriend(friend)">Rimuovi</button>\n    </ion-item-options>\n    <ion-item>\n      <ion-avatar item-start>\n        <ion-icon name="contact" item-start></ion-icon>\n      </ion-avatar>\n      <h2>{{friend.name}}</h2>\n    </ion-item>\n  </ion-item-sliding>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__["a" /* ProfileProvider */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__["a" /* ProfileProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__["a" /* ProfileProvider */]) === "function" && _c || Object])
     ], FriendsListPage);
     return FriendsListPage;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=friends-list.js.map
@@ -475,9 +474,7 @@ var HomeListe = /** @class */ (function () {
         this.profileProv.getUserProfile().then(function (data) { return _this.user.uid = data.key; });
         this.profileProv.getFriendLists().on("value", function (eventListSnapshot) {
             _this.sharedCards = [];
-            console.log('snap0: ' + eventListSnapshot.val());
             eventListSnapshot.forEach(function (snap) {
-                console.log('snap: ' + snap.val());
                 _this.sharedCards.push({
                     id: snap.key,
                     name: snap.val().title,
@@ -515,14 +512,12 @@ var HomeListe = /** @class */ (function () {
     };
     HomeListe.prototype.checkAlreadyAdded = function (list, friendKey) {
         var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this.profileProv.getFriendForAList(_this.user.uid, list).then(function (data) {
-                console.log(data);
-                data.forEach(function (element) {
-                    console.log("element", element.data);
-                    if (friendKey == element.data) {
+        return new Promise(function (resolve) {
+            _this.profileProv.getFriendForAList(_this.user.uid, list).once('value', function (snap) {
+                snap.forEach(function (el) {
+                    console.log('el: ', el.val().friendUid);
+                    if (friendKey == el.val().friendUid)
                         resolve(true);
-                    }
                 });
                 resolve(false);
             });
@@ -535,7 +530,7 @@ var HomeListe = /** @class */ (function () {
             alert("Non puoi aggiungere amici perchè la lista non è tua");
             return;
         }
-        var friends = this.profileProv.getPeople().then(function (people) {
+        this.profileProv.getPeople().then(function (people) {
             var alert = _this.alertCtrl.create();
             people.forEach(function (person, index) {
                 _this.checkAlreadyAdded(card.name, person.key).then(function (condition) {
@@ -617,29 +612,16 @@ var HomeListe = /** @class */ (function () {
         //   this.storage.set("cards", this.cards);
         //   this.storage.set("cardCount", this.cardCount);
         // }
-        var sharedLists = [{}];
-        this.profileProv.getFriendForAList(this.user.uid, post.name).then(function (data) {
-            data.forEach(function (el) {
-                console.log('el: ', el);
-                var friendListsRef = _this.profileProv.getSharedLists(el.data);
-                friendListsRef.once('value', function (snap) {
-                    console.log('snap3', snap.val());
-                    snap.forEach(function (list) {
-                        console.log('list: ', list.val());
-                        if (snap.key != 'debugNestedNode') {
-                            sharedLists.push({
-                                path: snap.val().path,
-                                proprietaryUid: snap.val().proprietaryUid,
-                                title: snap.val().title,
-                                listKey: snap.key
-                            });
+        console.log('post: ', post);
+        this.profileProv.getFriendForAList(this.user.uid, post.name).once('value', function (friends) {
+            friends.forEach(function (friend) {
+                _this.profileProv.getSharedLists(friend.val().friendUid).once('value', function (lists) {
+                    lists.forEach(function (list) {
+                        if (list.val().path) {
+                            _this.profileProv.removeCloudList(post.owner, post.name, friend.val().friendUid, list.key);
                         }
                     });
-                    // if (ele.val().proprietaryUid == post.owner) {
-                    // }
                 });
-                _this.profileProv.removeCloudList(el.data, sharedLists[1]);
-                console.log('arr ', sharedLists);
             });
         });
     };
@@ -1109,9 +1091,8 @@ var ToDoProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_app__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_app___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_firebase_app__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_firebase_database__ = __webpack_require__(247);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angularfire2_database___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_angularfire2_database__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_angularfire2_database__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1123,7 +1104,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-
+// import 'firebase/database';
 
 var ProfileProvider = /** @class */ (function () {
     function ProfileProvider(afDatabase) {
@@ -1146,9 +1127,9 @@ var ProfileProvider = /** @class */ (function () {
     ProfileProvider.prototype.getSharedLists = function (uid) {
         return __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref("/userProfile/" + uid + "/sharedLists/debugNode");
     };
-    ProfileProvider.prototype.removeCloudList = function (uid, sharedLists) {
-        __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/todos/Dh1qYxxwiRNl6bQvaZxxJQW8MJg2/eis/friends/').remove();
-        __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/userProfile/' + uid + '/sharedLists/debugNode/' + sharedLists.listKey + '/').remove();
+    ProfileProvider.prototype.removeCloudList = function (owner, listName, uidConnectedFriend, listKeyConnected) {
+        __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/todos/' + owner + '/' + listName + '/friends/').remove();
+        __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/' + listKeyConnected + '/').remove();
     };
     ProfileProvider.prototype.getEmail = function () {
         return this.currentUser.email;
@@ -1176,17 +1157,7 @@ var ProfileProvider = /** @class */ (function () {
         });
     };
     ProfileProvider.prototype.getFriendForAList = function (owner, list) {
-        return new Promise(function (resolve) {
-            var arr = [];
-            var friendsLists = __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/todos/' + owner + '/' + list + '/friends/');
-            friendsLists.once('value', function (snapshot) {
-                snapshot.forEach(function (child) {
-                    arr.push({ ref: friendsLists, data: child.val().friendUid });
-                });
-            }).then(function () {
-                resolve(arr);
-            });
-        });
+        return __WEBPACK_IMPORTED_MODULE_1_firebase_app___default.a.database().ref('/todos/' + owner + '/' + list + '/friends/');
     };
     ProfileProvider.prototype.getNameByUid = function (uid) {
         return new Promise(function (resolve) {
@@ -1215,7 +1186,7 @@ var ProfileProvider = /** @class */ (function () {
     };
     ProfileProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["AngularFireDatabase"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["AngularFireDatabase"]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["AngularFireDatabase"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["AngularFireDatabase"]) === "function" && _a || Object])
     ], ProfileProvider);
     return ProfileProvider;
     var _a;

@@ -51,9 +51,7 @@ export class HomeListe {
     this.profileProv.getUserProfile().then(data => this.user.uid = data.key)
     this.profileProv.getFriendLists().on("value", eventListSnapshot => {
       this.sharedCards = [];
-      console.log('snap0: ' + eventListSnapshot.val())
       eventListSnapshot.forEach(snap => {
-        console.log('snap: ' + snap.val())
         this.sharedCards.push({
           id: snap.key,
           name: snap.val().title,
@@ -91,15 +89,12 @@ export class HomeListe {
   }
 
   checkAlreadyAdded(list, friendKey): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this.profileProv.getFriendForAList(this.user.uid, list).then(data => {
-        console.log(data)
-
-        data.forEach(element => {
-          console.log("element", element.data)
-          if (friendKey == element.data) {
+    return new Promise((resolve) => {
+      this.profileProv.getFriendForAList(this.user.uid, list).once('value', snap => {
+        snap.forEach(el => {
+          console.log('el: ', el.val().friendUid)
+          if (friendKey == el.val().friendUid)
             resolve(true);
-          }
         })
         resolve(false);
       })
@@ -112,7 +107,7 @@ export class HomeListe {
       alert("Non puoi aggiungere amici perchè la lista non è tua");
       return;
     }
-    var friends = this.profileProv.getPeople().then((people) => {
+    this.profileProv.getPeople().then((people) => {
       let alert = this.alertCtrl.create();
       people.forEach((person, index) => {
         this.checkAlreadyAdded(card.name, person.key).then(condition => {
@@ -196,32 +191,16 @@ export class HomeListe {
     //   this.storage.set("cards", this.cards);
     //   this.storage.set("cardCount", this.cardCount);
     // }
-    var sharedLists = [{}];
-    this.profileProv.getFriendForAList(this.user.uid, post.name).then((data) => {
-      data.forEach(el => {
-        console.log('el: ',el)
-        var friendListsRef = this.profileProv.getSharedLists(el.data);
-        friendListsRef.once('value', snap => {
-          console.log('snap3', snap.val())
-          snap.forEach(list =>{
-            console.log('list: ',list.val())
-            if (snap.key != 'debugNestedNode') {
-              sharedLists.push({
-                path: snap.val().path,
-                proprietaryUid: snap.val().proprietaryUid,
-                title: snap.val().title,
-                listKey: snap.key
-              })
+    console.log('post: ',post)
+    this.profileProv.getFriendForAList(this.user.uid, post.name).once('value', friends => {
+      friends.forEach(friend => {
+        this.profileProv.getSharedLists(friend.val().friendUid).once('value', lists => {
+          lists.forEach(list => {
+            if(list.val().path){
+              this.profileProv.removeCloudList(post.owner,post.name,friend.val().friendUid, list.key);
             }
           })
-         
-          // if (ele.val().proprietaryUid == post.owner) {
-
-
-          // }
         })
-        this.profileProv.removeCloudList(el.data, sharedLists[1]);
-        console.log('arr ', sharedLists)
       })
     })
   }

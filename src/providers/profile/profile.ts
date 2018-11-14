@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import firebase, { User } from 'firebase/app';
-import 'firebase/database';
-import { Observable } from 'rxjs';
+// import 'firebase/database';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { ScrollView } from 'ionic-angular/umd/util/scroll-view';
-import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ProfileProvider {
@@ -39,9 +36,9 @@ export class ProfileProvider {
     return firebase.database().ref(`/userProfile/${uid}/sharedLists/debugNode`);
   }
 
-  removeCloudList(uid, sharedLists) { //elimina la lista dal db
-    firebase.database().ref('/todos/Dh1qYxxwiRNl6bQvaZxxJQW8MJg2/eis/friends/').remove()
-    firebase.database().ref('/userProfile/' + uid + '/sharedLists/debugNode/' + sharedLists.listKey + '/').remove()
+  removeCloudList(owner,listName,uidConnectedFriend, listKeyConnected) { //elimina la lista dal db
+    firebase.database().ref('/todos/' + owner + '/' + listName + '/friends/').remove()
+    firebase.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/' + listKeyConnected + '/').remove()
   }
 
   getEmail(): string {
@@ -70,18 +67,8 @@ export class ProfileProvider {
     });
   }
 
-  getFriendForAList(owner, list): Promise<Array<any>> { // ritorna gli amici della tua lista, da sistemare
-    return new Promise((resolve) => {
-      var arr = [];
-      var friendsLists = firebase.database().ref('/todos/' + owner + '/' + list + '/friends/');
-      friendsLists.once('value', function (snapshot) {
-        snapshot.forEach(function (child) {
-          arr.push({ ref: friendsLists, data: child.val().friendUid });
-        });
-      }).then(() => {
-        resolve(arr);
-      })
-    })
+  getFriendForAList(owner, list): firebase.database.Reference { // ritorna gli amici della tua lista, da sistemare      
+      return firebase.database().ref('/todos/' + owner + '/' + list + '/friends/');  
   }
 
   getNameByUid(uid): Promise<any> {

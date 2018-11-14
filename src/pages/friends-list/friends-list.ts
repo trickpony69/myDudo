@@ -19,21 +19,17 @@ export class FriendsListPage {
 
   private friends = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, private profileProv: ProfileProvider) {
-    console.log(navParams.get("proprietaryUid"),"---", navParams.get("title"))    
-    profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).then( data => {
-      console.log("arr",data)
-      data.forEach((element) =>{
-        
-        profileProv.getNameByUid(element.data).then(name =>{
-          this.friends.push({name});
+    console.log(navParams.get("proprietaryUid"), "---", navParams.get("title"))
+    profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).on('value', snap => {
+      snap.forEach(el => {
+        profileProv.getNameByUid(el.val().friendUid).then(name => {
+          this.friends.push({ name: name, friendUid: el.val().friendUid })
         })
-        
       })
-      console.log("friends: ",this.friends);
     })
   }
 
-  removeFriend(friend){
+  removeFriend(friend) {
     console.log(friend)
   }
 
