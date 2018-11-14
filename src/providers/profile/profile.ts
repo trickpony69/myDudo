@@ -37,7 +37,7 @@ export class ProfileProvider {
   }
 
   removeCloudList(owner,listName,uidConnectedFriend, listKeyConnected) { //elimina la lista dal db
-    firebase.database().ref('/todos/' + owner + '/' + listName + '/friends/').remove()
+    firebase.database().ref('/todos/' + owner + '/' + listName).remove()
     firebase.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/' + listKeyConnected + '/').remove()
   }
 
