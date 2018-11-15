@@ -1,14 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { SessionProvider } from '../../providers/session/session';
 import { ProfileProvider } from '../../providers/profile/profile';
-
-/**
- * Generated class for the FriendsListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -19,7 +11,7 @@ export class FriendsListPage {
 
   private friends = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, private profileProv: ProfileProvider) {
-    console.log(navParams.get("proprietaryUid"), "---", navParams.get("title"))
+    this.friends.push({ name: 'Tu', friendUid: 'null' })
     profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).on('value', snap => {
       snap.forEach(el => {
         profileProv.getNameByUid(el.val().friendUid).then(name => {
@@ -30,11 +22,10 @@ export class FriendsListPage {
   }
 
   removeFriend(friend) {
-    console.log(friend)
+    this.profileProv.removeFriend(this.navParams.get('proprietaryUid'), this.navParams.get('title'), friend.friendUid)
+    let index = this.friends.indexOf(friend);
+    if (index > -1) {
+      this.friends.splice(index, 1);
+    }
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad FriendsListPage');
-  }
-
 }

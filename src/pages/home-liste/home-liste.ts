@@ -92,7 +92,6 @@ export class HomeListe {
     return new Promise((resolve) => {
       this.profileProv.getFriendForAList(this.user.uid, list).once('value', snap => {
         snap.forEach(el => {
-          console.log('el: ', el.val().friendUid)
           if (friendKey == el.val().friendUid)
             resolve(true);
         })
@@ -102,7 +101,6 @@ export class HomeListe {
   }
 
   addFriend(card, i) {
-    console.log(card)
     if (card.proprietary == 0) {
       alert("Non puoi aggiungere amici perchè la lista non è tua");
       return;
@@ -185,18 +183,17 @@ export class HomeListe {
       return
     }
     let index = this.cards.indexOf(post);
-    // if (index > -1) {
-    //   this.cards.splice(index, 1);
-    //   this.cardCount--;
-    //   this.storage.set("cards", this.cards);
-    //   this.storage.set("cardCount", this.cardCount);
-    // }
-    console.log('post: ',post)
+    if (index > -1) {
+      this.cards.splice(index, 1);
+      this.cardCount--;
+      this.storage.set("cards", this.cards);
+      this.storage.set("cardCount", this.cardCount);
+    }
     this.profileProv.getFriendForAList(this.user.uid, post.name).once('value', friends => {
       friends.forEach(friend => {
         this.profileProv.getSharedLists(friend.val().friendUid).once('value', lists => {
           lists.forEach(list => {
-            if(list.val().path){
+            if(list.val().path ){
               this.profileProv.removeCloudList(post.owner,post.name,friend.val().friendUid, list.key);
             }
           })

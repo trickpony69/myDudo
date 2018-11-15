@@ -36,9 +36,26 @@ export class ProfileProvider {
     return firebase.database().ref(`/userProfile/${uid}/sharedLists/debugNode`);
   }
 
-  removeCloudList(owner,listName,uidConnectedFriend, listKeyConnected) { //elimina la lista dal db
-    firebase.database().ref('/todos/' + owner + '/' + listName).remove()
-    firebase.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/' + listKeyConnected + '/').remove()
+  removeFriend(owner, listName, uidConnectedFriend) { //elimina l'amico collegato alla lista
+    firebase.database().ref('/todos/' + owner + '/' + listName + '/friends/').once('value', snap => {
+      snap.forEach(el => {
+        if (el.val().friendUid == uidConnectedFriend)
+          firebase.database().ref('/todos/' + owner + '/' + listName + '/friends/' + el.key).remove()
+      })
+    })
+
+    firebase.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/').once('value', snap => {
+      snap.forEach(el => {
+        if (el.val().title == listName) {
+          firebase.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/' + el.key).remove()
+        }
+      })
+    })
+  }
+
+  removeCloudList(owner, listName, uidConnectedFriend, listKeyConnected) { //elimina la lista dal db
+    firebase.database().ref('/todos/' + owner + '/' + listName).remove();
+    firebase.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/' + listKeyConnected + '/').remove();
   }
 
   getEmail(): string {
@@ -51,7 +68,7 @@ export class ProfileProvider {
     })
   }
 
-  getPeople(): Promise<Array<any>> {
+  getPeople(): Promise<Array<any>> {          //torna tutte le persone eccetto te stesso
     return new Promise((resolve, reject) => {
       var currentUser = this.userProfile;
       var friends = firebase.database().ref('userProfile/');
@@ -67,13 +84,12 @@ export class ProfileProvider {
     });
   }
 
-  getFriendForAList(owner, list): firebase.database.Reference { // ritorna gli amici della tua lista, da sistemare      
-      return firebase.database().ref('/todos/' + owner + '/' + list + '/friends/');  
+  getFriendForAList(owner, list): firebase.database.Reference { // ritorna una ref degli amici della lista passata     
+    return firebase.database().ref('/todos/' + owner + '/' + list + '/friends/');
   }
 
   getNameByUid(uid): Promise<any> {
     return new Promise(resolve => {
-
       firebase.database().ref(('/userProfile/' + uid + '/' + '/name/'))
         .once('value', function (snapshot) {
           resolve(snapshot.val())
@@ -82,7 +98,14 @@ export class ProfileProvider {
   }
 
   setFriends(friendId, list, path, proprietaryUid) {
-    console.log("riferimento", 'userProfile/' + friendId + '/sharedLists/')
+    firebase.database().ref('userProfile/' + friendId + '/sharedLists/debugNode/').once('value', function (snapshot) {
+      if (!snapshot.hasChild('debugNestedNode')) {
+        firebase.database().ref('userProfile/' + friendId + '/sharedLists/debugNode/').set({
+          debugNestedNode: 'Non togliere altrimenti non permette più il push'
+        })
+      }
+    });
+
     firebase.database().ref('userProfile/' + friendId + '/sharedLists/debugNode/').push({
       title: list,
       path: path,
