@@ -53,9 +53,14 @@ export class ProfileProvider {
     })
   }
 
-  removeCloudList(owner, listName, uidConnectedFriend, listKeyConnected) { //elimina la lista dal db
+  removeCloudList(owner, listName, uidConnectedFriend) { //elimina la lista dal db
     firebase.database().ref('/todos/' + owner + '/' + listName).remove();
-    firebase.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/' + listKeyConnected + '/').remove();
+    firebase.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/').once('value', snap => {
+      snap.forEach(el => {
+        if (el.val().title == listName)
+          firebase.database().ref('/userProfile/' + uidConnectedFriend + '/sharedLists/debugNode/' + el.key).remove();
+      })
+    })
   }
 
   getEmail(): string {
@@ -68,20 +73,8 @@ export class ProfileProvider {
     })
   }
 
-  getPeople(): Promise<Array<any>> {          //torna tutte le persone eccetto te stesso
-    return new Promise((resolve, reject) => {
-      var currentUser = this.userProfile;
-      var friends = firebase.database().ref('userProfile/');
-      friends.on('value', getData);
-      function getData(data) {
-        var obj = [];
-        data.forEach(element => {
-          if (currentUser.key != element.key)
-            obj.push({ key: element.key, payload: element.val() });
-        });
-        resolve(obj)
-      }
-    });
+  getPeople(): firebase.database.Reference { //torna tutte le persone eccetto te stesso
+    return firebase.database().ref('userProfile/')
   }
 
   getFriendForAList(owner, list): firebase.database.Reference { // ritorna una ref degli amici della lista passata     
@@ -111,7 +104,6 @@ export class ProfileProvider {
       path: path,
       proprietaryUid: proprietaryUid
     }).then(() => {
-      console.error();
       firebase.database().ref('todos/' + this.userProfile.key + '/' + list + '/' + 'friends/').push({
         friendUid: friendId
       })

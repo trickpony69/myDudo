@@ -25888,80 +25888,9 @@ page-login {
   border-radius: 20px;
 }
 
-*, *:before, *:after {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.slide-container {
-  width: 600px;
-}
-
-.wrapper:focus {
-  outline: 0;
-}
-
-.clash-card {
-  margin-left: 20px;
-  background: white;
-  width: 375px;
-  display: inline-block;
-  margin: auto;
-  border-radius: 5;
-  position: relative;
-  text-align: center;
-  -webkit-box-shadow: -1px 15px 30px -12px black;
-  box-shadow: -1px 15px 30px -12px black;
-  z-index: 9999;
-}
-
-.clash-card__image {
-  position: relative;
-  height: 250px;
-  margin-bottom: 60px;
-  margin-top: 0px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-.clash-card__image--barbarian {
-  background: url("../assets/imgs/animatedRainbow.gif");
-  background-repeat: no-repeat;
-  background-position: bottom;
-}
-
-.clash-card__image--barbarian img {
-  width: 160px;
-  position: absolute;
-  top: 30px;
-  left: 120px;
-}
-
-.clash-card__level {
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 3px;
-}
-
-.clash-card__level--barbarian {
-  color: #EC9B3B;
-}
-
-.clash-card__level--archer {
-  color: #EE5487;
-}
-
-.clash-card__level--giant {
-  color: #F6901A;
-}
-
-.clash-card__level--goblin {
-  color: #82BB30;
-}
-
-.clash-card__level--wizard {
-  color: #4FACFF;
+#title {
+  padding: 10%;
+  padding-bottom: 35%;
 }
 
 .clash-card__unit-name {
@@ -25971,55 +25900,17 @@ page-login {
   margin-bottom: 5px;
 }
 
-.clash-card__unit-description {
-  margin-bottom: 10px;
-}
-
 .clash-card__unit-stats--barbarian {
-  background: #EC9B3B;
+  background: #2b3137;
 }
 
 .clash-card__unit-stats--barbarian .one-third {
-  border-right: 1px solid #BD7C2F;
-}
-
-.clash-card__unit-stats--archer {
-  background: #EE5487;
-}
-
-.clash-card__unit-stats--archer .one-third {
-  border-right: 1px solid #D04976;
-}
-
-.clash-card__unit-stats--giant {
-  background: #F6901A;
-}
-
-.clash-card__unit-stats--giant .one-third {
-  border-right: 1px solid #de7b09;
-}
-
-.clash-card__unit-stats--goblin {
-  background: #82BB30;
-}
-
-.clash-card__unit-stats--goblin .one-third {
-  border-right: 1px solid #71a32a;
-}
-
-.clash-card__unit-stats--wizard {
-  background: #4FACFF;
-}
-
-.clash-card__unit-stats--wizard .one-third {
-  border-right: 1px solid #309eff;
+  border-right: 1px solid white;
 }
 
 .clash-card__unit-stats {
   color: white;
   font-weight: 700;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
 }
 
 .clash-card__unit-stats .one-third {
@@ -26058,14 +25949,4 @@ page-login {
   content: " ";
   clear: both;
   height: 0;
-}
-
-.slick-prev {
-  left: 100px;
-  z-index: 999;
-}
-
-.slick-next {
-  right: 100px;
-  z-index: 999;
 }

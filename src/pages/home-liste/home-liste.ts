@@ -49,16 +49,19 @@ export class HomeListe {
 
     this.user = { email: "", uid: "" };
     this.profileProv.getUserProfile().then(data => this.user.uid = data.key)
-    this.profileProv.getFriendLists().on("value", eventListSnapshot => {
+    this.profileProv.getFriendLists().on('value', eventListSnapshot => {
       this.sharedCards = [];
+      console.log('sharedCards: ', eventListSnapshot.val())
       eventListSnapshot.forEach(snap => {
-        this.sharedCards.push({
-          id: snap.key,
-          name: snap.val().title,
-          proprietaryUid: snap.val().proprietaryUid,
-          path: snap.val().path,
-          proprietary: 0
-        });
+        if (snap.val().title) {
+          this.sharedCards.push({
+            id: snap.key,
+            name: snap.val().title,
+            proprietaryUid: snap.val().proprietaryUid,
+            path: snap.val().path,
+            proprietary: 0
+          });
+        }
       })
     })
   }
@@ -88,34 +91,27 @@ export class HomeListe {
     splash.present();
   }
 
-  checkAlreadyAdded(list, friendKey): Promise<boolean> {
-    return new Promise((resolve) => {
-      this.profileProv.getFriendForAList(this.user.uid, list).once('value', snap => {
-        snap.forEach(el => {
-          if (friendKey == el.val().friendUid)
-            resolve(true);
-        })
-        resolve(false);
-      })
-    })
-  }
-
   addFriend(card, i) {
     if (card.proprietary == 0) {
       alert("Non puoi aggiungere amici perchè la lista non è tua");
       return;
     }
-    this.profileProv.getPeople().then((people) => {
+    this.profileProv.getPeople().once('value', people => {
       let alert = this.alertCtrl.create();
-      people.forEach((person, index) => {
-        this.checkAlreadyAdded(card.name, person.key).then(condition => {
-          alert.addInput({
-            type: 'radio',
-            label: person.payload.name,
-            value: person.key,
-            checked: false,
-            disabled: condition
+      people.forEach(person => {
+        var check = false;
+        this.profileProv.getFriendForAList(this.user.uid, card.name).once('value', snap => {
+          snap.forEach(friend => {
+            if (person.key == friend.val().friendUid) check = true;
+            else check = false;
           })
+        })
+        alert.addInput({
+          type: 'radio',
+          label: person.val().name,
+          value: person.key,
+          checked: false,
+          disabled: check
         })
       })
       alert.setTitle('Persone');
@@ -161,7 +157,7 @@ export class HomeListe {
           handler: () => { this.addFriend(card, index) }
         }, {
           text: "modifica",
-          handler: () => { this.choseImage(index) }
+          handler: () => { alert('coming soon') }
         }, {
           text: 'Annulla',
           role: 'cancel',
@@ -191,105 +187,8 @@ export class HomeListe {
     }
     this.profileProv.getFriendForAList(this.user.uid, post.name).once('value', friends => {
       friends.forEach(friend => {
-        this.profileProv.getSharedLists(friend.val().friendUid).once('value', lists => {
-          lists.forEach(list => {
-            if(list.val().path ){
-              this.profileProv.removeCloudList(post.owner,post.name,friend.val().friendUid, list.key);
-            }
-          })
-        })
+        this.profileProv.removeCloudList(post.owner, post.name, friend.val().friendUid);
       })
     })
   }
-
-  //-----------REFACTORING------------
-  addShared() { // Da togliere
-    let splash = this.alertCtrl.create({
-      title: 'Lista',
-      message: 'Inserisci il nome della lista ed il nome del tuo amico',
-      inputs: [
-        {
-          placeholder: 'nome lista',
-          name: 'title'
-        },
-        {
-          placeholder: 'id amico',
-          name: 'friendId'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Aggiungi',
-          handler: (data) => {
-            this.cards.push({ id: this.cardCount, name: data.title, friend: data.friendId, proprietary: 0 });
-            this.cardCount++;
-            this.storage.set("cards", this.cards);
-            this.storage.set("cardCount", this.cardCount);
-          }
-        }
-      ]
-    });
-    splash.present();
-    // alert.onDidDismiss(() => {})
-  }
-
-  choseImage(index) { // Da cambiare
-    let splash = this.alertCtrl.create({
-      title: 'Sfondo',
-      message: 'Inserisci il nome della lista ed il nome del tuo amico',
-      inputs: [
-        {
-          type: 'radio',
-          name: 'image',
-          label: 'nessuno',
-          value: 'nessuno',
-        }, {
-          type: 'radio',
-          name: 'image',
-          label: 'sfondo 0',
-          value: 'sfondo0',
-        }, {
-          type: 'radio',
-          name: 'image',
-          label: 'sfondo 1',
-          value: 'sfondo1',
-        }, {
-          type: 'radio',
-          name: 'image',
-          label: 'sfondo 2',
-          value: 'sfondo2',
-        }, {
-          type: 'radio',
-          name: 'image',
-          label: 'ombrellone',
-          value: 'ombrellone',
-        }, {
-          type: 'radio',
-          name: 'image',
-          label: 'spiaggia',
-          value: 'spiaggia',
-        }, {
-          type: 'radio',
-          name: 'image',
-          label: 'carrello della spesa',
-          value: 'shopping',
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cambia',
-          handler: (data) => {
-            var listeCards = document.getElementsByTagName("img");
-            if (data == "nessuno") { listeCards[index].style.display = "none"; }
-            else {
-              listeCards[index].style.background = "url('./../assets/imgs/" + data + ".jpg')";
-              listeCards[index].style.display = "block";
-            }
-          }
-        }
-      ]
-    });
-    splash.present();
-  }
-
 }

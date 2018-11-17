@@ -5,43 +5,29 @@
 </ion-header>
 
 <ion-content>
-  <div class="slide-container">
+        <h1 id="title">Il tuo profilo</h1>
+        <ion-list>
+          <ion-item>nome: {{profile.name}}</ion-item>
+          <ion-item>email: {{profile.email}}</ion-item>
+          <ion-item (tap)="copy()">uid: {{profile.uid}}</ion-item>
+        </ion-list>
+        <button ion-button block (click)="logout()" color="danger">Esci</button>
 
-    <div class="wrapper">
-      <div class="clash-card barbarian">
-        <div class="clash-card__image clash-card__image--barbarian">
-          <img src="assets/imgs/bogi.png" alt="barbarian" />
-        </div>
-        <div class="clash-card__unit-name">Il tuo profilo</div>
-        <div class="clash-card__unit-description">
-          <ion-list>
-            <ion-item>nome: {{profile.name}}</ion-item>
-            <ion-item>email: {{profile.email}}</ion-item>
-            <ion-item (tap)="copy()">uid: {{profile.uid}}</ion-item>
-          </ion-list>
-
-          <button ion-button block (click)="logout()" color="danger">Esci</button>
+      <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">
+        <div class="one-third">
+          <div class="stat">nd<sup>liste</sup></div>
+          <div class="stat-value">le tue liste</div><br>
         </div>
 
-        <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">
-          <div class="one-third">
-            <div class="stat">nd<sup>liste</sup></div>
-            <div class="stat-value">tue</div>
-          </div>
-
-          <div class="one-third">
-              <div class="stat">nd<sup>liste</sup></div>
-              <div class="stat-value">condivise con altri</div>
-          </div>
-
-          <div class="one-third no-border">
-              <div class="stat">nd<sup>liste</sup></div>
-              <div class="stat-value">di amici</div>
-          </div>
-
+        <div class="one-third">
+          <div class="stat">nd<sup>liste</sup></div>
+          <div class="stat-value">condivise con altri</div>
         </div>
 
+        <div class="one-third no-border">
+          <div class="stat">nd<sup>liste</sup></div>
+          <div class="stat-value">di amici</div>
+        </div>
       </div>
-    </div>
-  </div>
+    
 </ion-content>
