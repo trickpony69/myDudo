@@ -83,10 +83,25 @@ export class ProfileProvider {
 
   getNameByUid(uid): Promise<any> {
     return new Promise(resolve => {
-      firebase.database().ref(('/userProfile/' + uid + '/' + '/name/'))
-        .once('value', function (snapshot) {
-          resolve(snapshot.val())
+      firebase.database().ref(('/userProfile/' + uid + '/' + '/name/')).once('value', function (snapshot) {
+        resolve(snapshot.val())
+      })
+    })
+  }
+
+  getUidByName(name): Promise<{ name, uid }> {
+    return new Promise(resolve => {
+      firebase.database().ref('/userProfile/').once('value', snap => {
+        var found = false;
+        snap.forEach(friend => {
+          if (friend.val().name == name){
+            found = true;
+            resolve({ name: friend.val().name, uid: friend.key })
+          }
         })
+        if(!found)
+          resolve(null)
+      })
     })
   }
 

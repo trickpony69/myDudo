@@ -92,39 +92,85 @@ export class HomeListe {
   }
 
   addFriend(card, i) {
+    var buffer;
+    let mainAlert = this.alertCtrl.create();
+    mainAlert.setTitle('Aggiungi amico');
+    mainAlert.addButton('Annulla');
+    mainAlert.addInput(
+      {
+        name: 'nickname',
+        placeholder: 'nickname'
+      })
+    mainAlert.addButton({
+      text: 'Aggiungi',
+      handler: friend => {
+        console.log('friend: ', friend.nickname);
+        buffer = friend.nickname;
+      }
+    });
+    mainAlert.present();
+    mainAlert.onDidDismiss(() => {
+      this.profileProv.getUidByName(buffer).then(person => {
+        console.log('person: ', person)
+        if (!person) { alert('il tuo amico non ha un account myDudo'); return; }
+        this.profileProv.getFriendForAList(this.user.uid, card.name).once('value', snap => {
+          snap.forEach(friend => {
+            if (friend.val().uid == person.uid) {
+              alert('questo amico è già presente nella lista');
+              return;
+            }
+
+          })
+        })
+        this.profileProv.getPeople().once('value', people => {
+          people.forEach(user => {
+            console.log('entraci pls: ')
+            if (user.key == person.uid) {
+              let path = "/todos/" + this.user.uid + "/" + this.cards[i].name + "/";
+              this.profileProv.setFriends(person.uid, this.cards[i].name, path, this.user.uid);
+              alert(buffer + ' è stato aggiunto')
+              return;
+            }
+          })
+        })
+      })
+    })
+
     if (card.proprietary == 0) {
       alert("Non puoi aggiungere amici perchè la lista non è tua");
       return;
     }
-    this.profileProv.getPeople().once('value', people => {
-      let alert = this.alertCtrl.create();
-      people.forEach(person => {
-        var check = false;
-        this.profileProv.getFriendForAList(this.user.uid, card.name).once('value', snap => {
-          snap.forEach(friend => {
-            if (person.key == friend.val().friendUid) check = true;
-            else check = false;
-          })
-        })
-        alert.addInput({
-          type: 'radio',
-          label: person.val().name,
-          value: person.key,
-          checked: false,
-          disabled: check
-        })
-      })
-      alert.setTitle('Persone');
-      alert.addButton('Annulla');
-      alert.addButton({
-        text: 'Aggiungi',
-        handler: friend => {
-          let path = "/todos/" + this.user.uid + "/" + this.cards[i].name + "/";
-          this.profileProv.setFriends(friend, this.cards[i].name, path, this.user.uid);
-        }
-      });
-      alert.present()
-    });
+    //------------------------------------
+
+    // this.profileProv.getPeople().once('value', people => {
+    //   let alert = this.alertCtrl.create();
+    //   people.forEach(person => {
+    //     var check = false;
+    //     this.profileProv.getFriendForAList(this.user.uid, card.name).once('value', snap => {
+    //       snap.forEach(friend => {
+    //         if (person.key == friend.val().friendUid) check = true;
+    //         else check = false;
+    //       })
+    //     })
+    //     alert.addInput({
+    //       type: 'radio',
+    //       label: person.val().name,
+    //       value: person.key,
+    //       checked: false,
+    //       disabled: check
+    //     })
+    //   })
+    //   alert.setTitle('Persone');
+    //   alert.addButton('Annulla');
+    //   alert.addButton({
+    //     text: 'Aggiungi',
+    //     handler: friend => {
+    //       let path = "/todos/" + this.user.uid + "/" + this.cards[i].name + "/";
+    //       this.profileProv.setFriends(friend, this.cards[i].name, path, this.user.uid);
+    //     }
+    //   });
+    //   alert.present()
+    // });
   }
 
   openTodo(card) {
