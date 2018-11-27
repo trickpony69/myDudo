@@ -110,29 +110,30 @@ export class HomeListe {
     });
     mainAlert.present();
     mainAlert.onDidDismiss(() => {
+      var alreadyAdded = false;
       this.profileProv.getUidByName(buffer).then(person => {
         console.log('person: ', person)
         if (!person) { alert('il tuo amico non ha un account myDudo'); return; }
         this.profileProv.getFriendForAList(this.user.uid, card.name).once('value', snap => {
           snap.forEach(friend => {
-            if (friend.val().uid == person.uid) {
+            console.log('friend: ', friend.val())
+            if (friend.val().friendUid == person.uid) {
               alert('questo amico è già presente nella lista');
-              return;
-            }
-
-          })
-        })
-        this.profileProv.getPeople().once('value', people => {
-          people.forEach(user => {
-            console.log('entraci pls: ')
-            if (user.key == person.uid) {
-              let path = "/todos/" + this.user.uid + "/" + this.cards[i].name + "/";
-              this.profileProv.setFriends(person.uid, this.cards[i].name, path, this.user.uid);
-              alert(buffer + ' è stato aggiunto')
-              return;
+              alreadyAdded = true;
             }
           })
         })
+        if (!alreadyAdded) {
+          this.profileProv.getPeople().once('value', people => {
+            people.forEach(user => {
+              if (user.key == person.uid) {
+                let path = "/todos/" + this.user.uid + "/" + this.cards[i].name + "/";
+                this.profileProv.setFriends(person.uid, this.cards[i].name, path, this.user.uid);
+                alert(buffer + ' è stato aggiunto')
+              }
+            })
+          })
+        }
       })
     })
 

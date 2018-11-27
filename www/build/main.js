@@ -183,6 +183,7 @@ var HomeListe = /** @class */ (function () {
         });
         mainAlert.present();
         mainAlert.onDidDismiss(function () {
+            var alreadyAdded = false;
             _this.profileProv.getUidByName(buffer).then(function (person) {
                 console.log('person: ', person);
                 if (!person) {
@@ -191,23 +192,24 @@ var HomeListe = /** @class */ (function () {
                 }
                 _this.profileProv.getFriendForAList(_this.user.uid, card.name).once('value', function (snap) {
                     snap.forEach(function (friend) {
-                        if (friend.val().uid == person.uid) {
+                        console.log('friend: ', friend.val());
+                        if (friend.val().friendUid == person.uid) {
                             alert('questo amico è già presente nella lista');
-                            return;
+                            alreadyAdded = true;
                         }
                     });
                 });
-                _this.profileProv.getPeople().once('value', function (people) {
-                    people.forEach(function (user) {
-                        console.log('entraci pls: ');
-                        if (user.key == person.uid) {
-                            var path = "/todos/" + _this.user.uid + "/" + _this.cards[i].name + "/";
-                            _this.profileProv.setFriends(person.uid, _this.cards[i].name, path, _this.user.uid);
-                            alert(buffer + ' è stato aggiunto');
-                            return;
-                        }
+                if (!alreadyAdded) {
+                    _this.profileProv.getPeople().once('value', function (people) {
+                        people.forEach(function (user) {
+                            if (user.key == person.uid) {
+                                var path = "/todos/" + _this.user.uid + "/" + _this.cards[i].name + "/";
+                                _this.profileProv.setFriends(person.uid, _this.cards[i].name, path, _this.user.uid);
+                                alert(buffer + ' è stato aggiunto');
+                            }
+                        });
                     });
-                });
+                }
             });
         });
         if (card.proprietary == 0) {
