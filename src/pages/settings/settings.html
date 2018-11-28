@@ -1,38 +1,38 @@
 <ion-header>
   <!-- <ion-navbar> -->
-    <!-- <ion-title>Impostazioni</ion-title> -->
+  <!-- <ion-title>Impostazioni</ion-title> -->
   <!-- </ion-navbar> -->
 </ion-header>
 
 <ion-content>
   <div id="main">
-    <h1 id="title">{{profile.name}}</h1>
+    <h1 id="title">
+      <ion-icon name="md-happy" item-start></ion-icon>
+      {{profile.name}}
+    </h1>
   </div>
   <ion-list>
+    <ion-list-header>
+      Visualizza
+    </ion-list-header>
     <ion-item>email: {{profile.email}}
       <ion-icon name="md-mail" item-start></ion-icon>
     </ion-item>
     <ion-item (tap)="copy()">uid: {{profile.uid}}
-        <ion-icon name="md-barcode" item-start></ion-icon>
+      <ion-icon name="md-barcode" item-start></ion-icon>
+    </ion-item>
+    <button ion-item (click)="showStatystics()">
+      <ion-icon name="analytics" item-start></ion-icon>statistiche
+    </button>
+  </ion-list>
+  <ion-list-header>
+    Modifica
+  </ion-list-header>
+  <ion-list>
+    <ion-item>
+      <ion-icon name="beer" item-start></ion-icon>
+      coming soon
     </ion-item>
   </ion-list>
   <button ion-button block (click)="logout()" color="danger">Esci</button>
-
-  <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">
-    <div class="one-third">
-      <div class="stat">nd<sup>liste</sup></div>
-      <div class="stat-value">le tue liste</div><br>
-    </div>
-
-    <div class="one-third">
-      <div class="stat">nd<sup>liste</sup></div>
-      <div class="stat-value">condivise con altri</div>
-    </div>
-
-    <div class="one-third no-border">
-      <div class="stat">nd<sup>liste</sup></div>
-      <div class="stat-value">di amici</div>
-    </div>
-  </div>
-
 </ion-content>

@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, ToastController, LoadingController } from 'ionic-angular';
-import { ToDoProvider } from '../../providers/to-do/to-do';
-import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
 import { SessionProvider } from '../../providers/session/session';
-import { Observable } from '../../../node_modules/rxjs'
 import { ProfileProvider } from '../../providers/profile/profile';
 import { Clipboard } from '@ionic-native/clipboard';
 
@@ -17,7 +13,8 @@ export class SettingsPage {
 
   private profile = { name: "", email: "",uid:"" };
 
-  constructor(public toastCtrl: ToastController, public loadingCtrl: LoadingController, public session: SessionProvider, public profileProv: ProfileProvider, private clipboard: Clipboard) {
+  constructor(public toastCtrl: ToastController, public loadingCtrl: LoadingController,
+     public session: SessionProvider, public profileProv: ProfileProvider, private clipboard: Clipboard) {
     this.profileProv.getUserProfile().then(data => {
       data.on("value", userProfileSnapshot => {
         this.profile = userProfileSnapshot.val();
@@ -44,6 +41,10 @@ export class SettingsPage {
   copy() {
     this.clipboard.copy(this.profile.uid);
     this.presentToast();
+  }
+
+  showStatystics(){
+    alert('Coming Soon')
   }
 
   logout() {
