@@ -1,8 +1,16 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700,900);
 
 #title{
-  padding: 10%;
-  padding-bottom: 35%;
+  color: white;
+  font-weight: 700; 
+  padding: 20%;
+}
+
+#main{
+  padding: 5%;
+  background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .clash-card__unit-name {

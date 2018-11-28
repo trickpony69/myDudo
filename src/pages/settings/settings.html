@@ -1,33 +1,38 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Impostazioni</ion-title>
-  </ion-navbar>
+  <!-- <ion-navbar> -->
+    <!-- <ion-title>Impostazioni</ion-title> -->
+  <!-- </ion-navbar> -->
 </ion-header>
 
 <ion-content>
-        <h1 id="title">Il tuo profilo</h1>
-        <ion-list>
-          <ion-item>nome: {{profile.name}}</ion-item>
-          <ion-item>email: {{profile.email}}</ion-item>
-          <ion-item (tap)="copy()">uid: {{profile.uid}}</ion-item>
-        </ion-list>
-        <button ion-button block (click)="logout()" color="danger">Esci</button>
+  <div id="main">
+    <h1 id="title">{{profile.name}}</h1>
+  </div>
+  <ion-list>
+    <ion-item>email: {{profile.email}}
+      <ion-icon name="md-mail" item-start></ion-icon>
+    </ion-item>
+    <ion-item (tap)="copy()">uid: {{profile.uid}}
+        <ion-icon name="md-barcode" item-start></ion-icon>
+    </ion-item>
+  </ion-list>
+  <button ion-button block (click)="logout()" color="danger">Esci</button>
 
-      <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">
-        <div class="one-third">
-          <div class="stat">nd<sup>liste</sup></div>
-          <div class="stat-value">le tue liste</div><br>
-        </div>
+  <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">
+    <div class="one-third">
+      <div class="stat">nd<sup>liste</sup></div>
+      <div class="stat-value">le tue liste</div><br>
+    </div>
 
-        <div class="one-third">
-          <div class="stat">nd<sup>liste</sup></div>
-          <div class="stat-value">condivise con altri</div>
-        </div>
+    <div class="one-third">
+      <div class="stat">nd<sup>liste</sup></div>
+      <div class="stat-value">condivise con altri</div>
+    </div>
 
-        <div class="one-third no-border">
-          <div class="stat">nd<sup>liste</sup></div>
-          <div class="stat-value">di amici</div>
-        </div>
-      </div>
-    
+    <div class="one-third no-border">
+      <div class="stat">nd<sup>liste</sup></div>
+      <div class="stat-value">di amici</div>
+    </div>
+  </div>
+
 </ion-content>

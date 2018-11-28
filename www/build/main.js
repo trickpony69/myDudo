@@ -572,7 +572,7 @@ var SettingsPage = /** @class */ (function () {
     };
     SettingsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-settings',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/settings/settings.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Impostazioni</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n        <h1 id="title">Il tuo profilo</h1>\n        <ion-list>\n          <ion-item>nome: {{profile.name}}</ion-item>\n          <ion-item>email: {{profile.email}}</ion-item>\n          <ion-item (tap)="copy()">uid: {{profile.uid}}</ion-item>\n        </ion-list>\n        <button ion-button block (click)="logout()" color="danger">Esci</button>\n\n      <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">\n        <div class="one-third">\n          <div class="stat">nd<sup>liste</sup></div>\n          <div class="stat-value">le tue liste</div><br>\n        </div>\n\n        <div class="one-third">\n          <div class="stat">nd<sup>liste</sup></div>\n          <div class="stat-value">condivise con altri</div>\n        </div>\n\n        <div class="one-third no-border">\n          <div class="stat">nd<sup>liste</sup></div>\n          <div class="stat-value">di amici</div>\n        </div>\n      </div>\n    \n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/settings/settings.html"*/,
+            selector: 'page-settings',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/settings/settings.html"*/'<ion-header>\n  <!-- <ion-navbar> -->\n    <!-- <ion-title>Impostazioni</ion-title> -->\n  <!-- </ion-navbar> -->\n</ion-header>\n\n<ion-content>\n  <div id="main">\n    <h1 id="title">{{profile.name}}</h1>\n  </div>\n  <ion-list>\n    <ion-item>email: {{profile.email}}\n      <ion-icon name="md-mail" item-start></ion-icon>\n    </ion-item>\n    <ion-item (tap)="copy()">uid: {{profile.uid}}\n        <ion-icon name="md-barcode" item-start></ion-icon>\n    </ion-item>\n  </ion-list>\n  <button ion-button block (click)="logout()" color="danger">Esci</button>\n\n  <div class="clash-card__unit-stats clash-card__unit-stats--barbarian clearfix">\n    <div class="one-third">\n      <div class="stat">nd<sup>liste</sup></div>\n      <div class="stat-value">le tue liste</div><br>\n    </div>\n\n    <div class="one-third">\n      <div class="stat">nd<sup>liste</sup></div>\n      <div class="stat-value">condivise con altri</div>\n    </div>\n\n    <div class="one-third no-border">\n      <div class="stat">nd<sup>liste</sup></div>\n      <div class="stat-value">di amici</div>\n    </div>\n  </div>\n\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/settings/settings.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ToastController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_2__providers_session_session__["a" /* SessionProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_profile_profile__["a" /* ProfileProvider */], __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__["a" /* Clipboard */]])
     ], SettingsPage);
@@ -757,9 +757,9 @@ var AppModule = /** @class */ (function () {
                     links: [
                         { loadChildren: '../pages/friends-list/friends-list.module#FriendsListPageModule', name: 'FriendsListPage', segment: 'friends-list', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/home-liste/home-liste.module#HomeListeModule', name: 'HomeListe', segment: 'home-liste', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/list/list.module#ListPageModule', name: 'ListPage', segment: 'list', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/settings/settings.module#SettingsPageModule', name: 'SettingsPage', segment: 'settings', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/settings/settings.module#SettingsPageModule', name: 'SettingsPage', segment: 'settings', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/list/list.module#ListPageModule', name: 'ListPage', segment: 'list', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_13__ionic_storage__["a" /* IonicStorageModule */].forRoot(),
@@ -809,15 +809,15 @@ var map = {
 		3
 	],
 	"../pages/list/list.module": [
-		501,
+		503,
 		2
 	],
 	"../pages/login/login.module": [
-		502,
+		501,
 		0
 	],
 	"../pages/settings/settings.module": [
-		503,
+		502,
 		1
 	]
 };
