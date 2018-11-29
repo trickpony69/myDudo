@@ -8,7 +8,7 @@
   <ion-list *ngFor="let friend of friends">
     <ion-item-sliding #item>
       <ion-item-options side="right">
-        <button ion-button color="danger" (click)="removeFriend(friend)" *ngIf="friend.name != 'Tu'">Rimuovi</button>
+        <button ion-button color="danger" (click)="removeFriend(friend)" *ngIf="friend.proprietary == 0">Rimuovi</button>
       </ion-item-options>
       <ion-item>
         <ion-icon name="contact" item-start></ion-icon>

@@ -27,17 +27,20 @@ var FriendsListPage = /** @class */ (function () {
         this.navParams = navParams;
         this.profileProv = profileProv;
         this.friends = [];
-        this.friends.push({ name: 'Tu', friendUid: 'null' });
-        profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).on('value', function (snap) {
+        this.proprietaryUid = this.navParams.get("proprietaryUid");
+        this.profileProv.getNameByUid(this.proprietaryUid).then(function (name) {
+            _this.friends.push({ name: name, friendUid: _this.proprietaryUid, proprietary: 1 });
+        });
+        profileProv.getFriendForAList(this.proprietaryUid, navParams.get("title")).on('value', function (snap) {
             snap.forEach(function (el) {
                 profileProv.getNameByUid(el.val().friendUid).then(function (name) {
-                    _this.friends.push({ name: name, friendUid: el.val().friendUid });
+                    _this.friends.push({ name: name, friendUid: el.val().friendUid, proprietary: 0 });
                 });
             });
         });
     }
     FriendsListPage.prototype.removeFriend = function (friend) {
-        this.profileProv.removeFriend(this.navParams.get('proprietaryUid'), this.navParams.get('title'), friend.friendUid);
+        this.profileProv.removeFriend(this.proprietaryUid, this.navParams.get('title'), friend.friendUid);
         var index = this.friends.indexOf(friend);
         if (index > -1) {
             this.friends.splice(index, 1);
@@ -45,11 +48,12 @@ var FriendsListPage = /** @class */ (function () {
     };
     FriendsListPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-friends-list',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Utenti della lista</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-list *ngFor="let friend of friends">\n    <ion-item-sliding #item>\n      <ion-item-options side="right">\n        <button ion-button color="danger" (click)="removeFriend(friend)" *ngIf="friend.name != \'Tu\'">Rimuovi</button>\n      </ion-item-options>\n      <ion-item>\n        <ion-icon name="contact" item-start></ion-icon>\n        <h2>{{friend.name}}</h2>\n      </ion-item>\n    </ion-item-sliding>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/,
+            selector: 'page-friends-list',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>Utenti della lista</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-list *ngFor="let friend of friends">\n    <ion-item-sliding #item>\n      <ion-item-options side="right">\n        <button ion-button color="danger" (click)="removeFriend(friend)" *ngIf="friend.proprietary == 0">Rimuovi</button>\n      </ion-item-options>\n      <ion-item>\n        <ion-icon name="contact" item-start></ion-icon>\n        <h2>{{friend.name}}</h2>\n      </ion-item>\n    </ion-item-sliding>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/friends-list/friends-list.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__["a" /* ProfileProvider */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__["a" /* ProfileProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_profile_profile__["a" /* ProfileProvider */]) === "function" && _c || Object])
     ], FriendsListPage);
     return FriendsListPage;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=friends-list.js.map
@@ -577,10 +581,10 @@ var SettingsPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-settings',template:/*ion-inline-start:"/Users/michele/myDudo/src/pages/settings/settings.html"*/'<ion-header>\n  <!-- <ion-navbar> -->\n  <!-- <ion-title>Impostazioni</ion-title> -->\n  <!-- </ion-navbar> -->\n</ion-header>\n\n<ion-content>\n  <div id="main">\n    <h1 id="title">\n      <ion-icon name="md-happy" item-start></ion-icon>\n      {{profile.name}}\n    </h1>\n  </div>\n  <ion-list>\n    <ion-list-header>\n      Visualizza\n    </ion-list-header>\n    <ion-item>email: {{profile.email}}\n      <ion-icon name="md-mail" item-start></ion-icon>\n    </ion-item>\n    <ion-item (tap)="copy()">uid: {{profile.uid}}\n      <ion-icon name="md-barcode" item-start></ion-icon>\n    </ion-item>\n    <button ion-item (click)="showStatystics()">\n      <ion-icon name="analytics" item-start></ion-icon>statistiche\n    </button>\n  </ion-list>\n  <ion-list-header>\n    Modifica\n  </ion-list-header>\n  <ion-list>\n    <ion-item>\n      <ion-icon name="beer" item-start></ion-icon>\n      coming soon\n    </ion-item>\n  </ion-list>\n  <button ion-button block (click)="logout()" color="danger">Esci</button>\n</ion-content>'/*ion-inline-end:"/Users/michele/myDudo/src/pages/settings/settings.html"*/,
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ToastController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* LoadingController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__providers_session_session__["a" /* SessionProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_session_session__["a" /* SessionProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__providers_profile_profile__["a" /* ProfileProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_profile_profile__["a" /* ProfileProvider */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__["a" /* Clipboard */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__["a" /* Clipboard */]) === "function" && _e || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ToastController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* LoadingController */],
+            __WEBPACK_IMPORTED_MODULE_2__providers_session_session__["a" /* SessionProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_profile_profile__["a" /* ProfileProvider */], __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__["a" /* Clipboard */]])
     ], SettingsPage);
     return SettingsPage;
-    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=settings.js.map

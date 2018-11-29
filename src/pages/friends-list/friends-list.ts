@@ -10,19 +10,23 @@ import { ProfileProvider } from '../../providers/profile/profile';
 export class FriendsListPage {
 
   private friends = [];
+  public proprietaryUid = this.navParams.get("proprietaryUid");
+  public proprietaryName;
   constructor(public navCtrl: NavController, public navParams: NavParams, private profileProv: ProfileProvider) {
-    this.friends.push({ name: 'Tu', friendUid: 'null' })
-    profileProv.getFriendForAList(navParams.get("proprietaryUid"), navParams.get("title")).on('value', snap => {
+    this.profileProv.getNameByUid(this.proprietaryUid).then(name => {
+      this.friends.push({ name: name, friendUid: this.proprietaryUid, proprietary: 1 })
+    })
+    profileProv.getFriendForAList(this.proprietaryUid, navParams.get("title")).on('value', snap => {
       snap.forEach(el => {
         profileProv.getNameByUid(el.val().friendUid).then(name => {
-          this.friends.push({ name: name, friendUid: el.val().friendUid })
+          this.friends.push({ name: name, friendUid: el.val().friendUid, proprietary: 0 })
         })
       })
     })
   }
 
   removeFriend(friend) {
-    this.profileProv.removeFriend(this.navParams.get('proprietaryUid'), this.navParams.get('title'), friend.friendUid)
+    this.profileProv.removeFriend(this.proprietaryUid, this.navParams.get('title'), friend.friendUid)
     let index = this.friends.indexOf(friend);
     if (index > -1) {
       this.friends.splice(index, 1);
