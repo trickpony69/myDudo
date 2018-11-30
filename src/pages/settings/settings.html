@@ -21,9 +21,6 @@
     <ion-item (tap)="copy()">uid: {{profile.uid}}
       <ion-icon name="md-barcode" item-start></ion-icon>
     </ion-item>
-    <button ion-item (click)="showStatystics()">
-      <ion-icon name="analytics" item-start></ion-icon>statistiche
-    </button>
   </ion-list>
   <ion-list-header>
     Modifica
@@ -32,6 +29,21 @@
     <ion-item>
       <ion-icon name="beer" item-start></ion-icon>
       coming soon
+    </ion-item>
+  </ion-list>
+  <ion-list-header>
+    Statistiche
+  </ion-list-header>
+  <ion-list>
+    <ion-item>
+      Liste tue
+      <ion-icon name="analytics" item-start></ion-icon>
+      <ion-badge class="badge1" item-end>999</ion-badge>
+    </ion-item>
+    <ion-item>
+      Liste condivise con te
+      <ion-icon name="analytics" item-start></ion-icon>
+      <ion-badge class="badge2" item-end>999</ion-badge>
     </ion-item>
   </ion-list>
   <button ion-button block (click)="logout()" color="danger">Esci</button>

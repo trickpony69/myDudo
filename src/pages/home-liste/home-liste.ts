@@ -3,6 +3,7 @@ import { IonicPage, NavController, AlertController, ActionSheetController, NavPa
 import { ListPage } from '../list/list';
 import { Storage } from '@ionic/storage';
 import { ProfileProvider } from '../../providers/profile/profile';
+import { StatusBar } from '@ionic-native/status-bar';
 
 @IonicPage()
 @Component({
@@ -18,8 +19,8 @@ export class HomeListe {
   user = { email: "", uid: "" };
   immagine = "src=\"./../assets/imgs/sfondo0.jpg\"";
 
-  constructor(private storage: Storage, public actionSheet: ActionSheetController, public alertCtrl: AlertController, public navCtrl: NavController, public profileProv: ProfileProvider) {
-
+  constructor(private storage: Storage, public actionSheet: ActionSheetController, public alertCtrl: AlertController,
+    public navCtrl: NavController, public profileProv: ProfileProvider) {
     this.storage.get('cards').then((val) => {
       // Object.values(myObject).length forse funziona anche questa
       var counterCards = function (obj) {

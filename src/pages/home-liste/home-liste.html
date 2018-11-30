@@ -7,7 +7,6 @@
 
 </ion-header> -->
 
-
 <ion-content>
   <ion-fab bottom right>
     <button ion-fab (click)="add()">
@@ -16,25 +15,19 @@
   </ion-fab>
 
 
-  <ion-list-header>Le tue liste</ion-list-header>
+  <h2 class="divisor">Tue</h2>
   <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">
     <img id="immagine" />
     <ion-card-content id="gradient">
       <ion-card-title id="font">
         {{ card.name }}
       </ion-card-title>
-      <p id="description" *ngIf="card.proprietary == 1">
-        Questa lista è tua
-      </p>
-      <p id="description" *ngIf="card.proprietary == 0">
-        Questa lista è di un tuo amico
-      </p>
     </ion-card-content>
   </ion-card>
   
 
   <!-- Shared -->
-  <ion-list-header>Liste condivise con te</ion-list-header>
+  <h2 class="divisor">Di altri</h2>
   <ion-list (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of sharedCards; let i = index">
   <section class="cards" >
     <article class="card card--2">
@@ -54,9 +47,8 @@
         <div class="card__img--hover"></div>
       </a>
       <div class="card__info">
-        <span class="card__category">Questa lista è di un tuo amico</span>
         <h1 class="card__title">{{card.name}}</h1>
-        <span class="card__by">by <a href="#" class="card__author" title="author">Lista di:</a></span>
+        <span class="card__category">Questa lista è di: </span>
       </div>
     </article>
   </section>

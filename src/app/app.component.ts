@@ -6,7 +6,6 @@ import { TabsPage } from '../pages/tabs/tabs';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { firebaseConfig } from './app.module';
-import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   templateUrl: 'app.html'

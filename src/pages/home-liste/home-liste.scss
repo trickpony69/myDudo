@@ -55,6 +55,12 @@ body {
     max-width: 400px;
 }
 
+.divisor{
+    padding: 0;
+    font-weight: 700;
+    font-size: 3em; 
+}
+
 //-----------Shared------------
 
 
@@ -114,7 +120,7 @@ body {
     // background-color: #fff;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
-    padding: 80px 24px 100px 24px;
+    padding: 35px 15px;
     background-color: transparent;
     position: relative;
 }
@@ -131,11 +137,7 @@ body {
 .card__title {
     margin-top: 5px;
     margin-bottom: 10px;
+    font-size: 3em;
+    font-weight: 700;
     font-family: 'Roboto Slab', serif;
-}
-
-.card__by {
-    font-size: 12px;
-    font-family: 'Raleway', sans-serif;
-    font-weight: 500;
 }
