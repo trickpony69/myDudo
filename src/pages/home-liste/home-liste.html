@@ -14,6 +14,9 @@
       <ion-icon name="md-add"></ion-icon>
     </button>
   </ion-fab>
+
+
+  <ion-list-header>Le tue liste</ion-list-header>
   <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of cards; let i = index">
     <img id="immagine" />
     <ion-card-content id="gradient">
@@ -28,20 +31,10 @@
       </p>
     </ion-card-content>
   </ion-card>
-  <!-- <ion-card class="card" (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of sharedCards; let i = index">
-    <ion-card-content>
-      <ion-card-title id="font">
-        {{ card.name }}
-      </ion-card-title>
-      <p id="description" *ngIf="card.proprietary == 1">
-        Questa lista è tua
-      </p>
-      <p id="description" *ngIf="card.proprietary == 0">
-        Questa lista è di un tuo amico
-      </p>
-    </ion-card-content>
-  </ion-card>  -->
-  <!-- test --> 
+  
+
+  <!-- Shared -->
+  <ion-list-header>Liste condivise con te</ion-list-header>
   <ion-list (press)="action(card,i)" (click)="openTodo(card)" *ngFor="let card of sharedCards; let i = index">
   <section class="cards" >
     <article class="card card--2">
