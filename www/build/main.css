@@ -25681,6 +25681,10 @@ ion-navbar.toolbar {
   color: red !important;
 }
 
+#separator {
+  margin-top: 8%;
+}
+
 #gradient {
   background-image: -webkit-gradient(linear, left top, right top, from(#fdfc47), to(#24fe41));
   background-image: linear-gradient(to right, #fdfc47, #24fe41);

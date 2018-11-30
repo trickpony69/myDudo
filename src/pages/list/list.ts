@@ -113,7 +113,8 @@ export class ListPage {
       proprietaryUid = this.toUser.uid;
     this.navCtrl.push(FriendsListPage,{
       title: this.toUser.cardName,
-      proprietaryUid: proprietaryUid
+      proprietaryUid: proprietaryUid,
+      proprietary: this.navParams.get('proprietary')
     })
   }
 
